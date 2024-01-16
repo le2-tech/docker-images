@@ -1,13 +1,6 @@
 # Use the official PHP 8.2 image as a base image
 FROM php:8.2-fpm
 
-# Set the environment variable
-ARG DOCKER_ENV=dev
-
-# Set user and group IDs if provided as build arguments
-ARG USER_ID=1000
-ARG GROUP_ID=1000
-
 # Install system dependencies and clean up
 RUN apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -17,6 +10,9 @@ RUN apt-get update -y && \
         net-tools && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Set the environment variable
+ARG DOCKER_ENV=dev
 
 # Install PHP extensions and configure them
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
@@ -52,6 +48,10 @@ RUN sed -i -e "s/www-data/www/g" /usr/local/etc/php-fpm.d/www.conf && \
            -e "s/^;listen.owner *=.*/listen.owner = www-data/g" \
            -e "s/^;listen.group *=.*/listen.group = www-data/g" \
            -e "s/^;listen.mode *=.*/listen.mode = 0660/g" /usr/local/etc/php-fpm.d/www.conf
+
+# Set user and group IDs if provided as build arguments
+ARG USER_ID=1000
+ARG GROUP_ID=1000
 
 # Modify www-data user and group IDs, create directories, and set permissions
 RUN groupmod -g ${GROUP_ID} www-data && \
