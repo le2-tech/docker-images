@@ -5,7 +5,7 @@
 include ../.env
 
 build:
-	docker build . -t le2/lambda-go
+	docker build . -t registry.le2.tech/le2/golang-lambda
 
 check:
 	

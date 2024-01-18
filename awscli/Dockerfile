@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-RUN apt-get update \
+RUN apt-get update -y \
         && apt-get install -y mysql-client curl unzip net-tools socat procps less \
         && rm -rf /var/lib/apt/lists/*
 
