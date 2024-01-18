@@ -5,7 +5,7 @@
 include ../.env
 
 build:
-	docker build . -t le2/golang
+	docker build . -t registry.le2.tech/le2/golang
 
 check:
 	
