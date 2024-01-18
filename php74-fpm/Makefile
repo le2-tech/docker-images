@@ -16,3 +16,6 @@ else ifeq ($(OS),Darwin)
 else
 	@echo "This is neither Linux nor Mac"
 endif
+
+buildx:
+	docker buildx build --platform linux/amd64,linux/arm64 --build-arg DOCKER_ENV=${DOCKER_ENV} --build-arg USER_ID=$(USER_ID) --build-arg GROUP_ID=$(GROUP_ID) -t registry.le2.tech/le2/php:8.2-fpm . --push

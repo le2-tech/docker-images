@@ -35,6 +35,10 @@ prune:
 	docker rm $(docker ps -aq)
 	docker system prune
 
+buildx:
+	docker buildx create --name mybuilder --use
+	docker buildx inspect --bootstrap
+
 # 由于docker设定的iptable规则的优先级高于ufw设定的iptable规则，所以导致ufw设定docker打开的端口无效。
 # 之后考虑使用 DOCKER-USER 链: iptables -I DOCKER-USER -p tcp --dport 9087 -j REJECT
 # ufw-install:
