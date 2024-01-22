@@ -2,7 +2,7 @@
 FROM php:8.2-cli
 
 # Set the environment variable
-ARG DOCKER_ENV=dev
+ARG DOCKER_ENV=prod
 
 # Set user and group IDs if provided as build arguments
 ARG USER_ID=1000
@@ -21,7 +21,7 @@ RUN apt-get update -y && \
 # Install PHP extensions and configure them
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
     docker-php-ext-install -j$(nproc) bcmath zip mysqli pdo_mysql gd exif opcache intl && \
-    if [ "$DOCKER_ENV" = "local" ]; then \
+    if [ "$DOCKER_ENV" = "dev" ]; then \
         pecl install xdebug-3.2.2 && \
         docker-php-ext-enable xdebug; \
     fi && \

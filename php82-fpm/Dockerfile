@@ -12,12 +12,12 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists/*
 
 # Set the environment variable
-ARG DOCKER_ENV=dev
+ARG DOCKER_ENV=prod
 
 # Install PHP extensions and configure them
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
     docker-php-ext-install -j$(nproc) bcmath zip mysqli pdo_mysql gd exif opcache intl && \
-    if [ "$DOCKER_ENV" = "local" ]; then \
+    if [ "$DOCKER_ENV" = "dev" ]; then \
         pecl install xdebug-3.2.2 && \
         docker-php-ext-enable xdebug; \
     fi && \
@@ -35,7 +35,7 @@ COPY config/ /tmp/
 # Configure PHP settings
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-RUN if [ "$DOCKER_ENV" = "local" ]; then \
+RUN if [ "$DOCKER_ENV" = "dev" ]; then \
         mv /tmp/php.ini-dev $PHP_INI_DIR/conf.d/php.ini; \
     else \
         mv /tmp/php.ini-prod $PHP_INI_DIR/conf.d/php.ini; \

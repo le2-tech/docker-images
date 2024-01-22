@@ -2,7 +2,7 @@
 .PHONY: 
 .DEFAULT_GOAL := _
 
-include ../make.env
+include ../.env
 
 _: clean clone build
 
