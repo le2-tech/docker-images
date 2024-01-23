@@ -5,10 +5,10 @@
 include ../.env
 
 build:
-	docker build . -t registry.le2.tech/le2/golang-lambda
+	docker build . -t registry.cn-hongkong.aliyuncs.com/le2/golang-lambda
 
 check:
 	
 
 buildx:
-	docker buildx build --platform linux/amd64,linux/arm64 -t registry.le2.tech/le2/golang-lambda . --push
+	docker buildx build --platform linux/amd64,linux/arm64 -t registry.cn-hongkong.aliyuncs.com/le2/golang-lambda . --push

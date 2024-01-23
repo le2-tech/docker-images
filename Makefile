@@ -1,3 +1,5 @@
+include ./.env
+
 install:
 	apt update
 	apt upgrade -y
@@ -35,8 +37,12 @@ prune:
 	docker rm $(docker ps -aq)
 	docker system prune
 
+
+
 buildx:
 	docker buildx create --name mybuilder --use
 	# docker buildx create --name mybuilder
 	# docker buildx use mybuilder
 	docker buildx inspect --bootstrap
+	docker login --username=${DOCKER_USER} -p=${DOCKER_PASSWORD} registry.cn-hongkong.aliyuncs.com
+
