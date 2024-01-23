@@ -5,9 +5,9 @@
 include ../.env
 
 build:
-	docker build . -t registry.cn-hongkong.aliyuncs.com/le2/awscli ${build_proxy}
+	docker build . -t ${REGISTRY_HOST}le2/awscli ${build_proxy}
 
 check:
-	docker run -it --rm registry.cn-hongkong.aliyuncs.com/le2/awscli aws --version
-	docker run -it --rm registry.cn-hongkong.aliyuncs.com/le2/awscli mysql -V
+	docker run -it --rm ${REGISTRY_HOST}le2/awscli aws --version
+	docker run -it --rm ${REGISTRY_HOST}le2/awscli mysql -V
 
