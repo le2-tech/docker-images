@@ -18,5 +18,5 @@ else
 endif
 
 buildx:
-	docker buildx build --platform linux/amd64,linux/arm64 --build-arg DOCKER_ENV=dev -t registry.le2.tech/le2/php:8.2-cli-dev . --push
-	docker buildx build --platform linux/amd64,linux/arm64 -t registry.le2.tech/le2/php:8.2-cli . --push
+	docker buildx build --platform linux/amd64,linux/arm64 --build-arg DOCKER_ENV=dev -t registry.le2.tech/le2/php-cli:8.2-dev . --push
+	docker buildx build --platform linux/amd64,linux/arm64 -t registry.le2.tech/le2/php-cli:8.2 . --push

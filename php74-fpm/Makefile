@@ -18,5 +18,5 @@ else
 endif
 
 buildx:
-	docker buildx build --platform linux/amd64,linux/arm64 --build-arg DOCKER_ENV=dev -t registry.le2.tech/le2/php:7.4-fpm-dev . --push
-	docker buildx build --platform linux/amd64,linux/arm64 -t registry.le2.tech/le2/php:7.4-fpm . --push
+	docker buildx build --platform linux/amd64,linux/arm64 --build-arg DOCKER_ENV=dev -t registry.le2.tech/le2/php-fpm:7.4-dev . --push
+	docker buildx build --platform linux/amd64,linux/arm64 -t registry.le2.tech/le2/php-fpm:7.4 . --push

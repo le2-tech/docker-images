@@ -11,4 +11,4 @@ check:
 	
 
 buildx:
-	docker buildx build --platform linux/amd64,linux/arm64 -t registry.le2.tech/le2/mysql:5.7 . --push
+	docker buildx build --platform linux/arm64 -t registry.le2.tech/le2/mysql:5.7 . --push
