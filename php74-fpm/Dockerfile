@@ -4,10 +4,6 @@ FROM php:7.4-fpm
 # Set the environment variable
 ARG DOCKER_ENV=prod
 
-# Set user and group IDs if provided as build arguments
-ARG USER_ID=1000
-ARG GROUP_ID=1000
-
 # Install system dependencies and clean up
 RUN apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -52,6 +48,10 @@ RUN sed -i -e "s/www-data/www/g" /usr/local/etc/php-fpm.d/www.conf && \
            -e "s/^;listen.owner *=.*/listen.owner = www-data/g" \
            -e "s/^;listen.group *=.*/listen.group = www-data/g" \
            -e "s/^;listen.mode *=.*/listen.mode = 0660/g" /usr/local/etc/php-fpm.d/www.conf
+
+# Set user and group IDs if provided as build arguments
+ARG USER_ID=1000
+ARG GROUP_ID=1000
 
 # Modify www-data user and group IDs, create directories, and set permissions
 RUN groupmod -g ${GROUP_ID} www-data && \

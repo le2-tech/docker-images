@@ -1,5 +1,10 @@
-# Use the official PHP 8.2 image as a base image
-FROM php:8.2-cli
+# Use the official PHP 7.4 image as a base image
+FROM php:7.4-cli
+
+# Set the environment variable
+ARG DOCKER_ENV=prod
+
+
 
 # Install system dependencies and clean up
 RUN apt-get update -y && \
@@ -11,14 +16,11 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Set the environment variable
-ARG DOCKER_ENV=prod
-
 # Install PHP extensions and configure them
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
     docker-php-ext-install -j$(nproc) bcmath zip mysqli pdo_mysql gd exif opcache intl && \
     if [ "$DOCKER_ENV" = "dev" ]; then \
-        pecl install xdebug-3.2.2 && \
+        pecl install xdebug-3.1.6 && \
         docker-php-ext-enable xdebug; \
     fi && \
     pecl install redis msgpack apcu && \
@@ -29,14 +31,11 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
     php -r "unlink('composer-setup.php');"
 
-# Configure PHP settings
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-#     sed -i -e "s/^bcmath.scale.*/bcmath.scale = 10/g" \
-#            -e "s/^;date.timezone.*/date.timezone = Asia\/Tokyo/g" \
-#            -e 's/^variables_order.*/variables_order = "EGPCS"/g' "$PHP_INI_DIR/php.ini"
-
 # Copy custom PHP configuration
 COPY config/ /tmp/
+
+# Configure PHP settings
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN if [ "$DOCKER_ENV" = "dev" ]; then \
         mv /tmp/php.ini-dev $PHP_INI_DIR/conf.d/php.ini; \
@@ -57,3 +56,4 @@ RUN groupmod -g ${GROUP_ID} www-data && \
 # Set user and working directory
 USER www-data
 WORKDIR /www
+

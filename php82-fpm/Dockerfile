@@ -29,11 +29,11 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
     php -r "unlink('composer-setup.php');"
 
-# Copy custom PHP configuration
-COPY config/ /tmp/
-
 # Configure PHP settings
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Copy custom PHP configuration
+COPY config/ /tmp/
 
 RUN if [ "$DOCKER_ENV" = "dev" ]; then \
         mv /tmp/php.ini-dev $PHP_INI_DIR/conf.d/php.ini; \

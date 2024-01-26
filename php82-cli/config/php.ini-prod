@@ -1,0 +1,11 @@
+
+memory_limit = 256M
+
+bcmath.scale = 10
+
+date.timezone = Asia/Tokyo
+
+variables_order = "EGPCS"
+
+; opcache
+; opcache.enable = 0
