@@ -5,8 +5,8 @@
 include ../.env
 
 build:
-	docker build . -t le2/schemaspy
+	docker build . -t ${NAMESPACE}/schemaspy
 
 check:
-	docker run -it --rm le2/awscli aws --version
-	docker run -it --rm le2/awscli mysql -V
+	docker run -it --rm ${NAMESPACE}/awscli aws --version
+	docker run -it --rm ${NAMESPACE}/awscli mysql -V
