@@ -5,10 +5,10 @@
 include ../.env
 
 build:
-	docker build . -t ${REGISTRY_HOST}le2/golang
+	docker build . -t ${REGISTRY_HOST}${NAMESPACE}/golang
 
 check:
 	
 
 buildx:
-	docker buildx build --platform linux/amd64,linux/arm64 -t ${REGISTRY_HOST}le2/golang . --push
+	docker buildx build --platform linux/amd64,linux/arm64 -t ${REGISTRY_HOST}${NAMESPACE}/golang . --push ${build_proxy}

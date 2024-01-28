@@ -11,7 +11,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "aws
 
 # 安装 Session Manager 插件
 # 根据目标架构选择相应的链接
-# https://docs.aws.amazon.com/systems-manager/latest/userguide/install-plugin-debian.html
+# https://docs.aws.amazon.com/zh_cn/systems-manager/latest/userguide/install-plugin-linux.html
 RUN architecture=$(uname -m) && \
     case $architecture in \
         x86_64) plugin_url="https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" ;; \

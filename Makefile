@@ -44,5 +44,7 @@ buildx:
 	# docker buildx create --name mybuilder
 	# docker buildx use mybuilder
 	docker buildx inspect --bootstrap
+
+login_hub:
 	docker login --username=${DOCKER_USER} -p=${DOCKER_PASSWORD} ${REGISTRY_HOST}
 
