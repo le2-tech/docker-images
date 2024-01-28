@@ -10,9 +10,9 @@ OS := $(shell uname -s)
 
 build: ## build
 ifeq ($(OS),Linux)
-	docker build . -t ${REGISTRY_HOST}${NAMESPACE}/php:8.2-cli-dev --pull --build-arg DOCKER_ENV=dev --build-arg USER_ID=$(USER_ID) --build-arg GROUP_ID=$(GROUP_ID)
+	docker build . -t ${REGISTRY_HOST}${NAMESPACE}/php-cli:8.2-dev --pull --build-arg DOCKER_ENV=dev --build-arg USER_ID=$(USER_ID) --build-arg GROUP_ID=$(GROUP_ID)
 else ifeq ($(OS),Darwin)
-	docker build . -t ${REGISTRY_HOST}${NAMESPACE}/php:8.2-cli-dev --pull --build-arg DOCKER_ENV=dev ${build_proxy}
+	docker build . -t ${REGISTRY_HOST}${NAMESPACE}/php-cli:8.2-dev --pull --build-arg DOCKER_ENV=dev ${build_proxy}
 else
 	@echo "This is neither Linux nor Mac"
 endif
