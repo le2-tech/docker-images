@@ -39,7 +39,7 @@ prune:
 
 
 
-buildx:
+buildx-init:
 	docker buildx create --name mybuilder --use
 	# docker buildx create --name mybuilder
 	# docker buildx use mybuilder
