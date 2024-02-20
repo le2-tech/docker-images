@@ -1,9 +1,9 @@
 include ./.env
 
 install:
-	apt update
-	apt upgrade -y
-	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends make screen zip unzip tree
+	sudo apt update
+	sudo apt upgrade -y
+	DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends make screen zip unzip tree
 	curl -fsSL https://get.docker.com -o get-docker.sh
 	sh get-docker.sh
 
@@ -31,6 +31,9 @@ uninit-user:
 	userdel dev-user
 	groupdel dev-group
 
+init-ecsuser:
+	sudo usermod -aG docker ecs-user
+	newgrp docker
 
 prune:
 	docker stop $(docker ps -aq)
