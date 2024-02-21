@@ -5,10 +5,10 @@
 include ../.env
 
 build:
-	docker build . -t ${REGISTRY_HOST}${NAMESPACE}/mysql:5.7
+	docker build . -t ${REGISTRY_HOST}${IMAGE_NS}/mysql:5.7
 
 check:
 	
 
 buildx:
-	docker buildx build --platform linux/arm64 -t ${REGISTRY_HOST}${NAMESPACE}/mysql:5.7 . --push
+	docker buildx build --platform linux/amd64,linux/arm64 -t ${REGISTRY_HOST}${IMAGE_NS}/mysql:5.7 . --push ${build_proxy}
