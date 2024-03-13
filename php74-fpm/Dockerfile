@@ -1,9 +1,6 @@
 # Use the official PHP 7.4 image as a base image
 FROM php:7.4-fpm
 
-# Set the environment variable
-ARG DOCKER_ENV=prod
-
 # Install system dependencies and clean up
 RUN apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -13,6 +10,9 @@ RUN apt-get update -y && \
         net-tools && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Set the environment variable
+ARG DOCKER_ENV=prod
 
 # Install PHP extensions and configure them
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
@@ -29,11 +29,11 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
     php -r "unlink('composer-setup.php');"
 
-# Copy custom PHP configuration
-COPY config/ /tmp/
-
 # Configure PHP settings
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Copy custom PHP configuration
+COPY config/ /tmp/
 
 RUN if [ "$DOCKER_ENV" = "dev" ]; then \
         mv /tmp/php.ini-dev $PHP_INI_DIR/conf.d/php.ini; \

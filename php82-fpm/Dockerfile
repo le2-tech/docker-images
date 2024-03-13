@@ -62,6 +62,3 @@ RUN groupmod -g ${GROUP_ID} www-data && \
 # Set user and working directory
 USER www-data
 WORKDIR /www
-
-# Expose PHP-FPM port
-EXPOSE 9000

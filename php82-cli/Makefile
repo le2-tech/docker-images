@@ -10,13 +10,13 @@ OS := $(shell uname -s)
 
 build: ## build
 ifeq ($(OS),Linux)
-	docker build . -t ${REGISTRY_HOST}${IMAGE_NS}/php-cli:8.2-dev --pull --build-arg DOCKER_ENV=dev --build-arg USER_ID=$(USER_ID) --build-arg GROUP_ID=$(GROUP_ID)
+	docker build . -t ${REGISTRY_HOST}${IMAGE_NS}php-cli:8.2-dev --pull --build-arg DOCKER_ENV=dev --build-arg USER_ID=$(USER_ID) --build-arg GROUP_ID=$(GROUP_ID)
 else ifeq ($(OS),Darwin)
-	docker build . -t ${REGISTRY_HOST}${IMAGE_NS}/php-cli:8.2-dev --pull --build-arg DOCKER_ENV=dev ${build_proxy}
+	docker build . -t ${REGISTRY_HOST}${IMAGE_NS}php-cli:8.2-dev --pull --build-arg DOCKER_ENV=dev ${build_proxy}
 else
 	@echo "This is neither Linux nor Mac"
 endif
 
 buildx:
-	docker buildx build --platform linux/amd64,linux/arm64 --build-arg DOCKER_ENV=dev -t ${REGISTRY_HOST}${IMAGE_NS}/php-cli:8.2-dev . --push
-	docker buildx build --platform linux/amd64,linux/arm64                            -t ${REGISTRY_HOST}${IMAGE_NS}/php-cli:8.2     . --push
+	docker buildx build --platform linux/amd64,linux/arm64 --build-arg DOCKER_ENV=dev -t ${REGISTRY_HOST}${IMAGE_NS}php-cli:8.2-dev . --push
+	docker buildx build --platform linux/amd64,linux/arm64                            -t ${REGISTRY_HOST}${IMAGE_NS}php-cli:8.2     . --push

@@ -31,9 +31,6 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 
 # Configure PHP settings
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-#     sed -i -e "s/^bcmath.scale.*/bcmath.scale = 10/g" \
-#            -e "s/^;date.timezone.*/date.timezone = Asia\/Tokyo/g" \
-#            -e 's/^variables_order.*/variables_order = "EGPCS"/g' "$PHP_INI_DIR/php.ini"
 
 # Copy custom PHP configuration
 COPY config/ /tmp/

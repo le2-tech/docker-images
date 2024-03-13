@@ -5,5 +5,5 @@
 include ../.env
 
 build:
-	docker build . -t ${IMAGE_NS}/schemaspy
+	docker build . -t ${IMAGE_NS}schemaspy
 
