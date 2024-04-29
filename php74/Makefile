@@ -1,9 +1,7 @@
 .PHONY: 
-.DEFAULT_GOAL := _
+.DEFAULT_GOAL := clean clone buildx-fpm buildx-cli
 
 include ../.env
-
-_: clean clone buildx-fpm buildx-cli
 
 clone:
 	${host_proxy} git clone https://github.com/docker-library/php.git github \
@@ -18,8 +16,12 @@ clean:
 
 buildx-fpm:
 	cd github/7.4/bullseye/fpm/ \
-	&& docker buildx build . --platform linux/amd64,linux/arm64 -t ${REGISTRY_HOST}${IMAGE_NS}php:7.4-fpm ${build_proxy} --push
+	&& docker buildx build . -t ${REGISTRY_HOST}${IMAGE_NS}php:7.4-fpm ${build_proxy} --pull --platform linux/amd64,linux/arm64 --push
 
 buildx-cli:
 	cd github/7.4/bullseye/cli/ \
-	&& docker buildx build . --platform linux/amd64,linux/arm64 -t ${REGISTRY_HOST}${IMAGE_NS}php:7.4-cli ${build_proxy} --push
+	&& docker buildx build . -t ${REGISTRY_HOST}${IMAGE_NS}php:7.4-cli ${build_proxy} --pull --platform linux/amd64,linux/arm64 --push
+
+build-cli:
+	cd github/7.4/bullseye/cli/ \
+	&& docker build . -t ${REGISTRY_HOST}${IMAGE_NS}php:7.4-cli ${build_proxy}

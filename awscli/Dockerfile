@@ -1,13 +1,19 @@
-FROM ubuntu:latest
+# FROM ubuntu:latest
+FROM debian:sid-slim
 
 RUN apt-get update -y \
-        && apt-get install -y mysql-client curl unzip net-tools socat procps less \
+        && apt-get install -y --no-install-recommends \
+            mysql-client curl ca-certificates unzip net-tools socat procps less \
         && rm -rf /var/lib/apt/lists/*
 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" \
-        && unzip awscliv2.zip \
-        && ./aws/install \
-        && rm -fr awscliv2.zip
+RUN set -eux; \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip"; \
+    unzip awscliv2.zip; \
+    ./aws/install; \
+    rm -fr awscliv2.zip; \
+    aws --version; \
+    echo "complete -C '/usr/local/bin/aws_completer' aws" >> ~/.bashrc
+
 
 # 安装 Session Manager 插件
 # 根据目标架构选择相应的链接

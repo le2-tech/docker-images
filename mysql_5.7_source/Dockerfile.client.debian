@@ -1,0 +1,65 @@
+# 使用 Debian bullseye-slim 作为基础镜像
+ARG BASE_IMAGE
+FROM debian:${BASE_IMAGE} as builder
+
+# 设置工作目录
+WORKDIR /usr/src/mysql
+
+# 安装必要的包和编译工具
+RUN set -eux ;\
+    apt-get update ;\
+    apt-get install -y --no-install-recommends \
+        # git \
+        curl ca-certificates \
+        build-essential \
+        cmake \
+        # wget \
+        libncurses5-dev \
+        libssl-dev \
+        zlib1g-dev \
+        ;\
+    rm -rf /var/lib/apt/lists/*
+
+# 下载 MySQL 源码包
+RUN set -eux ;\
+    curl -fsSL https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.44.tar.gz -o mysql-5.7.44.tar.gz ;\
+    tar -xzvf mysql-5.7.44.tar.gz --strip-components=1 ;\
+    rm mysql-5.7.44.tar.gz
+
+# 配置、编译并安装 MySQL 客户端
+RUN set -eux; \
+    cmake . \
+    -DCMAKE_BUILD_TYPE=MinSizeRel \
+    -DDOWNLOAD_BOOST=1 -DWITH_BOOST=boost \
+    -DWITHOUT_SERVER=1 \
+    ; \
+    # make mysqlclient libmysql ; \
+    make mysqlclient ; \
+    make install 
+
+# 创建一个目录来存储必要的二进制文件
+RUN set -eux ;\
+    mkdir /mysql-binaries ;\
+    cp /usr/local/mysql/bin/mysql /mysql-binaries/ ;\
+    cp /usr/local/mysql/bin/mysqldump /mysql-binaries/
+
+# 第二阶段 - 附带必要的 MySQL 文件
+FROM debian:${BASE_IMAGE}
+
+RUN set -eux ;\
+    apt-get update ;\
+    apt-get install -y --no-install-recommends \
+        libssl-dev \
+        ;\
+    rm -rf /var/lib/apt/lists/*
+
+# 拷贝第一阶段中编译得到的必要的 MySQL 二进制文件
+COPY --from=builder /mysql-binaries /usr/local/mysql/bin
+# 拷贝所需的库，如果有特定的库也可以指定复制
+COPY --from=builder /usr/local/mysql/lib /usr/local/mysql/lib
+
+# 设置环境变量，使得 mysql 客户端可以直接使用
+ENV PATH=$PATH:/usr/local/mysql/bin
+
+# 验证 mysql 客户端版本
+RUN mysql --version

@@ -1,4 +1,4 @@
-# Use the official PHP 8.2 image as a base image
+
 ARG BASE_IMAGE
 ARG BASE_IMAGE_TAG
 FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
@@ -51,11 +51,11 @@ RUN set -xe; \
       gnupg2 \
       git \
       libzip-dev zip unzip; \
-      if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-        docker-php-ext-configure zip; \
-      else \
-        docker-php-ext-configure zip --with-libzip; \
-      fi; \
+    #   if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+    #     docker-php-ext-configure zip; \
+    #   else \
+    #     docker-php-ext-configure zip --with-libzip; \
+    #   fi; \
       # Install the zip extension
       docker-php-ext-install zip; \
       php -m | grep -q 'zip'
@@ -106,7 +106,7 @@ RUN if [ ${INSTALL_XDEBUG} = true ] && [ "${DOCKER_ENV}" = "dev" ]; then \
         # Install the xdebug extension
         # https://xdebug.org/docs/compat
         if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-                pecl install xdebug-3.3.0; \
+                pecl install xdebug-3.3.1; \
             elif [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
                 pecl install xdebug-3.1.6; \
             fi; \
@@ -135,22 +135,6 @@ RUN if [ ${INSTALL_APCU} = true ]; then \
         pecl install apcu; \
         docker-php-ext-enable apcu; \
     fi
-
-
-# Install system dependencies and clean up
-# RUN apt-get update -y && \
-#     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-#          procps \
-#          wget \
-#          vim \
-#          jq \ 
-#          iputils-ping \
-#         zlib1g-dev \
-#         mariadb-client \
-#         net-tools  \
-#     && apt-get clean \
-#     && rm -rf /var/lib/apt/lists/*
-
 
 # Install Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
@@ -184,10 +168,26 @@ ARG USER_ID=1000
 ARG GROUP_ID=1000
 
 # Modify www-data user and group IDs, create directories, and set permissions
-RUN groupmod -g ${GROUP_ID} www-data ; \
-    usermod -u ${USER_ID} www-data ; \
+RUN groupmod -o -g ${GROUP_ID} www-data ; \
+    usermod -o -u ${USER_ID} -g www-data www-data ; \
     mkdir -p /home/www-data /www /var/www ; \
     chown -R www-data:www-data /home/www-data /www /var/www
+
+# Install system dependencies and clean up
+RUN set -eux; \
+    apt-get update -y ; \
+    apt-get install -y --no-install-recommends \
+        procps \
+        wget \
+        vim \
+        jq \ 
+        iputils-ping \
+        zlib1g-dev \
+        mariadb-client \
+        net-tools \
+        ; \
+    rm -rf /var/lib/apt/lists/*
+
 
 # Set user and working directory
 USER www-data

@@ -1,0 +1,37 @@
+
+
+cd mysql-server
+mkdir build
+cd build
+
+apt update -y
+apt install -y make cmake git build-essential openssl libssl-dev libncurses-dev ncurses-dev pkg-config bison
+
+
+cmake .. -DDOWNLOAD_BOOST=1 \
+         -DWITH_BOOST=../source_downloads \
+         -DMYSQL_DATADIR=/opt/mysql/data \
+         -DDEFAULT_CHARSET=utf8mb4 \
+         -DDEFAULT_COLLATION=utf8mb4_unicode_ci
+
+
+make -j$(nproc)
+
+make install DESTDIR=/xspaces/mysql-5.7.44
+
+make package
+
+
+apt install -y openssl libssl-dev
+
+
+https://github.com/docker-library/mysql/tree/3728e572e5bcb149ff07aa74eed32b62cf8b3d25
+
+https://launchpad.net/ubuntu/+source/mysql-5.7/5.7.42-0ubuntu0.18.04.1
+
+
+https://www.cnblogs.com/huaweicloud/p/12384762.html
+https://jeremyxu2010.github.io/2019/09/%E7%BC%96%E8%AF%91arm64%E5%B9%B3%E5%8F%B0%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%8C%85/
+https://github.com/mysql/mysql-server/blob/5.7/packaging/deb-in/CMakeLists.txt
+https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/source-configuration-options.html
+https://dev.mysql.com/doc/refman/5.7/en/source-configuration-options.html#option_cmake_cmake_install_prefix
