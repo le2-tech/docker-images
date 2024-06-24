@@ -4,15 +4,18 @@
 
 include ../.env
 
+tag_name := ${REGISTRY_HOST}${IMAGE_NS}mysql:5.7-debian
+
 build:
-	docker build . -t ${REGISTRY_HOST}${IMAGE_NS}mysql:5.7-debian ${build_proxy} --progress=plain
+	docker build . -t ${tag_name} ${build_proxy} --progress=plain
 
 check:
 	
 
+buildx_suffix := --pull --platform linux/amd64,linux/arm64 --push
+
 buildx:
-	docker buildx build --platform linux/amd64,linux/arm64 -t ${REGISTRY_HOST}${IMAGE_NS}mysql:5.7 . --push ${build_proxy}
+	docker buildx build . -t ${tag_name} ${buildx_suffix} ${build_proxy}
 
 build-client:
-	docker build . -t ${REGISTRY_HOST}${IMAGE_NS}mysql:5.7-client-bullseye ${build_proxy} -f Dockerfile.client.debian --progress=plain --build-arg BASE_IMAGE=bullseye-slim
-	# docker build . -t ${REGISTRY_HOST}${IMAGE_NS}mysql:5.7-client-bookworm ${build_proxy} -f Dockerfile.client.debian --progress=plain --build-arg BASE_IMAGE=bookworm-slim
+	docker build . -t ${tag_name}-client ${build_proxy} -f Dockerfile.client.debian --progress=plain --build-arg BASE_IMAGE=bullseye-slim

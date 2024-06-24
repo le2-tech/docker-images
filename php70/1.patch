@@ -1,0 +1,26 @@
+diff --git a/7.0/alpine3.7/cli/Dockerfile b/7.0/alpine3.7/cli/Dockerfile
+index e1c6fadb..c931374b 100644
+--- a/7.0/alpine3.7/cli/Dockerfile
++++ b/7.0/alpine3.7/cli/Dockerfile
+@@ -82,7 +82,7 @@ RUN set -xe; \
+ 		wget -O php.tar.xz.asc "$PHP_ASC_URL"; \
+ 		export GNUPGHOME="$(mktemp -d)"; \
+ 		for key in $GPG_KEYS; do \
+-			gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
++			gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
+ 		done; \
+ 		gpg --batch --verify php.tar.xz.asc php.tar.xz; \
+ 		command -v gpgconf > /dev/null && gpgconf --kill all; \
+diff --git a/7.0/alpine3.7/fpm/Dockerfile b/7.0/alpine3.7/fpm/Dockerfile
+index d06f3edb..1eea5df7 100644
+--- a/7.0/alpine3.7/fpm/Dockerfile
++++ b/7.0/alpine3.7/fpm/Dockerfile
+@@ -83,7 +83,7 @@ RUN set -xe; \
+ 		wget -O php.tar.xz.asc "$PHP_ASC_URL"; \
+ 		export GNUPGHOME="$(mktemp -d)"; \
+ 		for key in $GPG_KEYS; do \
+-			gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
++			gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
+ 		done; \
+ 		gpg --batch --verify php.tar.xz.asc php.tar.xz; \
+ 		command -v gpgconf > /dev/null && gpgconf --kill all; \

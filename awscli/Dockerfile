@@ -4,7 +4,7 @@ FROM debian:sid-slim
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-    	mysql-client curl ca-certificates unzip net-tools socat procps less; \
+    	mysql-client curl ca-certificates unzip net-tools socat procps less jq; \
     rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
