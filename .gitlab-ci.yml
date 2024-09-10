@@ -4,6 +4,9 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_BUILDKIT: 1
+  SERVICE_NAME:
+    description: "Name of the service to build"
+    value: "service1"  # 默认服务名称
 
 # 定义一个作业，使用矩阵策略并行处理多个服务
 build-and-push:
@@ -24,9 +27,6 @@ build-and-push:
     # 打印 Docker 版本
     - docker --version
 
-    # 从外部定义的环境变量或文件中加载服务列表
-    - export SERVICE_LIST=$(echo $SERVICES | tr ',' '\n')
-
   script:
     # 登录 Docker Hub
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
@@ -34,10 +34,6 @@ build-and-push:
     # 调用每个服务目录下的 Makefile
     - make -C ./${SERVICE_NAME} buildx
 
-  # 并行运行多个作业，每个作业对应一个服务
-  parallel:
-    matrix:
-      - SERVICE_NAME: $SERVICE_LIST
 
   rules:
     - when: manual  # 手动触发流水线
