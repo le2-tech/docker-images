@@ -10,7 +10,7 @@ build-and-push:
   stage: build
   image: docker:latest  # 使用 Docker 的最新版本
   services:
-    - docker:latest-dind  # 使用最新的 Docker-in-Docker 服务
+    - docker:dind  # 使用最新的 Docker-in-Docker 服务
 
   before_script:
     - pwd
