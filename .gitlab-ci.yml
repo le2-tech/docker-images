@@ -1,0 +1,40 @@
+stages:
+  - build
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_BUILDKIT: 1
+
+# 定义一个作业，使用矩阵策略并行处理多个服务
+build-and-push:
+  stage: build
+  image: docker:latest  # 使用 Docker 的最新版本
+  services:
+    - docker:latest-dind  # 使用最新的 Docker-in-Docker 服务
+
+  before_script:
+    - pwd
+    - ls -l
+    - git status
+    - cp .env.pro .env
+    # 打印 Docker 版本
+    - docker --version
+
+    # 从外部定义的环境变量或文件中加载服务列表
+    - export SERVICE_LIST=$(echo $SERVICES | tr ',' '\n')
+
+  script:
+    # 登录 Docker Hub
+    - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+
+    # 调用每个服务目录下的 Makefile
+    - make -C ./${SERVICE_NAME}
+
+  # 并行运行多个作业，每个作业对应一个服务
+  parallel:
+    matrix:
+      - SERVICE_NAME: $SERVICE_LIST
+    max_parallel: 3  # 同时最多允许3个服务构建
+
+  rules:
+    - when: manual  # 手动触发流水线

@@ -4,7 +4,7 @@ ARG BASE_IMAGE_TAG
 FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
 
 # Set Environment Variables
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 ARG DOCKER_ENV=prod
 
@@ -91,6 +91,12 @@ RUN if [ ${INSTALL_OPCACHE} = true ] && [ "${DOCKER_ENV}" = "prod" ]; then \
         docker-php-ext-install opcache; \
     fi
 
+ARG INSTALL_SOCKETS=true
+
+RUN if [ ${INSTALL_SOCKETS} = true ]; then \
+        docker-php-ext-install sockets; \
+    fi
+
 ARG INSTALL_INTL=true
 
 RUN if [ ${INSTALL_INTL} = true ]; then \
@@ -105,8 +111,9 @@ ARG INSTALL_XDEBUG=true
 RUN if [ ${INSTALL_XDEBUG} = true ] && [ "${DOCKER_ENV}" = "dev" ]; then \
         # Install the xdebug extension
         # https://xdebug.org/docs/compat
+        # https://pecl.php.net/package/xdebug
         if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-                pecl install xdebug-3.3.1; \
+                pecl install xdebug-3.3.2; \
             elif [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
                 pecl install xdebug-3.1.6; \
             fi; \

@@ -73,7 +73,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends gnupg && rm -rf
 # add gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
 # https://github.com/tianon/gosu/blob/master/INSTALL.md
-ENV GOSU_VERSION 1.17
+ENV GOSU_VERSION=1.17
 RUN set -eux; \
 # save list of currently installed packages for later so we can clean up
 	savedAptMark="$(apt-mark showmanual)"; \
@@ -142,8 +142,8 @@ RUN set -eux; \
 # 	gpgconf --kill all; \
 # 	rm -rf "$GNUPGHOME"
 
-ENV MYSQL_MAJOR 8.0
-ENV MYSQL_VERSION 8.0.36-0debian12
+ENV MYSQL_MAJOR=8.0
+ENV MYSQL_VERSION=8.0.36-0debian12
 
 # 将MySQL的.tar.gz安装包复制到容器中
 # COPY mysql-5.7.44-linux-aarch64.tar.gz /usr/local/mysql/

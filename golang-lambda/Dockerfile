@@ -2,7 +2,7 @@
 FROM golang:latest
 
 # Set environment variable for AWS Lambda Runtime Interface Emulator binary
-ENV RIE_BINARY /aws-lambda/aws-lambda-rie
+ENV RIE_BINARY=/aws-lambda/aws-lambda-rie
 
 # Detect the architecture and set the appropriate binary URL
 RUN set -eux; \

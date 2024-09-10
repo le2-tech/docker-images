@@ -33,8 +33,6 @@ git_patch_use:
 
 docker_image := ${REGISTRY_HOST}${IMAGE_NS}php
 
-buildx_suffix := --pull --platform linux/amd64,linux/arm64 --push
-
 buildx-fpm:
 	cd github/7.2/alpine3.12/fpm/ \
 	&& docker buildx build . -t ${docker_image}:7.2-fpm-alpine ${build_proxy} ${buildx_suffix}

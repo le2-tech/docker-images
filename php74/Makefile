@@ -16,18 +16,17 @@ clone:
 clean:
 	rm -fr github
 
-docker_image := ${REGISTRY_HOST}${IMAGE_NS}php
+tag := ${REGISTRY_HOST}${IMAGE_NS}php
 
-buildx_suffix := --pull --platform linux/amd64,linux/arm64 --push
 
 buildx-fpm:
 	cd github/7.4/bullseye/fpm/ \
-	&& docker buildx build . -t ${docker_image}:7.4-fpm ${build_proxy} ${buildx_suffix}
+	&& docker buildx build . -t ${tag}:7.4-fpm ${build_proxy} ${buildx_suffix}
 
 buildx-cli:
 	cd github/7.4/bullseye/cli/ \
-	&& docker buildx build . -t ${docker_image}:7.4-cli ${build_proxy} ${buildx_suffix}
+	&& docker buildx build . -t ${tag}:7.4-cli ${build_proxy} ${buildx_suffix}
 
 build-cli:
 	cd github/7.4/bullseye/cli/ \
-	&& docker build . -t ${docker_image}:7.4-cli ${build_proxy}
+	&& docker build . -t ${tag}:7.4-cli ${build_proxy}

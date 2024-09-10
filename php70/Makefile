@@ -31,18 +31,17 @@ git_patch_use:
 	rm 1.patch; \
 	git status;
 
-docker_image := ${REGISTRY_HOST}${IMAGE_NS}php
+tag := ${REGISTRY_HOST}${IMAGE_NS}php
 
-buildx_suffix := --pull --platform linux/amd64,linux/arm64 --push
 
 buildx-fpm:
 	cd github/7.0/alpine3.7/fpm/ \
-	&& docker buildx build . -t ${docker_image}:7.0-fpm-alpine ${build_proxy} ${buildx_suffix}
+	&& docker buildx build . -t ${tag}:7.0-fpm-alpine ${build_proxy} ${buildx_suffix}
 
 buildx-cli:
 	cd github/7.0/alpine3.7/cli/ \
-	&& docker buildx build . -t ${docker_image}:7.0-cli-alpine ${build_proxy} ${buildx_suffix}
+	&& docker buildx build . -t ${tag}:7.0-cli-alpine ${build_proxy} ${buildx_suffix}
 
 build-cli:
 	cd github/7.0/alpine3.7/cli/ \
-	&& docker build . -t ${docker_image}:7.0-cli-alpine ${build_proxy}
+	&& docker build . -t ${tag}:7.0-cli-alpine ${build_proxy}

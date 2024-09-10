@@ -4,12 +4,13 @@
 
 include ../.env
 
+tag_name := ${REGISTRY_HOST}${IMAGE_NS}mysql:8.0-source
+
 build:
-	docker build . -t ${REGISTRY_HOST}${IMAGE_NS}mysql:8.0_source ${build_proxy} --progress=plain
+	docker build . -t ${tag_name} ${build_proxy} --progress=plain
 
 check:
 
-buildx_suffix := --pull --platform linux/amd64,linux/arm64 --push
 
 buildx:
-	docker buildx build . -t ${REGISTRY_HOST}${IMAGE_NS}mysql:5.7 ${buildx_suffix} ${build_proxy}
+	docker buildx build . -t ${tag_name} ${buildx_suffix} ${build_proxy}

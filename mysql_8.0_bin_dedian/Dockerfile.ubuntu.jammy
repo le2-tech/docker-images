@@ -6,7 +6,7 @@
 
 FROM ubuntu:noble
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends gnupg && rm -rf
 
 # add gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
-# ENV GOSU_VERSION 1.17
+# ENV GOSU_VERSION=1.17
 # RUN set -eux; \
 # 	savedAptMark="$(apt-mark showmanual)"; \
 # 	apt-get update; \
@@ -69,8 +69,8 @@ RUN set -eux; \
 # 	gpgconf --kill all; \
 # 	rm -rf "$GNUPGHOME"
 
-ENV MYSQL_MAJOR 8.0
-# ENV MYSQL_VERSION 8.0.36-3
+ENV MYSQL_MAJOR=8.0
+# ENV MYSQL_VERSION=8.0.36-3
 
 # RUN echo 'deb [ signed-by=/etc/apt/keyrings/mysql.gpg ] http://repo.mysql.com/apt/debian/ bookworm mysql-8.0' > /etc/apt/sources.list.d/mysql.list
 

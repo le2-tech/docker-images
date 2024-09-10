@@ -12,8 +12,6 @@ build:
 check:
 	
 
-buildx_suffix := --pull --platform linux/amd64,linux/arm64 --push
-
 buildx:
 	docker buildx build . -t ${tag_name} ${buildx_suffix} ${build_proxy}
 

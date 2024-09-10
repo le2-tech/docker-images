@@ -17,7 +17,6 @@ check-fpm:
 	docker run -it --rm ${_tag72}-dev sh -c " \
 		php -v ;\
 	"
-buildx_suffix := --pull --platform linux/amd64,linux/arm64 --push
 
 buildx-fpm-70-dev:
 	docker buildx build . -t ${_tag70}-dev ${buildx_suffix} --build-arg BASE_IMAGE=${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.0-fpm-alpine --build-arg DOCKER_ENV=dev
