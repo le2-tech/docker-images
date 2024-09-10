@@ -4,9 +4,6 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_BUILDKIT: 1
-  SERVICE_NAME:
-    description: "Name of the service to build"
-    value: "service1"  # 默认服务名称
 
 # 定义一个作业，使用矩阵策略并行处理多个服务
 build-and-push:
@@ -26,6 +23,9 @@ build-and-push:
     - cp .env.pro .env
     # 打印 Docker 版本
     - docker --version
+
+    # 启用 Buildx 并使用 docker-container 驱动
+    - docker buildx create --use --driver docker-container
 
   script:
     # 登录 Docker Hub
