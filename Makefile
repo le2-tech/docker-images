@@ -49,5 +49,5 @@ buildx-init:
 	docker buildx inspect --bootstrap
 
 login_hub:
-	docker login --username=${DOCKER_USER} -p=${DOCKER_PASSWORD} ${REGISTRY_HOST}
+	docker login --username=${DOCKER_USERNAME} -p=${DOCKER_PASSWORD} ${REGISTRY_HOST}
 

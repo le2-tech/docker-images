@@ -13,8 +13,9 @@ build-and-push:
     - docker:dind  # 使用最新的 Docker-in-Docker 服务
 
   before_script:
+    - set -eux
     - pwd
-    - ls -l
+    - ls -la
     - git status
     - cp .env.pro .env
     # 打印 Docker 版本
@@ -25,10 +26,10 @@ build-and-push:
 
   script:
     # 登录 Docker Hub
-    - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
 
     # 调用每个服务目录下的 Makefile
-    - make -C ./${SERVICE_NAME}
+    - make -C ./${SERVICE_NAME} buildx
 
   # 并行运行多个作业，每个作业对应一个服务
   parallel:
