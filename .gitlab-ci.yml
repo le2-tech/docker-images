@@ -34,7 +34,6 @@ build-and-push:
   parallel:
     matrix:
       - SERVICE_NAME: $SERVICE_LIST
-    max_parallel: 3  # 同时最多允许3个服务构建
 
   rules:
     - when: manual  # 手动触发流水线
