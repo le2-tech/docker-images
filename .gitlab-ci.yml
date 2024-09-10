@@ -4,22 +4,23 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_BUILDKIT: 1
+  CMD_BUILDX: buildx
 
 # 定义一个作业，使用矩阵策略并行处理多个服务
 build-and-push:
   stage: build
-  image: docker:latest  # 使用 Docker 的最新版本
+  image: docker:latest # 使用 Docker 的最新版本
   services:
-    - docker:dind  # 使用最新的 Docker-in-Docker 服务
+    - docker:dind # 使用最新的 Docker-in-Docker 服务
 
   before_script:
     - set -eux
     # 安装 make
     - apk add --no-cache make
-    - env
-    - pwd
-    - ls -la
-    - git status
+    # - env
+    # - pwd
+    # - ls -la
+    # - git status
     - cp .env.pro .env
     # 打印 Docker 版本
     - docker --version
@@ -32,8 +33,7 @@ build-and-push:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
 
     # 调用每个服务目录下的 Makefile
-    - make -C ./${SERVICE_NAME} buildx
-
+    - make -C ./${SERVICE_NAME} ${CMD_BUILDX}
 
   rules:
-    - when: manual  # 手动触发流水线
+    - when: manual # 手动触发流水线

@@ -23,6 +23,8 @@ check-php83-fpm:
 		php -v ;\
 	"
 
+## php74
+
 buildx-php74-fpm:
 	docker buildx build . -t ${REGISTRY_HOST}${IMAGE_NS}php-fpm:7.4-dev ${buildx_suffix} --build-arg BASE_IMAGE=${REGISTRY_HOST}${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.4-fpm --build-arg DOCKER_ENV=dev
 	docker buildx build . -t ${REGISTRY_HOST}${IMAGE_NS}php-fpm:7.4     ${buildx_suffix} --build-arg BASE_IMAGE=${REGISTRY_HOST}${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.4-fpm
@@ -32,6 +34,7 @@ buildx-php74-cli:
 	docker buildx build . -t ${REGISTRY_HOST}${IMAGE_NS}php-cli:7.4-dev ${buildx_suffix} --build-arg BASE_IMAGE=${REGISTRY_HOST}${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.4-cli --build-arg DOCKER_ENV=dev
 	docker buildx build . -t ${REGISTRY_HOST}${IMAGE_NS}php-cli:7.4     ${buildx_suffix} --build-arg BASE_IMAGE=${REGISTRY_HOST}${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.4-cli
 
+## php82
 
 buildx-php82-fpm-dev:
 	docker buildx build . ${build_proxy} -t ${REGISTRY_HOST}${IMAGE_NS}php-fpm:8.2-dev ${buildx_suffix} --build-arg BASE_IMAGE=${REGISTRY_HOST}php --build-arg BASE_IMAGE_TAG=8.2-fpm --build-arg DOCKER_ENV=dev
@@ -48,6 +51,9 @@ buildx-php82-cli-dev:
 buildx-php82-cli:
 	docker buildx build . ${build_proxy} -t ${REGISTRY_HOST}${IMAGE_NS}php-cli:8.2     ${buildx_suffix} --build-arg BASE_IMAGE=${REGISTRY_HOST}php --build-arg BASE_IMAGE_TAG=8.2-cli
 
+## php83
+
+buildx-php83: buildx-php83-fpm-dev buildx-php83-fpm buildx-php83-cli-dev buildx-php83-cli
 
 buildx-php83-fpm-dev:
 	docker buildx build . ${build_proxy} -t ${REGISTRY_HOST}${IMAGE_NS}php-fpm:8.3-dev ${buildx_suffix} --build-arg BASE_IMAGE=${REGISTRY_HOST}php --build-arg BASE_IMAGE_TAG=8.3-fpm --build-arg DOCKER_ENV=dev
