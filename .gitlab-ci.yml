@@ -14,6 +14,7 @@ build-and-push:
 
   before_script:
     - set -eux
+    - env
     - pwd
     - ls -la
     - git status
