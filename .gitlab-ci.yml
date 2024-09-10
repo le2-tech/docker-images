@@ -4,7 +4,7 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_BUILDKIT: 1
-  SERVICE_NAME: tmp
+  SERVICE_NAME: awscli
   CMD_BUILDX: buildx
 
 # 定义一个作业，使用矩阵策略并行处理多个服务
