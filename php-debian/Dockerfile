@@ -6,7 +6,7 @@ FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
 # Set Environment Variables
 ENV DEBIAN_FRONTEND=noninteractive
 
-ARG DOCKER_ENV=prod
+ENV DOCKER_ENV=prod
 
 RUN set -eux; \
     apt-get update; \
@@ -60,55 +60,55 @@ RUN set -xe; \
       docker-php-ext-install zip; \
       php -m | grep -q 'zip'
 
-ARG INSTALL_BZ2=true
+ARG SKIP_BZ2
 
-RUN if [ ${INSTALL_BZ2} = true ]; then \
+RUN if [ ${SKIP_BZ2} != "true" ]; then \
         apt-get -yqq install libbz2-dev; \
         docker-php-ext-install bz2; \
     fi
 
-ARG INSTALL_BCMATH=true
+ARG SKIP_BCMATH
 
-RUN if [ ${INSTALL_BCMATH} = true ]; then \
+RUN if [ ${SKIP_BCMATH} != "true" ]; then \
         docker-php-ext-install bcmath; \
     fi
 
-ARG INSTALL_MYSQLI=true
+ARG SKIP_MYSQLI
 
-RUN if [ ${INSTALL_MYSQLI} = true ]; then \
+RUN if [ ${SKIP_MYSQLI} != "true" ]; then \
         docker-php-ext-install mysqli; \
     fi
 
-ARG INSTALL_EXIF=true
+ARG SKIP_EXIF
 
-RUN if [ ${INSTALL_EXIF} = true ]; then \
+RUN if [ ${SKIP_EXIF} != "true" ]; then \
         docker-php-ext-install exif; \
     fi
 
-ARG INSTALL_OPCACHE=true
+ARG SKIP_OPCACHE
 
-RUN if [ ${INSTALL_OPCACHE} = true ] && [ "${DOCKER_ENV}" = "prod" ]; then \
+RUN if [ ${SKIP_OPCACHE} != "true" ] && [ "${DOCKER_ENV}" = "prod" ]; then \
         docker-php-ext-install opcache; \
     fi
 
-ARG INSTALL_SOCKETS=true
+ARG SKIP_SOCKETS
 
-RUN if [ ${INSTALL_SOCKETS} = true ]; then \
+RUN if [ ${SKIP_SOCKETS} != "true" ]; then \
         docker-php-ext-install sockets; \
     fi
 
-ARG INSTALL_INTL=true
+ARG SKIP_INTL
 
-RUN if [ ${INSTALL_INTL} = true ]; then \
+RUN if [ ${SKIP_INTL} != "true" ]; then \
         apt-get install -yqq zlib1g-dev libicu-dev g++; \
         docker-php-ext-configure intl ; \
         docker-php-ext-install intl; \
     fi
 
 
-ARG INSTALL_XDEBUG=true
+ARG SKIP_XDEBUG
 
-RUN if [ ${INSTALL_XDEBUG} = true ] && [ "${DOCKER_ENV}" = "dev" ]; then \
+RUN if [ ${SKIP_XDEBUG} != "true" ] && [ "${DOCKER_ENV}" = "dev" ]; then \
         # Install the xdebug extension
         # https://xdebug.org/docs/compat
         # https://pecl.php.net/package/xdebug
@@ -120,25 +120,25 @@ RUN if [ ${INSTALL_XDEBUG} = true ] && [ "${DOCKER_ENV}" = "dev" ]; then \
         docker-php-ext-enable xdebug; \
     fi
 
-ARG INSTALL_PHPREDIS=true
+ARG SKIP_PHPREDIS
 
-RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
+RUN if [ ${SKIP_PHPREDIS} != "true" ]; then \
         pecl install -o -f redis; \
         rm -rf /tmp/pear; \
         docker-php-ext-enable redis; \
     fi
 
-ARG INSTALL_PHPMSGPACK=true
+ARG SKIP_PHPMSGPACK
 
-RUN if [ ${INSTALL_PHPMSGPACK} = true ]; then \
+RUN if [ ${SKIP_PHPMSGPACK} != "true" ]; then \
         pecl install -o -f msgpack; \
         rm -rf /tmp/pear; \
         docker-php-ext-enable msgpack; \
     fi
 
-ARG INSTALL_APCU=true
+ARG SKIP_APCU
 
-RUN if [ ${INSTALL_APCU} = true ]; then \
+RUN if [ ${SKIP_APCU} != "true" ]; then \
         pecl install apcu; \
         docker-php-ext-enable apcu; \
     fi
@@ -171,8 +171,8 @@ RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
     fi
 
 # Set user and group IDs if provided as build arguments
-ARG USER_ID=1000
-ARG GROUP_ID=1000
+ENV USER_ID=1000
+ENV GROUP_ID=1000
 
 # Modify www-data user and group IDs, create directories, and set permissions
 RUN groupmod -o -g ${GROUP_ID} www-data ; \

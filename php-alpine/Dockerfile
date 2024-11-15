@@ -16,9 +16,9 @@ RUN set -eux; \
 RUN set -eux; \
     apk add --no-cache \
         tzdata \
-        ; \
-    cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime ; \
-    echo "Asia/Tokyo" > /etc/timezone ;
+        ; 
+    # cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime ; \
+    # echo "Asia/Tokyo" > /etc/timezone ;
 
 RUN set -eux; \
     pecl channel-update pecl.php.net; \

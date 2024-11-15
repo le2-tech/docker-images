@@ -7,7 +7,7 @@ upload_max_filesize = 100M
 
 bcmath.scale = 10
 
-date.timezone = Asia/Tokyo
+; date.timezone = Asia/Tokyo
 
 variables_order = "EGPCS"
 
@@ -20,4 +20,4 @@ xdebug.mode= "debug"
 xdebug.client_host="host.docker.internal"
 xdebug.client_port = "903" 
 ; xdebug.idekey = 'phpstorm'
-; xdebug.start_with_request = yes
+xdebug.start_with_request=yes
