@@ -60,55 +60,55 @@ RUN set -xe; \
       docker-php-ext-install zip; \
       php -m | grep -q 'zip'
 
-ARG SKIP_BZ2
+ENV INSTALL_BZ2="true"
 
-RUN if [ ${SKIP_BZ2} != "true" ]; then \
+RUN if [ ${INSTALL_BZ2} = "true" ]; then \
         apt-get -yqq install libbz2-dev; \
         docker-php-ext-install bz2; \
     fi
 
-ARG SKIP_BCMATH
+ENV INSTALL_BCMATH="true"
 
-RUN if [ ${SKIP_BCMATH} != "true" ]; then \
+RUN if [ ${INSTALL_BCMATH} = "true" ]; then \
         docker-php-ext-install bcmath; \
     fi
 
-ARG SKIP_MYSQLI
+ENV INSTALL_MYSQLI="true"
 
-RUN if [ ${SKIP_MYSQLI} != "true" ]; then \
+RUN if [ ${INSTALL_MYSQLI} = "true" ]; then \
         docker-php-ext-install mysqli; \
     fi
 
-ARG SKIP_EXIF
+ENV INSTALL_EXIF="true"
 
-RUN if [ ${SKIP_EXIF} != "true" ]; then \
+RUN if [ ${INSTALL_EXIF} = "true" ]; then \
         docker-php-ext-install exif; \
     fi
 
-ARG SKIP_OPCACHE
+ENV INSTALL_OPCACHE="true"
 
-RUN if [ ${SKIP_OPCACHE} != "true" ] && [ "${DOCKER_ENV}" = "prod" ]; then \
+RUN if [ ${INSTALL_OPCACHE} = "true" ] && [ "${DOCKER_ENV}" = "prod" ]; then \
         docker-php-ext-install opcache; \
     fi
 
-ARG SKIP_SOCKETS
+ENV INSTALL_SOCKETS="true"
 
-RUN if [ ${SKIP_SOCKETS} != "true" ]; then \
+RUN if [ ${INSTALL_SOCKETS} = "true" ]; then \
         docker-php-ext-install sockets; \
     fi
 
-ARG SKIP_INTL
+ENV INSTALL_INTL="true"
 
-RUN if [ ${SKIP_INTL} != "true" ]; then \
+RUN if [ ${INSTALL_INTL} = "true" ]; then \
         apt-get install -yqq zlib1g-dev libicu-dev g++; \
         docker-php-ext-configure intl ; \
         docker-php-ext-install intl; \
     fi
 
 
-ARG SKIP_XDEBUG
+ENV INSTALL_XDEBUG="true"
 
-RUN if [ ${SKIP_XDEBUG} != "true" ] && [ "${DOCKER_ENV}" = "dev" ]; then \
+RUN if [ ${INSTALL_XDEBUG} = "true" ] && [ "${DOCKER_ENV}" = "dev" ]; then \
         # Install the xdebug extension
         # https://xdebug.org/docs/compat
         # https://pecl.php.net/package/xdebug
@@ -120,25 +120,25 @@ RUN if [ ${SKIP_XDEBUG} != "true" ] && [ "${DOCKER_ENV}" = "dev" ]; then \
         docker-php-ext-enable xdebug; \
     fi
 
-ARG SKIP_PHPREDIS
+ENV INSTALL_PHPREDIS="true"
 
-RUN if [ ${SKIP_PHPREDIS} != "true" ]; then \
+RUN if [ ${INSTALL_PHPREDIS} = "true" ]; then \
         pecl install -o -f redis; \
         rm -rf /tmp/pear; \
         docker-php-ext-enable redis; \
     fi
 
-ARG SKIP_PHPMSGPACK
+ENV INSTALL_PHPMSGPACK="true"
 
-RUN if [ ${SKIP_PHPMSGPACK} != "true" ]; then \
+RUN if [ ${INSTALL_PHPMSGPACK} = "true" ]; then \
         pecl install -o -f msgpack; \
         rm -rf /tmp/pear; \
         docker-php-ext-enable msgpack; \
     fi
 
-ARG SKIP_APCU
+ENV INSTALL_APCU="true"
 
-RUN if [ ${SKIP_APCU} != "true" ]; then \
+RUN if [ ${INSTALL_APCU} = "true" ]; then \
         pecl install apcu; \
         docker-php-ext-enable apcu; \
     fi
