@@ -6,7 +6,7 @@ FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
 # Set Environment Variables
 ENV DEBIAN_FRONTEND=noninteractive
 
-ENV DOCKER_ENV=prod
+ARG DOCKER_ENV=prod
 
 RUN set -eux; \
     apt-get update; \
