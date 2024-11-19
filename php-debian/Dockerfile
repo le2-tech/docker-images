@@ -196,18 +196,17 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*
 
 
-RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
-else \
-    set -eux;\
-    apt-get update; \
-    apt-get -y install --no-install-recommends \
-        cron \
-        sudo \
-        ; \
-    apt-get clean; \
-    rm -rf /var/lib/apt/lists/*; \
-    echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
-fi
+RUN if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
+        set -eux;\
+        apt-get update; \
+        apt-get -y install --no-install-recommends \
+            cron \
+            sudo \
+            ; \
+        apt-get clean; \
+        rm -rf /var/lib/apt/lists/*; \
+        echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
+    fi
 
 
 # Set user and working directory
