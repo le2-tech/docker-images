@@ -195,16 +195,20 @@ RUN set -eux; \
         ; \
     rm -rf /var/lib/apt/lists/*
 
-RUN set -eux;\
+
+RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
+else \
+    set -eux;\
     apt-get update; \
     apt-get -y install --no-install-recommends \
         cron \
         sudo \
         ; \
     apt-get clean; \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/*; \
+    echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
+fi
 
-RUN echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers
 
 # Set user and working directory
 USER www-data
