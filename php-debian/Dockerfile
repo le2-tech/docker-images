@@ -192,6 +192,7 @@ RUN set -eux; \
         zlib1g-dev \
         mariadb-client \
         net-tools \
+        poppler-utils \
         ; \
     rm -rf /var/lib/apt/lists/*
 
