@@ -6,10 +6,12 @@ include ../.env
 
 tag := ${REGISTRY_HOST}${IMAGE_NS}node-uniapp:3
 
-## build
-build:
+build:## build
 	${host_proxy} docker        build . ${build_proxy} -t ${tag}  --pull --no-cache --progress=plain
 
-## buildx
-buildx:
+
+buildx:## buildx
 	${host_proxy} docker buildx build . ${build_proxy} -t ${tag} ${buildx_suffix}
+
+bash:
+	docker run -it --rm ${tag} bash

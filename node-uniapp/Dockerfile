@@ -6,7 +6,7 @@ RUN npx degit dcloudio/uni-preset-vue#vite /app
 
 WORKDIR /app
 
-RUN npm update --loglevel verbose \
-    && npm i vue@latest pinia@latest decimal.js@latest \
-    && npm i -D sass@latest \
-    && npm ls
+RUN set -eux; \
+    npm update --loglevel verbose; \
+    npm i vue@latest pinia@^2.3.1 decimal.js@latest; \
+    npm i -D sass@latest vite@latest;
