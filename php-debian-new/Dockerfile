@@ -149,11 +149,6 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
 # Configure PHP settings
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-# Copy custom PHP configuration
-# COPY config/php.ini /tmp/;
-
-# RUN mv /tmp/php.ini $PHP_INI_DIR/conf.d/php.ini;
-
 # Modify PHP-FPM configuration
 RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         sed -i -e "s/www-data/www/g" /usr/local/etc/php-fpm.d/www.conf; \
@@ -163,16 +158,6 @@ RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
             -e "s/^;listen.group *=.*/listen.group = www-data/g" \
             -e "s/^;listen.mode *=.*/listen.mode = 0660/g" /usr/local/etc/php-fpm.d/www.conf; \
     fi
-
-# Set user and group IDs if provided as build arguments
-# ENV USER_ID=1000
-# ENV GROUP_ID=1000
-
-# Modify www-data user and group IDs, create directories, and set permissions
-# RUN groupmod -o -g ${GROUP_ID} www-data ; \
-#     usermod -o -u ${USER_ID} -g www-data www-data ; \
-#     mkdir -p /home/www-data /www /var/www ; \
-#     chown -R www-data:www-data /home/www-data /www /var/www
 
 # Install system dependencies and clean up
 RUN set -eux; \
@@ -190,7 +175,6 @@ RUN set -eux; \
         ; \
     rm -rf /var/lib/apt/lists/*
 
-
 RUN if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         set -eux;\
         apt-get update; \
@@ -203,10 +187,5 @@ RUN if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         # echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
     fi
 
-
-# Set user and working directory
-# USER www-data
+# Set working directory
 WORKDIR /www
-
-# Expose PHP-FPM port
-# EXPOSE 9000
