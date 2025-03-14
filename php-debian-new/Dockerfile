@@ -9,30 +9,30 @@ RUN set -eux; \
     apt-get update; \
     # apt-get upgrade -y; \
     apt-get install -y --no-install-recommends \
-    curl \
-    # libmemcached-dev \
-    # libz-dev \
-    # libpq-dev \
-    # libjpeg-dev \
-    # libpng-dev \
-    # libfreetype6-dev \
-    libssl-dev \
-    # libwebp-dev \
-    # libxpm-dev \
-    # libmcrypt-dev \
-    # libonig-dev; \
-    procps \
-    # wget \
-    vim \
-    jq \ 
-    iputils-ping \
-    # zlib1g-dev \
-    # mariadb-client \
-    net-tools \
-    poppler-utils \
-    apt-utils \
-    gnupg2 \
-    git \
+        curl \
+        # libmemcached-dev \
+        # libz-dev \
+        # libpq-dev \
+        # libjpeg-dev \
+        # libpng-dev \
+        # libfreetype6-dev \
+        libssl-dev \
+        # libwebp-dev \
+        # libxpm-dev \
+        # libmcrypt-dev \
+        # libonig-dev; \
+        procps \
+        # wget \
+        vim \
+        jq \
+        iputils-ping \
+        # zlib1g-dev \
+        # mariadb-client \
+        net-tools \
+        poppler-utils \
+        apt-utils \
+        gnupg2 \
+        git \
     ; \
     rm -rf /var/lib/apt/lists/*
 
@@ -42,7 +42,7 @@ RUN set -xe; \
     # pecl channel-update pecl.php.net; \
     apt-get update; \
     apt-get install -yqq \
-    libzip-dev zlib1g-dev libz-dev zip unzip; \
+        libzip-dev zlib1g-dev libz-dev zip unzip; \
     rm -rf /var/lib/apt/lists/*; \
     #   if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
     #     docker-php-ext-configure zip; \
@@ -56,7 +56,7 @@ RUN set -xe; \
 RUN set -eux; \
     apt-get update; \
     apt-get install -yqq \
-    libpq-dev; \
+        libpq-dev; \
     rm -rf /var/lib/apt/lists/*; \
     # Install the PHP pdo_mysql extention
     docker-php-ext-install pdo_mysql; \
@@ -67,12 +67,12 @@ RUN set -eux; \
 RUN set -eux; \
     apt-get update; \
     apt-get install -yqq \
-    libjpeg-dev \
-    libpng-dev \
-    libfreetype6-dev \
-    libwebp-dev \
-    libxpm-dev \
-    libz-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libfreetype6-dev \
+        libwebp-dev \
+        libxpm-dev \
+        libz-dev \
     ; \
     docker-php-ext-configure gd \
     --prefix=/usr \
@@ -86,7 +86,8 @@ RUN set -eux; \
 
 RUN set -eux; \
     apt-get update; \
-    apt-get -yqq install libbz2-dev; \
+    apt-get -yqq install \
+        libbz2-dev; \
     rm -rf /var/lib/apt/lists/*; \
     docker-php-ext-install bz2;
 
@@ -102,7 +103,8 @@ RUN docker-php-ext-install sockets;
 
 RUN set -eux; \
     apt-get update; \
-    apt-get install -yqq libicu-dev zlib1g-dev g++; \
+    apt-get install -yqq \
+        libicu-dev zlib1g-dev g++; \
     rm -rf /var/lib/apt/lists/*; \
     docker-php-ext-configure intl ; \
     docker-php-ext-install intl;
@@ -111,9 +113,9 @@ RUN set -eux; \
 # https://xdebug.org/docs/compat
 # https://pecl.php.net/package/xdebug
 RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-    pecl install xdebug-3.3.2; \
+        pecl install xdebug-3.3.2; \
     elif [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
-    pecl install xdebug-3.1.6; \
+        pecl install xdebug-3.1.6; \
     fi; \
     docker-php-ext-enable xdebug;
 
@@ -138,24 +140,24 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 # Modify PHP-FPM configuration
 RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
-    sed -i -e "s/www-data/www/g" /usr/local/etc/php-fpm.d/www.conf; \
-    sed -i -e "s/^listen *=.*/listen = 9000/g" \
-    -e "s/^listen.allowed_clients *=.*/;listen.allowed_clients = 127.0.0.1/g" \
-    -e "s/^;listen.owner *=.*/listen.owner = www-data/g" \
-    -e "s/^;listen.group *=.*/listen.group = www-data/g" \
-    -e "s/^;listen.mode *=.*/listen.mode = 0660/g" /usr/local/etc/php-fpm.d/www.conf; \
+        sed -i -e "s/www-data/www/g" /usr/local/etc/php-fpm.d/www.conf; \
+        sed -i -e "s/^listen *=.*/listen = 9000/g" \
+        -e "s/^listen.allowed_clients *=.*/;listen.allowed_clients = 127.0.0.1/g" \
+        -e "s/^;listen.owner *=.*/listen.owner = www-data/g" \
+        -e "s/^;listen.group *=.*/listen.group = www-data/g" \
+        -e "s/^;listen.mode *=.*/listen.mode = 0660/g" /usr/local/etc/php-fpm.d/www.conf; \
     fi
 
 RUN if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
-    set -eux;\
-    apt-get update; \
-    apt-get -y install --no-install-recommends \
-    cron \
-    sudo \
-    ; \
-    apt-get clean; \
-    rm -rf /var/lib/apt/lists/*; \
-    # echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
+        set -eux;\
+        apt-get update; \
+        apt-get -y install --no-install-recommends \
+        cron \
+        sudo \
+        ; \
+        apt-get clean; \
+        rm -rf /var/lib/apt/lists/*; \
+        # echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
     fi
 
 # Set working directory
