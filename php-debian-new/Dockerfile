@@ -74,6 +74,7 @@ RUN set -eux; \
         libxpm-dev \
         libz-dev \
     ; \
+    rm -rf /var/lib/apt/lists/*; \
     docker-php-ext-configure gd \
     --prefix=/usr \
     --with-jpeg \
