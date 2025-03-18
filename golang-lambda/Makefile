@@ -2,7 +2,7 @@
 .PHONY: 
 .DEFAULT_GOAL := build
 
-include ../.env
+include ../.env_Makefile
 
 tag_name := ${REGISTRY_HOST}${IMAGE_NS}golang-lambda
 
@@ -13,4 +13,4 @@ check:
 	
 
 buildx:
-	docker buildx build . -t ${tag_name} ${buildx_suffix} ${build_proxy}
+	docker buildx build . -t ${tag_name} ${buildx_suffix} ${build_proxy_clean}

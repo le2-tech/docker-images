@@ -2,10 +2,10 @@
 .PHONY: 
 .DEFAULT_GOAL := build
 
-include ../.env
+include ../.env_Makefile
 
 tag := ${REGISTRY_HOST}${IMAGE_NS}rabbitmq:3-management
 
 ## buildx
 buildx:
-	${host_proxy} docker buildx build . ${build_proxy} -t ${tag} ${buildx_suffix}
+	${host_proxy_clean} docker buildx build . ${build_proxy_clean} -t ${tag} ${buildx_suffix}

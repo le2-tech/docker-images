@@ -3,10 +3,10 @@
 
 _: clean clone git_patch_use buildx-fpm buildx-cli
 
-include ../.env
+include ../.env_Makefile
 
 clone:
-	${host_proxy} git clone https://github.com/docker-library/php.git github \
+	${host_proxy_clean} git clone https://github.com/docker-library/php.git github \
 	&& cd github \
 	&& git checkout 20ebff40bb865416f3767540df06ad1df384337d
 
@@ -35,12 +35,12 @@ docker_image := ${REGISTRY_HOST}${IMAGE_NS}php
 
 buildx-fpm:
 	cd github/7.2/alpine3.12/fpm/ \
-	&& docker buildx build . -t ${docker_image}:7.2-fpm-alpine ${build_proxy} ${buildx_suffix}
+	&& docker buildx build . -t ${docker_image}:7.2-fpm-alpine ${build_proxy_clean} ${buildx_suffix}
 
 buildx-cli:
 	cd github/7.2/alpine3.12/cli/ \
-	&& docker buildx build . -t ${docker_image}:7.2-cli-alpine ${build_proxy} ${buildx_suffix}
+	&& docker buildx build . -t ${docker_image}:7.2-cli-alpine ${build_proxy_clean} ${buildx_suffix}
 
 build-cli:
 	cd github/7.2/alpine3.12/cli/ \
-	&& docker build . -t ${docker_image}:7.2-cli-alpine ${build_proxy}
+	&& docker build . -t ${docker_image}:7.2-cli-alpine ${build_proxy_clean}

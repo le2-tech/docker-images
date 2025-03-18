@@ -3,10 +3,10 @@
 
 _: clean clone buildx-fpm buildx-cli
 
-include ../.env
+include ../.env_Makefile
 
 clone:
-	${host_proxy} git clone https://github.com/docker-library/php.git github \
+	${host_proxy_clean} git clone https://github.com/docker-library/php.git github \
 	&& cd github \
 	&& git checkout 1361ba95d80570e3984f9de9f765948246191557
 
@@ -21,12 +21,12 @@ tag := ${REGISTRY_HOST}${IMAGE_NS}php
 
 buildx-fpm:
 	cd github/7.4/bullseye/fpm/ \
-	&& docker buildx build . -t ${tag}:7.4-fpm ${build_proxy} ${buildx_suffix}
+	&& docker buildx build . -t ${tag}:7.4-fpm ${build_proxy_clean} ${buildx_suffix}
 
 buildx-cli:
 	cd github/7.4/bullseye/cli/ \
-	&& docker buildx build . -t ${tag}:7.4-cli ${build_proxy} ${buildx_suffix}
+	&& docker buildx build . -t ${tag}:7.4-cli ${build_proxy_clean} ${buildx_suffix}
 
 build-cli:
 	cd github/7.4/bullseye/cli/ \
-	&& docker build . -t ${tag}:7.4-cli ${build_proxy}
+	&& docker build . -t ${tag}:7.4-cli ${build_proxy_clean}

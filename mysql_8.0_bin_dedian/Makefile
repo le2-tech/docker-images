@@ -2,7 +2,7 @@
 .PHONY: 
 .DEFAULT_GOAL := build
 
-include ../.env
+include ../.env_Makefile
 
 tag_name := ${REGISTRY_HOST}${IMAGE_NS}mysql:8.0
 

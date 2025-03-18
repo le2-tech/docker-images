@@ -2,7 +2,7 @@
 .PHONY: 
 .DEFAULT_GOAL := build
 
-include ../.env
+include ../.env_Makefile
 
 tag_name := ${REGISTRY_HOST}${IMAGE_NS}mysql:5.7-ubuntu
 
@@ -20,7 +20,7 @@ check:
 	"
 
 buildx:
-	docker buildx build . -t ${tag_name} ${buildx_suffix} ${build_proxy} -f Dockerfile.ubuntu-bionic
+	docker buildx build . -t ${tag_name} ${buildx_suffix} ${build_proxy_clean} -f Dockerfile.ubuntu-bionic
 
 will:
 	curl -s https://launchpad.net/ubuntu/+source/mysql-5.7 | grep 'mysql-5.7' | grep -o '[0-9.]\+-[0-9]\+ubuntu[0-9.]\+' | head -n 1

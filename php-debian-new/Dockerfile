@@ -10,7 +10,6 @@ RUN set -eux; \
     # apt-get upgrade -y; \
     apt-get install -y --no-install-recommends \
         curl \
-        # libmemcached-dev \
         # libz-dev \
         # libpq-dev \
         # libjpeg-dev \
@@ -42,7 +41,8 @@ RUN set -xe; \
     # pecl channel-update pecl.php.net; \
     apt-get update; \
     apt-get install -yqq \
-        libzip-dev zlib1g-dev libz-dev zip unzip; \
+        libzip-dev zlib1g-dev libz-dev zip unzip \
+    ; \
     rm -rf /var/lib/apt/lists/*; \
     #   if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
     #     docker-php-ext-configure zip; \
@@ -56,7 +56,8 @@ RUN set -xe; \
 RUN set -eux; \
     apt-get update; \
     apt-get install -yqq \
-        libpq-dev; \
+        libpq-dev \
+    ; \
     rm -rf /var/lib/apt/lists/*; \
     # Install the PHP pdo_mysql extention
     docker-php-ext-install pdo_mysql; \
@@ -88,7 +89,8 @@ RUN set -eux; \
 RUN set -eux; \
     apt-get update; \
     apt-get -yqq install \
-        libbz2-dev; \
+        libbz2-dev \
+    ; \
     rm -rf /var/lib/apt/lists/*; \
     docker-php-ext-install bz2;
 
@@ -105,7 +107,8 @@ RUN docker-php-ext-install sockets;
 RUN set -eux; \
     apt-get update; \
     apt-get install -yqq \
-        libicu-dev zlib1g-dev g++; \
+        libicu-dev zlib1g-dev g++ \
+    ; \
     rm -rf /var/lib/apt/lists/*; \
     docker-php-ext-configure intl ; \
     docker-php-ext-install intl;
@@ -153,8 +156,8 @@ RUN if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         set -eux;\
         apt-get update; \
         apt-get -y install --no-install-recommends \
-        cron \
-        sudo \
+            cron \
+            sudo \
         ; \
         apt-get clean; \
         rm -rf /var/lib/apt/lists/*; \
