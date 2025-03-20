@@ -24,8 +24,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y make
 
-      - name: Copy .env file
-        run: cp .env.pro .env
+      # - name: Copy .env file
+      #   run: cp .env.pro .env
+
+      - name: make .env file
+        run: echo "env_mode=pro" > .env
 
       - name: Show Docker version
         run: docker --version
