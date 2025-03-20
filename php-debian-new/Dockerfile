@@ -117,7 +117,7 @@ RUN set -eux; \
 # https://xdebug.org/docs/compat
 # https://pecl.php.net/package/xdebug
 RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-        pecl install xdebug-3.3.2; \
+        pecl install xdebug-3.4.2; \
     elif [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
         pecl install xdebug-3.1.6; \
     fi; \
@@ -161,7 +161,7 @@ RUN if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         ; \
         apt-get clean; \
         rm -rf /var/lib/apt/lists/*; \
-        # echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
+        echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
     fi
 
 # Set working directory
