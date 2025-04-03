@@ -2,20 +2,22 @@
 set -eu
 
 # 加载上级目录 .env 文件中的环境变量
-if [ -f ../.env ]; then
-  echo "加载 ../.env 文件中的环境变量..."
-  source ../.env
+env_type_file=../.env
+if [ -f $env_type_file ]; then
+  echo "加载 $env_type_file 文件中的环境变量..."
+  source $env_type_file
 else
-  echo "../.env 文件不存在."
+  echo "$env_type_file 文件不存在."
   exit 1
 fi
 
 # 
-if [ -f ../.env.${env_mode} ]; then
-  echo "加载 ../.env.${env_mode} 文件中的环境变量..."
-  source ../.env.${env_mode}
+env_file=../_env/${BASIC_ENV}.env
+if [ -f $env_file ]; then
+  echo "加载 $env_file 文件中的环境变量..."
+  source $env_file
 else
-  echo "../.env.${env_mode} 文件不存在."
+  echo "$env_file 文件不存在."
   exit 1
 fi
 

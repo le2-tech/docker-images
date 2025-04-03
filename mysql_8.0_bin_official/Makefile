@@ -2,7 +2,7 @@
 .PHONY: 
 .DEFAULT_GOAL := clean clone build
 
-include ../.env_Makefile
+include ../_env/Makefile
 
 clone:
 	${host_proxy_clean} git clone https://github.com/docker-library/mysql.git source -b master --depth 1

@@ -3,7 +3,7 @@
 .DEFAULT_GOAL := _
 _ : build
 
--include ../.env_Makefile
+-include ../_env/Makefile
 
 tag := ${REGISTRY_HOST}${IMAGE_NS}tmp
 

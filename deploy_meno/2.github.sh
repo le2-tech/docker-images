@@ -4,7 +4,7 @@
 sudo apt-get install socat
 
 ssh-keygen -t ed25519 -C "prod@le2.ltd"
-ssh-keygen -t ed25519 -C "prod@le2.fun"
+ssh-keygen -t ed25519 -C "prod1@le2.fun"
 
 # Generating public/private ed25519 key pair.
 # Enter file in which to save the key (/home/ecs-user/.ssh/id_ed25519):
