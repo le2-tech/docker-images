@@ -28,7 +28,7 @@ RUN set -eux; \
         # zlib1g-dev \
         # mariadb-client \
         net-tools \
-        poppler-utils \
+        # poppler-utils \
         apt-utils \
         gnupg2 \
         git \
@@ -163,6 +163,18 @@ RUN if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         rm -rf /var/lib/apt/lists/*; \
         echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
     fi
+
+RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
+    set -eux;\
+    apt-get update; \
+    apt-get -y install --no-install-recommends \
+        poppler-utils \
+        fontconfig \
+        libreoffice \
+    ; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/*; \
+fi
 
 # Set working directory
 WORKDIR /www
