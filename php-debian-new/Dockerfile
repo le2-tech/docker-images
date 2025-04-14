@@ -169,8 +169,8 @@ RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
     apt-get update; \
     apt-get -y install --no-install-recommends \
         poppler-utils \
-        fontconfig \
-        libreoffice \
+        # fontconfig \
+        # libreoffice \
     ; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
