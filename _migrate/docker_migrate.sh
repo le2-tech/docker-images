@@ -2,7 +2,7 @@
 set -eu
 
 # 加载上级目录 .env 文件中的环境变量
-env_type_file=../.env
+env_type_file=./.env
 if [ -f $env_type_file ]; then
   echo "加载 $env_type_file 文件中的环境变量..."
   source $env_type_file
@@ -12,7 +12,7 @@ else
 fi
 
 # 
-env_file=../_env/${BASIC_ENV}.env
+env_file=./_env/${BASIC_ENV}.env
 if [ -f $env_file ]; then
   echo "加载 $env_file 文件中的环境变量..."
   source $env_file
@@ -37,17 +37,19 @@ docker login -u "$MIGRATE_USERNAME" -p "$MIGRATE_PASSWORD" "${MIGRATE_HOST:-}"
 
 # 定义迁移任务（只写源镜像，格式例如： "axllent/mailpit:latest"）
 MIGRATIONS=(
-  # "nginx:latest"
-  # "node:latest"
-  # "axllent/mailpit:latest"
-  # "adminer"
-  # "mysql:8.4"
-  # "redis:latest"
-  # "redislabs/redisinsight:latest"
-  # "minio/minio:latest"
-  # "cdle2/awscli"
-  # "cdle2/node-uniapp:3"
-  # "fluent/fluent-bit:latest"
+  "neilpang/acme.sh:latest"
+  "linuxserver/libreoffice:latest"
+  "nginx:latest"
+  "node:latest"
+  "axllent/mailpit:latest"
+  "adminer"
+  "mysql:8.4"
+  "redis:latest"
+  "redislabs/redisinsight:latest"
+  "minio/minio:latest"
+  "cdle2/awscli"
+  "cdle2/node-uniapp:3"
+  "fluent/fluent-bit:latest"
   "cdle2/php:8.3-cli"
   "cdle2/php:8.3-fpm"
   # "cdle2/rabbitmq:3-management"
