@@ -50,6 +50,7 @@ MIGRATIONS=(
   "cdle2/awscli"
   "cdle2/node-uniapp:3"
   "fluent/fluent-bit:latest"
+  "golang:latest"
   "cdle2/php:8.3-cli"
   "cdle2/php:8.3-fpm"
   # "cdle2/rabbitmq:3-management"
