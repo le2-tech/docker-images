@@ -1,4 +1,4 @@
-include ./.env
+include ./_env/Makefile
 
 install:
 	sudo apt update
