@@ -4,10 +4,10 @@
 
 include ../_env/Makefile
 
-tag_name := ${REGISTRY_HOST}${IMAGE_NS}golang
+tag := ${REGISTRY_HOST}${IMAGE_NS}golang
 
 build:
-	docker build . -t ${tag_name}
+	docker build . -t ${tag}
 
 buildx:
-	${host_proxy_clean} docker buildx build . -t ${tag_name} ${buildx_suffix} ${build_proxy_clean}
+	${host_proxy_clean} docker buildx build . -t ${tag} ${buildx_suffix} ${build_proxy_clean}

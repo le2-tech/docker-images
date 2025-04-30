@@ -1,4 +1,4 @@
-name: Build and Push Docker - AWS CLI
+name: Build and Push Docker - awscli
 
 on:
   workflow_dispatch: # 手动触发
@@ -10,8 +10,6 @@ jobs:
     env:
       DOCKER_DRIVER: overlay2
       DOCKER_BUILDKIT: 1
-      # SERVICE_NAME: awscli
-      # CMD_BUILDX: buildx
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

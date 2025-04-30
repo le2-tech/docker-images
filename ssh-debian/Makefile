@@ -4,7 +4,7 @@
 
 include ../_env/Makefile
 
-tag := ${REGISTRY_HOST}${IMAGE_NS}ssh-debian
+tag := ${REGISTRY_HOST}${IMAGE_NS}ssh-debian:latest
 
 
 will:
@@ -19,5 +19,5 @@ check:
 
 ## ssh-debian
 buildx:
-	${host_proxy_clean} docker buildx build . ${build_proxy_clean} -t ${tag}:latest ${buildx_suffix_clean}
+	${host_proxy_clean} docker buildx build . ${build_proxy_clean} -t ${tag} ${buildx_suffix_clean}
 
