@@ -35,6 +35,8 @@ fi
 echo "正在登录 Docker Hub ..."
 docker login -u "$MIGRATE_USERNAME" -p "$MIGRATE_PASSWORD" "${MIGRATE_HOST:-}"
 
+REPO=coolcry
+
 # 定义迁移任务（只写源镜像，格式例如： "axllent/mailpit:latest"）
 MIGRATIONS=(
   "neilpang/acme.sh:latest"
@@ -47,13 +49,13 @@ MIGRATIONS=(
   "redis:latest"
   "redislabs/redisinsight:latest"
   "minio/minio:latest"
-  "cdle2/awscli"
-  "cdle2/node-uniapp:3"
+  "${REPO}/awscli"
+  "${REPO}/node-uniapp:3"
   "fluent/fluent-bit:latest"
   "golang:latest"
-  "cdle2/php:8.3-cli"
-  "cdle2/php:8.3-fpm"
-  # "cdle2/rabbitmq:3-management"
+  "${REPO}/php:8.3-cli"
+  "${REPO}/php:8.3-fpm"
+  "${REPO}/rabbitmq:3-management"
 )
 # 默认平台及目标镜像前缀映射，格式：platform:prefix
 DEFAULT_PLATFORMS=("linux/amd64:le2-amd64" "linux/arm64/v8:le2-arm64")
