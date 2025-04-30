@@ -17,13 +17,13 @@ check-fpm:
 	"
 
 buildx-fpm-70-dev:
-	docker buildx build . -t ${tag}:7.0-fpm-alpine-dev ${buildx_suffix} ${build_proxy_clean} --build-arg BASE_IMAGE=${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.0-fpm-alpine --build-arg DOCKER_ENV=dev
+	docker buildx build . -t ${tag}:7.0-fpm-alpine-dev ${buildx_suffix_clean} ${build_proxy_clean} --build-arg BASE_IMAGE=${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.0-fpm-alpine --build-arg DOCKER_ENV=dev
 buildx-fpm-70:
-	docker buildx build . -t ${tag}:7.0-fpm-alpine     ${buildx_suffix} ${build_proxy_clean} --build-arg BASE_IMAGE=${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.0-fpm-alpine
+	docker buildx build . -t ${tag}:7.0-fpm-alpine     ${buildx_suffix_clean} ${build_proxy_clean} --build-arg BASE_IMAGE=${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.0-fpm-alpine
 buildx-fpm-72-dev:
-	docker buildx build . -t ${tag}:7.2-fpm-alpine-dev ${buildx_suffix} ${build_proxy_clean} --build-arg BASE_IMAGE=${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.2-fpm-alpine --build-arg DOCKER_ENV=dev
+	docker buildx build . -t ${tag}:7.2-fpm-alpine-dev ${buildx_suffix_clean} ${build_proxy_clean} --build-arg BASE_IMAGE=${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.2-fpm-alpine --build-arg DOCKER_ENV=dev
 buildx-fpm-72:
-	docker buildx build . -t ${tag}:7.2-fpm-alpine     ${buildx_suffix} ${build_proxy_clean} --build-arg BASE_IMAGE=${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.2-fpm-alpine
+	docker buildx build . -t ${tag}:7.2-fpm-alpine     ${buildx_suffix_clean} ${build_proxy_clean} --build-arg BASE_IMAGE=${IMAGE_NS}php --build-arg BASE_IMAGE_TAG=7.2-fpm-alpine
 
 
 build-fpm-70:

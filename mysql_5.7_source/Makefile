@@ -13,7 +13,7 @@ check:
 	
 
 buildx:
-	docker buildx build . -t ${tag} ${buildx_suffix} ${build_proxy_clean}
+	docker buildx build . -t ${tag} ${buildx_suffix_clean} ${build_proxy_clean}
 
 build-client:
 	docker build . -t ${tag}-client ${build_proxy_clean} -f Dockerfile.client.debian --progress=plain --build-arg BASE_IMAGE=bullseye-slim

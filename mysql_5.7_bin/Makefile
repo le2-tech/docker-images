@@ -20,7 +20,7 @@ check:
 	"
 
 buildx:
-	docker buildx build . -t ${tag} ${buildx_suffix} ${build_proxy_clean} -f Dockerfile.ubuntu-bionic
+	docker buildx build . -t ${tag} ${buildx_suffix_clean} ${build_proxy_clean} -f Dockerfile.ubuntu-bionic
 
 will:
 	curl -s https://launchpad.net/ubuntu/+source/mysql-5.7 | grep 'mysql-5.7' | grep -o '[0-9.]\+-[0-9]\+ubuntu[0-9.]\+' | head -n 1

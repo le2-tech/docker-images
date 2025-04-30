@@ -36,11 +36,11 @@ tag := ${REGISTRY_HOST}${IMAGE_NS}php
 
 buildx-fpm:
 	cd github/7.0/alpine3.7/fpm/ \
-	&& docker buildx build . -t ${tag}:7.0-fpm-alpine ${build_proxy_clean} ${buildx_suffix}
+	&& docker buildx build . -t ${tag}:7.0-fpm-alpine ${build_proxy_clean} ${buildx_suffix_clean}
 
 buildx-cli:
 	cd github/7.0/alpine3.7/cli/ \
-	&& docker buildx build . -t ${tag}:7.0-cli-alpine ${build_proxy_clean} ${buildx_suffix}
+	&& docker buildx build . -t ${tag}:7.0-cli-alpine ${build_proxy_clean} ${buildx_suffix_clean}
 
 build-cli:
 	cd github/7.0/alpine3.7/cli/ \

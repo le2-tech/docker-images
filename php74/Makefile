@@ -21,11 +21,11 @@ tag := ${REGISTRY_HOST}${IMAGE_NS}php
 
 buildx-fpm:
 	cd github/7.4/bullseye/fpm/ \
-	&& docker buildx build . -t ${tag}:7.4-fpm ${build_proxy_clean} ${buildx_suffix}
+	&& docker buildx build . -t ${tag}:7.4-fpm ${build_proxy_clean} ${buildx_suffix_clean}
 
 buildx-cli:
 	cd github/7.4/bullseye/cli/ \
-	&& docker buildx build . -t ${tag}:7.4-cli ${build_proxy_clean} ${buildx_suffix}
+	&& docker buildx build . -t ${tag}:7.4-cli ${build_proxy_clean} ${buildx_suffix_clean}
 
 build-cli:
 	cd github/7.4/bullseye/cli/ \

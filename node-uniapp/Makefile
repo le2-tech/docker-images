@@ -11,7 +11,7 @@ build:## build
 
 
 buildx:## buildx
-	${host_proxy_clean} docker buildx build . ${build_proxy_clean} -t ${tag} ${buildx_suffix}
+	${host_proxy_clean} docker buildx build . -t ${tag} ${buildx_suffix_clean} ${build_proxy_clean}
 
 bash:
 	docker run -it --rm ${tag} bash

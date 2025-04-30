@@ -13,7 +13,7 @@ build2:
 	docker build . -t ${tag}-ubuntu -f Dockerfile.ubuntu.jammy --pull --progress=plain
 
 buildx1:
-	docker buildx build . -t ${tag}-debian -f Dockerfile.debian.sid ${buildx_suffix}
+	docker buildx build . -t ${tag}-debian -f Dockerfile.debian.sid ${buildx_suffix_clean}
 
 buildx2:
-	docker buildx build . -t ${tag}-ubuntu -f Dockerfile.ubuntu.jammy ${buildx_suffix}
+	docker buildx build . -t ${tag}-ubuntu -f Dockerfile.ubuntu.jammy ${buildx_suffix_clean}

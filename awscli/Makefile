@@ -25,7 +25,7 @@ check:
 	"
 
 buildx:
-	${host_proxy_clean} docker buildx build . ${build_proxy_clean} -t ${tag} ${buildx_suffix_clean}
+	${host_proxy_clean} docker buildx build . -t ${tag} ${buildx_suffix_clean} ${build_proxy_clean}
 
 buildx2:
 	${host_proxy_clean} docker buildx build . ${build_proxy_clean} -t ${tag}:2 ${buildx_suffix_clean} -f Dockerfile.build2

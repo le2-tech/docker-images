@@ -13,4 +13,4 @@ check:
 
 
 buildx:
-	docker buildx build . -t ${tag} ${buildx_suffix} ${build_proxy_clean}
+	docker buildx build . -t ${tag} ${buildx_suffix_clean} ${build_proxy_clean}
