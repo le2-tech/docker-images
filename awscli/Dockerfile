@@ -35,7 +35,7 @@ RUN set -eux; \
 RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
-      amd64)  pkg="ubuntu_64bit" ;; \
+      amd64) pkg="ubuntu_64bit" ;; \
       arm64) pkg="ubuntu_arm64" ;; \
       *) echo "Unsupported architecture: $arch" >&2 && exit 1 ;; \
     esac; \
