@@ -32,16 +32,16 @@ RUN set -eux; \
 #     dpkg -i session-manager-plugin.deb; \
 #     rm -f session-manager-plugin.deb
 
-# RUN set -eux; \
-#     arch=$(uname -m); \
-#     case "$arch" in \
-#       x86_64)  pkg="ubuntu_64bit" ;; \
-#       i686)    pkg="ubuntu_32bit" ;; \
-#       aarch64) pkg="ubuntu_arm64" ;; \
-#       *) echo "Unsupported architecture: $arch" >&2 && exit 1 ;; \
-#     esac; \
-#     plugin_url="https://s3.amazonaws.com/session-manager-downloads/plugin/latest/${pkg}/session-manager-plugin.deb"; \
-#     # -f 失败时报错，-S 显示错误信息，-L 跟随重定向
-#     curl -fSL "$plugin_url" -o session-manager-plugin.deb; \
-#     dpkg -i session-manager-plugin.deb; \
-#     rm session-manager-plugin.deb
+RUN set -eux; \
+    arch="$(dpkg --print-architecture)"; \
+    case "$arch" in \
+      x86_64)  pkg="ubuntu_64bit" ;; \
+      i686)    pkg="ubuntu_32bit" ;; \
+      aarch64) pkg="ubuntu_arm64" ;; \
+      *) echo "Unsupported architecture: $arch" >&2 && exit 1 ;; \
+    esac; \
+    plugin_url="https://s3.amazonaws.com/session-manager-downloads/plugin/latest/${pkg}/session-manager-plugin.deb"; \
+    # -f 失败时报错，-S 显示错误信息，-L 跟随重定向
+    curl -fSL "$plugin_url" -o session-manager-plugin.deb; \
+    dpkg -i session-manager-plugin.deb; \
+    rm session-manager-plugin.deb
