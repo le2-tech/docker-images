@@ -6,12 +6,10 @@
 
 FROM debian:sid-slim
 
-ENV DEBIAN_FRONTEND=noninteractive
-
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
-RUN apt-get update && apt-get install -y --no-install-recommends gnupg && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends gnupg && rm -rf /var/lib/apt/lists/*
 
 # add gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases

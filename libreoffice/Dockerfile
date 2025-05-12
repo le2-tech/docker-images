@@ -1,5 +1,6 @@
 
-FROM ubuntu:latest
+# FROM ubuntu:latest
+FROM ubuntu:rolling
 
 # 1. 安装 LibreOffice
 RUN apt-get update \

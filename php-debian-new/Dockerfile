@@ -3,12 +3,10 @@ ARG BASE_IMAGE
 ARG BASE_IMAGE_TAG
 FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
 
-# ARG DEBIAN_FRONTEND=noninteractive
-
 RUN set -eux; \
     apt-get update; \
     # apt-get upgrade -y; \
-    apt-get install -y --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         curl \
         # libz-dev \
         # libpq-dev \
@@ -40,7 +38,7 @@ RUN set -xe; \
     # apt-get update -yqq; \
     # pecl channel-update pecl.php.net; \
     apt-get update; \
-    apt-get install -yqq \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libzip-dev zlib1g-dev libz-dev zip unzip \
     ; \
     rm -rf /var/lib/apt/lists/*; \
@@ -55,7 +53,7 @@ RUN set -xe; \
 
 RUN set -eux; \
     apt-get update; \
-    apt-get install -yqq \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libpq-dev \
     ; \
     rm -rf /var/lib/apt/lists/*; \
@@ -67,7 +65,7 @@ RUN set -eux; \
 # Install the PHP gd library
 RUN set -eux; \
     apt-get update; \
-    apt-get install -yqq \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libjpeg-dev \
         libpng-dev \
         libfreetype6-dev \
@@ -88,7 +86,7 @@ RUN set -eux; \
 
 RUN set -eux; \
     apt-get update; \
-    apt-get -yqq install \
+    DEBIAN_FRONTEND=noninteractive apt-get -yqq install \
         libbz2-dev \
     ; \
     rm -rf /var/lib/apt/lists/*; \
@@ -106,7 +104,7 @@ RUN docker-php-ext-install sockets;
 
 RUN set -eux; \
     apt-get update; \
-    apt-get install -yqq \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libicu-dev zlib1g-dev g++ \
     ; \
     rm -rf /var/lib/apt/lists/*; \

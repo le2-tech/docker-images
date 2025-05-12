@@ -1,10 +1,8 @@
 FROM ubuntu:bionic
 
-ENV DEBIAN_FRONTEND=noninteractive
-
 RUN apt-get update -y \
     && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 		mysql-server-5.7 \
 		vim \
 		# gosu \

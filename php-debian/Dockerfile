@@ -4,14 +4,13 @@ ARG BASE_IMAGE_TAG
 FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
 
 # Set Environment Variables
-ENV DEBIAN_FRONTEND=noninteractive
 
 ARG DOCKER_ENV=prod
 
 RUN set -eux; \
     apt-get update; \
     apt-get upgrade -y; \
-    apt-get install -y --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             curl \
             libmemcached-dev \
             libz-dev \
