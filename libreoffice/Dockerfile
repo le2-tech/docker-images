@@ -1,7 +1,6 @@
 
 # FROM ubuntu:latest
-# FROM ubuntu:rolling
-FROM debian:experimental
+FROM ubuntu:rolling
 
 # 1. 安装 LibreOffice
 # https://packages.ubuntu.com/source/plucky/libreoffice
