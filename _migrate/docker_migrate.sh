@@ -38,7 +38,8 @@ docker login -u "$MIGRATE_USERNAME" -p "$MIGRATE_PASSWORD" "${MIGRATE_HOST:-}"
 # 定义迁移任务（只写源镜像，格式例如： "axllent/mailpit:latest"）
 MIGRATIONS=(
   "neilpang/acme.sh:latest"
-  "linuxserver/libreoffice:latest"
+  "${DOCKER_REPO}/libreoffice:latest"
+  "${DOCKER_REPO}/python-pdf-extract:latest"
   "nginx:latest"
   "node:latest"
   "axllent/mailpit:latest"
