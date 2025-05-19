@@ -39,7 +39,7 @@ docker login -u "$MIGRATE_USERNAME" -p "$MIGRATE_PASSWORD" "${MIGRATE_HOST:-}"
 MIGRATIONS=(
   "neilpang/acme.sh:latest"
   "${DOCKER_REPO}/libreoffice:latest"
-  "${DOCKER_REPO}/python-pdf-extract:latest"
+  "${DOCKER_REPO}/python-pdf-api:latest"
   "nginx:latest"
   "node:latest"
   "axllent/mailpit:latest"

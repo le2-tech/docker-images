@@ -4,7 +4,7 @@
 
 include ../_env/Makefile
 
-tag := ${REGISTRY_HOST}${IMAGE_NS}python-pdf-extract
+tag := ${REGISTRY_HOST}${IMAGE_NS}python-pdf-api
 
 check:
 	@docker run -it --rm ${tag} sh -c " \
