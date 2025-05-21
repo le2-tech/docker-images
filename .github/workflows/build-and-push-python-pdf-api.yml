@@ -1,4 +1,4 @@
-name: Build and Push Docker - python-pdf-service
+name: Build and Push Docker - python-pdf-api
 
 on:
   workflow_dispatch: # 手动触发
