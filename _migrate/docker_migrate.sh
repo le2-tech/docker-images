@@ -32,31 +32,29 @@ if [ -z "${MIGRATE_USERNAME:-}" ] || [ -z "${MIGRATE_PASSWORD:-}" ]; then
   exit 1
 fi
 
-echo "正在登录 Docker Hub ..."
-docker login -u "$MIGRATE_USERNAME" -p "$MIGRATE_PASSWORD" "${MIGRATE_HOST:-}"
-
 # 定义迁移任务（只写源镜像，格式例如： "axllent/mailpit:latest"）
 MIGRATIONS=(
+  "mariadb:latest"
+  "postgres:latest"
+  "docker.dragonflydb.io/dragonflydb/dragonfly:latest"
   "neilpang/acme.sh:latest"
   "${DOCKER_REPO}/libreoffice:latest"
   "${DOCKER_REPO}/python-pdf-api:latest"
   "nginx:latest"
   "node:latest"
   "axllent/mailpit:latest"
-  "adminer"
+  "adminer:latest"
   "mysql:8.4"
   "redis:latest"
   "redislabs/redisinsight:latest"
   "minio/minio:latest"
-  "${DOCKER_REPO}/awscli"
+  "${DOCKER_REPO}/awscli:latest"
   "${DOCKER_REPO}/node-uniapp:3"
   "fluent/fluent-bit:latest"
   "golang:latest"
   "${DOCKER_REPO}/php:8.3-cli"
   "${DOCKER_REPO}/php:8.3-fpm"
   "${DOCKER_REPO}/rabbitmq:3-management"
-  "mariadb:latest"
-  "postgres:latest"
 )
 # 默认平台及目标镜像前缀映射，格式：platform:prefix
 DEFAULT_PLATFORMS=("linux/amd64:le2-amd64" "linux/arm64/v8:le2-arm64")
@@ -74,6 +72,10 @@ migrate_image() {
   local attempt_num=1
   while [ $attempt_num -le $max_attempts ]; do
       echo "第 $attempt_num 次尝试拉取镜像..."
+
+      echo "正在登录 Docker Hub ..."
+      docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "${REGISTRY_HOST:-}"
+
       if docker pull --platform "${PLATFORM}" "${SOURCE_IMAGE}"; then
           echo "镜像拉取成功。"
           break
@@ -91,6 +93,9 @@ migrate_image() {
 
   echo "打标签：${SOURCE_IMAGE} -> ${TARGET_IMAGE} ..."
   docker tag "${SOURCE_IMAGE}" "${TARGET_IMAGE}"
+
+  echo "正在登录 Aliyun cr ..."
+  docker login -u "$MIGRATE_USERNAME" -p "$MIGRATE_PASSWORD" "${MIGRATE_HOST:-}"
 
   echo "推送镜像：${TARGET_IMAGE} ..."
   docker push "${TARGET_IMAGE}"
