@@ -55,6 +55,8 @@ MIGRATIONS=(
   "${DOCKER_REPO}/php:8.3-cli"
   "${DOCKER_REPO}/php:8.3-fpm"
   "${DOCKER_REPO}/rabbitmq:3-management"
+  "mariadb:latest"
+  "postgres:latest"
 )
 # 默认平台及目标镜像前缀映射，格式：platform:prefix
 DEFAULT_PLATFORMS=("linux/amd64:le2-amd64" "linux/arm64/v8:le2-arm64")
