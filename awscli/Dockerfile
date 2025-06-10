@@ -4,16 +4,16 @@ FROM debian:sid-slim
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-    	mysql-client curl ca-certificates unzip net-tools socat procps less jq; \
+    	curl ca-certificates unzip less jq; \
     rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip"; \
-    unzip -q awscliv2.zip; \
-    ./aws/install; \
-    rm -fr awscliv2.zip; \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip; \
+    unzip -q /tmp/awscliv2.zip -d /tmp; \
+    /tmp/aws/install --update; \
+    rm -rf /tmp/awscliv2.zip /tmp/aws; \
     aws --version; \
-    echo "complete -C '/usr/local/bin/aws_completer' aws" >> ~/.bashrc
+    echo "complete -C '/usr/local/bin/aws_completer' aws" >> /etc/bash.bashrc
 
 
 # 安装 Session Manager 插件
