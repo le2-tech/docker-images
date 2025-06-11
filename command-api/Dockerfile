@@ -25,7 +25,7 @@ COPY . .
 
 # 编译 Go 应用
 #RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o /app/your_project_name
-RUN CGO_ENABLED=0 GOOS=linux go build
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w"
 
 # 最终运行阶段
 FROM ${IMAGE_PREFIX}alpine:latest
