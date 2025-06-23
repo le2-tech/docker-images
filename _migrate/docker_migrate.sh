@@ -41,7 +41,7 @@ docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "${REGISTRY_HOST:-}"
 
 # 定义迁移任务（只写源镜像，格式例如： "axllent/mailpit:latest"）
 MIGRATIONS=(
-  "alpine:latest"
+  # "alpine:latest"
   # "mariadb:latest"
   # "postgres:latest"
   # "docker.dragonflydb.io/dragonflydb/dragonfly:latest"
@@ -65,6 +65,7 @@ MIGRATIONS=(
   # "${DOCKER_REPO}/php:8.3-cli"
   # "${DOCKER_REPO}/php:8.3-fpm"
   # "${DOCKER_REPO}/rabbitmq:3-management"
+  "${DOCKER_REPO}/postgres:latest"
 )
 # 默认平台及目标镜像前缀映射，格式：platform:prefix
 DEFAULT_PLATFORMS=("linux/amd64:le2-amd64" "linux/arm64/v8:le2-arm64")
