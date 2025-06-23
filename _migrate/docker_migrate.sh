@@ -43,7 +43,6 @@ docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "${REGISTRY_HOST:-}"
 MIGRATIONS=(
   # "alpine:latest"
   # "mariadb:latest"
-  # "postgres:latest"
   # "docker.dragonflydb.io/dragonflydb/dragonfly:latest"
   # "neilpang/acme.sh:latest"
   # "${DOCKER_REPO}/command-api:latest"
