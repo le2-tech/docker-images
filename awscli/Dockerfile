@@ -4,7 +4,7 @@ FROM debian:sid-slim
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-    	curl ca-certificates unzip less jq; \
+    	curl ca-certificates unzip less jq groff; \
     rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
