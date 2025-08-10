@@ -3,50 +3,14 @@ ARG BASE_IMAGE
 ARG BASE_IMAGE_TAG
 FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
 
-RUN set -eux; \
-    apt-get update; \
-    # apt-get upgrade -y; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        curl \
-        # libz-dev \
-        # libpq-dev \
-        # libjpeg-dev \
-        # libpng-dev \
-        # libfreetype6-dev \
-        libssl-dev \
-        # libwebp-dev \
-        # libxpm-dev \
-        # libmcrypt-dev \
-        # libonig-dev; \
-        procps \
-        # wget \
-        vim \
-        jq \
-        iputils-ping \
-        # zlib1g-dev \
-        # mariadb-client \
-        net-tools \
-        apt-utils \
-        gnupg2 \
-        git \
-    ; \
-    rm -rf /var/lib/apt/lists/*
 
 # always run apt update when start and after add new source list, then clean up at end.
-RUN set -xe; \
-    # apt-get update -yqq; \
-    # pecl channel-update pecl.php.net; \
+RUN set -eux; \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libzip-dev zlib1g-dev libz-dev zip unzip \
     ; \
     rm -rf /var/lib/apt/lists/*; \
-    #   if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-    #     docker-php-ext-configure zip; \
-    #   else \
-    #     docker-php-ext-configure zip --with-libzip; \
-    #   fi; \
-    # Install the zip extension
     docker-php-ext-install zip; \
     php -m | grep -q 'zip'
 
@@ -161,33 +125,22 @@ RUN if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
     fi
 
-# RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
-#     set -eux;\
-#     apt-get update; \
-#     apt-get -y install --no-install-recommends \
-#         poppler-utils \
-#         # fontconfig \
-#         # libreoffice \
-#     ; \
-#     apt-get clean; \
-#     rm -rf /var/lib/apt/lists/*; \
-# fi
-
-# # Install Docker CLI
-# RUN set -eux;\
-#     apt-get update; \
-#     apt-get install -y --no-install-recommends \
-#         ca-certificates \
-#         curl \
-#         gnupg \
-#         lsb-release \
-#         bash; \
-#     mkdir -p /etc/apt/keyrings; \
-#     curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg; \
-#     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list; \
-#     apt-get update; \
-#     apt-get install -y --no-install-recommends docker-ce-cli docker-compose-plugin; \
-#     rm -rf /var/lib/apt/lists/*
+# Install additional packages
+RUN set -eux; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        curl \
+        # libssl-dev \
+        procps \
+        vim \
+        jq \
+        iputils-ping \
+        net-tools \
+        apt-utils \
+        gnupg2 \
+        git \
+    ; \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /www
