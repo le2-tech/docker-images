@@ -12,7 +12,7 @@ RUN set -eux; \
     ; \
     rm -rf /var/lib/apt/lists/*; \
     docker-php-ext-install zip; \
-    php -m | grep -q 'zip'
+    docker-php-source delete;
 
 RUN set -eux; \
     apt-get update; \
@@ -23,7 +23,8 @@ RUN set -eux; \
     # Install the PHP pdo_mysql extention
     docker-php-ext-install pdo_mysql; \
     # Install the PHP pdo_pgsql extention
-    docker-php-ext-install pdo_pgsql; 
+    docker-php-ext-install pdo_pgsql; \
+    docker-php-source delete;
 
 # Install the PHP gd library
 RUN set -eux; \
@@ -44,26 +45,32 @@ RUN set -eux; \
     --with-xpm \
     --with-freetype; \
     docker-php-ext-install gd; \
-    php -r 'var_dump(gd_info());'
+    docker-php-source delete;
 
 
 RUN set -eux; \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get -yqq install \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y ---no-install-recommends \
         libbz2-dev \
     ; \
     rm -rf /var/lib/apt/lists/*; \
-    docker-php-ext-install bz2;
+    docker-php-ext-install bz2; \
+    docker-php-source delete;
 
-RUN docker-php-ext-install bcmath;
+RUN docker-php-ext-install bcmath; \
+    docker-php-source delete;
 
-RUN docker-php-ext-install mysqli;
+RUN docker-php-ext-install mysqli; \
+    docker-php-source delete;
 
-RUN docker-php-ext-install exif; 
+RUN docker-php-ext-install exif; \
+    docker-php-source delete;
 
-RUN docker-php-ext-install opcache;
+RUN docker-php-ext-install opcache; \
+    docker-php-source delete;
 
-RUN docker-php-ext-install sockets;
+RUN docker-php-ext-install sockets; \
+    docker-php-source delete;
 
 RUN set -eux; \
     apt-get update; \
@@ -72,28 +79,31 @@ RUN set -eux; \
     ; \
     rm -rf /var/lib/apt/lists/*; \
     docker-php-ext-configure intl ; \
-    docker-php-ext-install intl;
+    docker-php-ext-install intl; \
+    docker-php-source delete;
 
 # Install the xdebug extension
 # https://xdebug.org/docs/compat
 # https://pecl.php.net/package/xdebug
 RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-        pecl install xdebug-3.4.2; \
+        pecl install xdebug-3.4.5; \
     elif [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
         pecl install xdebug-3.1.6; \
     fi; \
-    docker-php-ext-enable xdebug;
+    docker-php-ext-enable xdebug; \
+    rm -rf /tmp/pear;
 
 RUN pecl install -o -f redis; \
-    rm -rf /tmp/pear; \
-    docker-php-ext-enable redis;
+    docker-php-ext-enable redis; \
+    rm -rf /tmp/pear; 
 
 RUN pecl install -o -f msgpack; \
-    rm -rf /tmp/pear; \
-    docker-php-ext-enable msgpack;
+    docker-php-ext-enable msgpack; \
+    rm -rf /tmp/pear;
 
 RUN pecl install apcu; \
-    docker-php-ext-enable apcu;
+    docker-php-ext-enable apcu; \
+    rm -rf /tmp/pear;
 
 # Install Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
@@ -116,7 +126,7 @@ RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
 RUN if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         set -eux;\
         apt-get update; \
-        apt-get -y install --no-install-recommends \
+        apt-get install -y --no-install-recommends \
             cron \
             sudo \
         ; \
