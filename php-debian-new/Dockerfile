@@ -50,7 +50,7 @@ RUN set -eux; \
 
 RUN set -eux; \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y ---no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libbz2-dev \
     ; \
     rm -rf /var/lib/apt/lists/*; \
