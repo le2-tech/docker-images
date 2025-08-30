@@ -2,6 +2,7 @@ FROM node:latest AS builder
 
 RUN npm install -g @vue/cli --loglevel verbose
 
+# https://github.com/dcloudio/uni-preset-vue/tree/vite
 RUN npx degit dcloudio/uni-preset-vue#vite /app
 
 WORKDIR /app

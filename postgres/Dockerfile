@@ -1,6 +1,15 @@
 
-
 FROM postgres:17-bookworm
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      locales \
+    && locale-gen zh_CN.UTF-8 \
+    && update-locale LANG=zh_CN.UTF-8
+
+# 设置环境变量
+ENV LANG=zh_CN.UTF-8
+ENV LC_ALL=zh_CN.UTF-8
 
 # 1. 安装 postgis
 RUN apt-get update \
