@@ -13,3 +13,6 @@ check:
 
 buildx:
 	${host_proxy_clean} docker buildx build . ${build_proxy_clean} -t ${tag} ${buildx_suffix_clean} 
+
+build:
+	${host_proxy_clean} docker        build . ${build_proxy_clean} -t ${tag}  
