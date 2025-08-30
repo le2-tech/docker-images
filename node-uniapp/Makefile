@@ -6,8 +6,8 @@ include ../_env/Makefile
 
 tag := ${REGISTRY_HOST}${IMAGE_NS}node-uniapp:3
 
-build:## build
-	${host_proxy_clean} docker        build . ${build_proxy_clean} -t ${tag}  --pull --no-cache --progress=plain
+build:## build  // --no-cache
+	${host_proxy_clean} docker        build . -t ${tag}                        ${build_proxy_clean}   --pull --progress=plain
 
 
 buildx:## buildx

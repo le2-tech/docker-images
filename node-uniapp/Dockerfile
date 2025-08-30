@@ -9,4 +9,7 @@ WORKDIR /app
 RUN set -eux; \
     npm update --loglevel verbose; \
     npm i vue@latest pinia@latest decimal.js@latest; \
-    npm i -D sass@latest vite@latest;
+    npm i -D sass@latest;
+
+# RUN set -eux; \
+#     npm i -D vite@latest;
