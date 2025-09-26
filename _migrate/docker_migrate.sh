@@ -58,12 +58,15 @@ MIGRATIONS=(
   # "${DOCKER_REPO}/command-api:latest"
   # "${DOCKER_REPO}/poppler:latest"
   # "${DOCKER_REPO}/libreoffice:latest"
-  "${DOCKER_REPO}/awscli:latest"
-  "${DOCKER_REPO}/node-uniapp:3"
-  "${DOCKER_REPO}/php:8.4-cli"
-  "${DOCKER_REPO}/php:8.4-fpm"
-  "${DOCKER_REPO}/rabbitmq:3-management"
-  "${DOCKER_REPO}/postgres:latest"
+  # "${DOCKER_REPO}/awscli:latest"
+  # "${DOCKER_REPO}/node-uniapp:3"
+  # "${DOCKER_REPO}/php:8.4-cli"
+  # "${DOCKER_REPO}/php:8.4-fpm"
+  # "${DOCKER_REPO}/rabbitmq:3-management"
+  # "${DOCKER_REPO}/postgres:latest"
+   # "${DOCKER_REPO}/postgres:latest"
+  #  "${DOCKER_REPO}/ssh-debian:latest"
+  "timescale/timescaledb-ha:pg17"
 )
 # 默认平台及目标镜像前缀映射，格式：platform:prefix
 DEFAULT_PLATFORMS=("linux/amd64:le2-amd64" "linux/arm64/v8:le2-arm64")
