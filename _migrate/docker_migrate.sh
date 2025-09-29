@@ -66,7 +66,8 @@ MIGRATIONS=(
   # "${DOCKER_REPO}/postgres:latest"
    # "${DOCKER_REPO}/postgres:latest"
   #  "${DOCKER_REPO}/ssh-debian:latest"
-  "timescale/timescaledb-ha:pg17"
+  # "timescale/timescaledb-ha:pg17"
+  "emqx/emqx:5.8.8"
 )
 # 默认平台及目标镜像前缀映射，格式：platform:prefix
 DEFAULT_PLATFORMS=("linux/amd64:le2-amd64" "linux/arm64/v8:le2-arm64")
