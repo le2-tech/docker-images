@@ -4,52 +4,45 @@ ARG BASE_IMAGE_TAG
 FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
 
 # Install the PHP zip extention
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    apt-get update; \
+RUN apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libzip-dev zlib1g-dev libz-dev zip unzip \
     ; \
-    docker-php-ext-install zip; 
+    docker-php-ext-install zip; \
     # docker-php-source delete;
     # apt-get purge -y --auto-remove libzip-dev zlib1g-dev libz-dev; \
     # apt-get install -yqq libzip5 zlib1g; \
-    # rm -rf /var/lib/apt/lists/*; 
+    rm -rf /var/lib/apt/lists/*; 
 
 # Install the PHP pdo_pgsql extention
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    apt-get update; \
+RUN apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libpq-dev \
     ; \
     # Install the PHP pdo_mysql extention
     # docker-php-ext-install pdo_mysql; \
     # Install the PHP pdo_pgsql extention
-    docker-php-ext-install pdo_pgsql;
+    docker-php-ext-install pdo_pgsql; \
     # docker-php-source delete;
     # apt-get purge -y --auto-remove libpq-dev; \
     # apt-get install -yqq libpq5; \
-    # rm -rf /var/lib/apt/lists/*;
+    rm -rf /var/lib/apt/lists/*;
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    apt-get update; \
+RUN apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libjpeg-dev libpng-dev libwebp-dev libxpm-dev \
     ; \
-    rm -rf /var/lib/apt/lists/*; \
     docker-php-ext-configure gd \
     --prefix=/usr \
     --with-jpeg \
     --with-webp \
     --with-xpm \
     --with-freetype; \
-    docker-php-ext-install gd;
+    docker-php-ext-install gd; \
     # docker-php-source delete;
     # apt-get purge -y --auto-remove libjpeg-dev libpng-dev libwebp-dev libxpm-dev; \
     # apt-get install -yqq libjpeg62-turbo libpng16-16t64 libwebp7 libxpm4; \
-    # rm -rf /var/lib/apt/lists/*;
+    rm -rf /var/lib/apt/lists/*;
 
 
 RUN apt-get update; \
