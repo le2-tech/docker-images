@@ -3,13 +3,10 @@ ARG BASE_IMAGE
 ARG BASE_IMAGE_TAG
 FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    apt-get update;
-
 # Install the PHP zip extention
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libzip-dev zlib1g-dev libz-dev zip unzip \
     ; \
@@ -22,6 +19,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # Install the PHP pdo_pgsql extention
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libpq-dev \
     ; \
@@ -36,6 +34,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libjpeg-dev libpng-dev libwebp-dev libxpm-dev \
     ; \
@@ -55,6 +54,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libbz2-dev \
     ; \
@@ -81,6 +81,7 @@ RUN docker-php-ext-install opcache;
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libicu-dev g++ \
     ; \
@@ -136,6 +137,7 @@ RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
+        apt-get update; \
         apt-get install -y --no-install-recommends \
             cron \
             sudo \
@@ -146,6 +148,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # Install additional packages
 # RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 #     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+#     apt-get update; \
 #     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 #         curl \
 #         procps \
