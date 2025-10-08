@@ -52,17 +52,15 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     # rm -rf /var/lib/apt/lists/*;
 
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    apt-get update; \
+RUN apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libbz2-dev \
     ; \
-    docker-php-ext-install bz2;
+    docker-php-ext-install bz2; \
     # docker-php-source delete;
     # apt-get purge -y --auto-remove libbz2-dev; \
     # apt-get install -yqq libbz2-1.0; \
-    # rm -rf /var/lib/apt/lists/*;
+    rm -rf /var/lib/apt/lists/*;
 
 RUN docker-php-ext-install bcmath; 
     # docker-php-source delete;
@@ -79,18 +77,16 @@ RUN docker-php-ext-install opcache;
 # RUN docker-php-ext-install sockets; \
     # docker-php-source delete;
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    apt-get update; \
+RUN apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
         libicu-dev g++ \
     ; \
     docker-php-ext-configure intl ; \
-    docker-php-ext-install intl; 
+    docker-php-ext-install intl; \
     # docker-php-source delete;
     # apt-get purge -y --auto-remove libicu-dev g++; \
     # apt-get install -yqq libicu76; \
-    # rm -rf /var/lib/apt/lists/*;    
+    rm -rf /var/lib/apt/lists/*;
 
 # Install the xdebug extension
 # https://xdebug.org/docs/compat
@@ -134,14 +130,13 @@ RUN if [ -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         -e "s/^;listen.mode *=.*/listen.mode = 0660/g" /usr/local/etc/php-fpm.d/www.conf; \
     fi
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
+RUN if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         apt-get update; \
         apt-get install -y --no-install-recommends \
             cron \
             sudo \
         ; \
+        rm -rf /var/lib/apt/lists/*; \
         echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
     fi
 
