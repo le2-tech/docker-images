@@ -44,3 +44,6 @@ buildx-php84-cli:
 
 build-test:
 	${host_proxy_clean} docker build . -t ${REGISTRY_HOST}${IMAGE_NS}php-cli:8.4 --build-arg BASE_IMAGE=${REGISTRY_HOST}php            --build-arg BASE_IMAGE_TAG=8.4-cli ${build_proxy_clean} --progress=plain
+
+bash-test:
+	${host_proxy_clean} docker run -it --rm ${REGISTRY_HOST}${IMAGE_NS}php-cli:8.4 bash
