@@ -2,14 +2,6 @@
 .PHONY: 
 .DEFAULT_GOAL := _
 _ : build
+tag := tmp
 
--include ../_env/Makefile
-
-tag := ${REGISTRY_HOST}${IMAGE_NS}tmp
-
-build:
-	docker build        . -t ${tag}                  ${build_proxy_clean}
-
-buildx:
-	docker buildx build . -t ${tag} ${buildx_suffix_clean} ${build_proxy_clean}
-
+include ../_env/Makefile

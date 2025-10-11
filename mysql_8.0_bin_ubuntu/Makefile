@@ -1,10 +1,8 @@
 
 .PHONY: 
 .DEFAULT_GOAL := build
-
-tag := golang
+tag := mysql:8.0-ubuntu
 
 include ../_env/Makefile
 
-build:
-	docker build . -t ${tag}
+

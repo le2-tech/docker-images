@@ -8,3 +8,18 @@ include ${BASE_DIR}/_env/${BASIC_ENV}.env
 build_proxy_clean := $(subst ",,$(build_proxy))
 host_proxy_clean := $(subst ",,$(host_proxy))
 buildx_suffix_clean := $(subst ",,$(buildx_suffix))
+
+tag_full := ${REGISTRY_HOST}${IMAGE_NS}${tag}
+
+bash:
+	${host_proxy_clean} docker run -it --rm ${tag_full} bash
+
+buildx:
+	${host_proxy_clean} docker buildx build . -t ${tag_full} ${buildx_suffix_clean} ${build_proxy_clean}
+
+# --no-cache --progress=plain
+build:
+	${host_proxy_clean} docker        build . -t ${tag_full}                         ${build_proxy_clean} --pull
+
+check:
+	${host_proxy_clean} docker run -it --rm ${tag_full} sh -c "$(CHECK_CMD)"

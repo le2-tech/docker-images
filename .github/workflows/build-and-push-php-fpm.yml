@@ -35,4 +35,4 @@ jobs:
         run: docker --version
 
       - name: Build and Push Service
-        run: make -C ./php-debian-new buildx-php84-fpm
+        run: make -C ./php84-fpm buildx

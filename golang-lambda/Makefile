@@ -1,16 +1,7 @@
 
 .PHONY: 
 .DEFAULT_GOAL := build
+tag := golang-lambda
+CHECK_CMD := go version ; go env ; go list -m all ;
 
 include ../_env/Makefile
-
-tag := ${REGISTRY_HOST}${IMAGE_NS}golang-lambda
-
-build:
-	docker build . -t ${tag}
-
-check:
-	
-
-buildx:
-	docker buildx build . -t ${tag} ${buildx_suffix_clean} ${build_proxy_clean}

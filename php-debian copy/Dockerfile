@@ -125,7 +125,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         apt-get update; \
-        apt-get install -yqq --no-install-recommends \
+        DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
             cron \
             sudo \
         ; \
