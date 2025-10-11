@@ -1,4 +1,4 @@
-name: Build and Push Docker - ossutil-debian
+name: Build and Push Docker - bakup-debian
 
 on:
   workflow_dispatch:
@@ -40,4 +40,4 @@ jobs:
         run: docker --version
 
       - name: Build and Push Service
-        run: make -C ./ossutil-debian buildx
+        run: make -C ./bakup-debian buildx
