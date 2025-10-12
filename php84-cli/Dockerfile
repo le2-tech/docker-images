@@ -8,7 +8,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libzip-dev zip unzip ; \
-    docker-php-ext-install -j"$(nproc)" zip; \
+    docker-php-ext-install zip; \
     apt-get purge -y --auto-remove libzip-dev; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libzip5 ; \
@@ -23,9 +23,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
         libpq-dev \
     ; \
     # Install the PHP pdo_mysql extention
-    # docker-php-ext-install -j"$(nproc)" pdo_mysql; \
+    # docker-php-ext-install pdo_mysql; \
     # Install the PHP pdo_pgsql extention
-    docker-php-ext-install -j"$(nproc)" pdo_pgsql; \
+    docker-php-ext-install pdo_pgsql; \
     apt-get purge -y --auto-remove libpq-dev; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libpq5 ; \
@@ -38,7 +38,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libjpeg-dev libpng-dev libwebp-dev libxpm-dev libfreetype-dev ; \
     docker-php-ext-configure gd --prefix=/usr --with-jpeg --with-webp --with-xpm --with-freetype; \
-    docker-php-ext-install -j"$(nproc)" gd; \
+    docker-php-ext-install gd; \
     apt-get purge -y --auto-remove libjpeg-dev libpng-dev libwebp-dev libxpm-dev libfreetype-dev; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libpng16-16 libfreetype6 ; \
@@ -51,18 +51,18 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libbz2-dev ; \
-    docker-php-ext-install -j"$(nproc)" bz2; \
+    docker-php-ext-install bz2; \
     apt-get purge -y --auto-remove libbz2-dev ; \
     php -m | grep bz2;
 
-RUN docker-php-ext-install -j"$(nproc)" bcmath; \
+RUN docker-php-ext-install bcmath; \
     php -m | grep bcmath;
 
-# RUN docker-php-ext-install -j"$(nproc)" mysqli;
+# RUN docker-php-ext-install mysqli;
 
-# RUN docker-php-ext-install -j"$(nproc)" exif; \
+# RUN docker-php-ext-install exif; \
 
-# RUN docker-php-ext-install -j"$(nproc)" sockets; \
+# RUN docker-php-ext-install sockets; \
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
@@ -71,7 +71,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libicu-dev ; \
     docker-php-ext-configure intl ; \
-    docker-php-ext-install -j"$(nproc)" intl; \
+    docker-php-ext-install intl; \
     apt-get purge -y --auto-remove libicu-dev; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libicu76 ;\
