@@ -4,8 +4,11 @@ FROM ubuntu:rolling
 
 # 1. 安装 LibreOffice
 # https://packages.ubuntu.com/source/plucky/libreoffice
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN set -eux; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       libreoffice-core \
       libreoffice-writer \
-    && rm -rf /var/lib/apt/lists/*
+      ; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/*

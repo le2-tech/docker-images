@@ -1,29 +1,32 @@
-
+# syntax=docker/dockerfile:1
 FROM debian:sid-slim
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # 安装必须依赖
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
     set -eux; \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends ca-certificates curl unzip cron ;
+    apt-get install -y --no-install-recommends ca-certificates curl unzip cron ;
 
 # postgresql-client 在sid源中只有18版本
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
     set -eux; \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends postgresql-client;
+    apt-get install -y --no-install-recommends postgresql-client;
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
     set -eux; \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends minio-client; \
-    ln -s /usr/bin/minio-client /usr/local/bin/mc;
+    apt-get install -y --no-install-recommends minio-client; \
+    ln -sf /usr/bin/minio-client /usr/local/bin/mc;
 
-ARG OSSUTIL_VERSION=2.1.2
-RUN arch="$(dpkg --print-architecture)"; \
+RUN set -eux; \
+    OSSUTIL_VERSION=2.1.2; \
+    arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
       amd64) osspkg="linux-amd64";; \
       arm64) osspkg="linux-arm64";; \
@@ -34,5 +37,4 @@ RUN arch="$(dpkg --print-architecture)"; \
     unzip -q /tmp/ossutil.zip -d /tmp/; \
     install -m 755 "/tmp/ossutil-${OSSUTIL_VERSION}-${osspkg}/ossutil" /usr/local/bin/ossutil; \
     rm -fr /tmp/ossutil*; \
-    # 构建期自检
     ossutil --help >/dev/null

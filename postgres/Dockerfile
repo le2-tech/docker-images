@@ -1,23 +1,29 @@
 
-FROM postgres:17-bookworm
+# postgresql-18-postgis-3 在 debian package 里只有sid源中有. https://packages.debian.org/sid/postgresql-18-postgis-3
+# postgresql-17-postgis-3 在 trixie 源里有。 https://packages.debian.org/sid/postgresql-17-postgis-3
+FROM postgres:17-trixie
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN set -eux; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       locales \
-    && sed -i '/^# zh_CN.UTF-8/s/^# //g' /etc/locale.gen \
-    && locale-gen \
-    && rm -rf /var/lib/apt/lists/*
+      ; \
+    sed -i '/^# zh_CN.UTF-8/s/^# //g' /etc/locale.gen; \
+    locale-gen; \
+    rm -rf /var/lib/apt/lists/*
 
 # 设置环境变量
 ENV LANG=zh_CN.UTF-8
 ENV LC_ALL=zh_CN.UTF-8
 
 # 1. 安装 postgis
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN set -eux; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       postgis \
       postgresql-$PG_MAJOR-postgis-3 \
-    && rm -rf /var/lib/apt/lists/*
+      ; \
+    rm -rf /var/lib/apt/lists/*
 
 # https://docs.tigerdata.com/self-hosted/latest/install/installation-linux/
 

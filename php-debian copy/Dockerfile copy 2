@@ -7,7 +7,7 @@ FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libzip-dev zip unzip \
     ; \
     docker-php-ext-install zip; \
@@ -19,7 +19,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libpq-dev \
     ; \
     # Install the PHP pdo_mysql extention
@@ -32,7 +32,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libjpeg-dev libpng-dev libwebp-dev libxpm-dev \
     ; \
     docker-php-ext-configure gd \
@@ -72,7 +72,7 @@ RUN docker-php-ext-install opcache;
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libicu-dev \
     ; \
     docker-php-ext-configure intl ; \

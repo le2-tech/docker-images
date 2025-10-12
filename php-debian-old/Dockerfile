@@ -43,9 +43,9 @@ RUN set -eux; \
 
 # always run apt update when start and after add new source list, then clean up at end.
 RUN set -xe; \
-    apt-get update -yqq; \
+    apt-get update -y; \
     pecl channel-update pecl.php.net; \
-    apt-get install -yqq \
+    apt-get install -y \
       apt-utils \
       gnupg2 \
       git \
@@ -62,7 +62,7 @@ RUN set -xe; \
 ENV INSTALL_BZ2="true"
 
 RUN if [ ${INSTALL_BZ2} = "true" ]; then \
-        apt-get -yqq install libbz2-dev; \
+        apt-get -y install libbz2-dev; \
         docker-php-ext-install bz2; \
     fi
 
@@ -99,7 +99,7 @@ RUN if [ ${INSTALL_SOCKETS} = "true" ]; then \
 ENV INSTALL_INTL="true"
 
 RUN if [ ${INSTALL_INTL} = "true" ]; then \
-        apt-get install -yqq zlib1g-dev libicu-dev g++; \
+        apt-get install -y zlib1g-dev libicu-dev g++; \
         docker-php-ext-configure intl ; \
         docker-php-ext-install intl; \
     fi

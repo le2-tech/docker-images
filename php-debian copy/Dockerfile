@@ -7,11 +7,11 @@ FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG}
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libzip-dev zip unzip ; \
     docker-php-ext-install zip; \
     apt-get purge -y --auto-remove libzip-dev; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libzip5 ; \
     php -m | grep zip;
 
@@ -19,7 +19,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libpq-dev \
     ; \
     # Install the PHP pdo_mysql extention
@@ -27,19 +27,19 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     # Install the PHP pdo_pgsql extention
     docker-php-ext-install pdo_pgsql; \
     apt-get purge -y --auto-remove libpq-dev; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libpq5 ; \
     php -m | grep pdo_pgsql;
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libjpeg-dev libpng-dev libwebp-dev libxpm-dev ; \
     docker-php-ext-configure gd --prefix=/usr --with-jpeg --with-webp --with-xpm --with-freetype; \
     docker-php-ext-install gd; \
     apt-get purge -y --auto-remove libjpeg-dev libpng-dev libwebp-dev libxpm-dev; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libpng16-16 ; \
     php -m | grep gd;
 
@@ -47,7 +47,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libbz2-dev ; \
     docker-php-ext-install bz2; \
     apt-get purge -y --auto-remove libbz2-dev ; \
@@ -65,12 +65,12 @@ RUN docker-php-ext-install bcmath; \
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libicu-dev ; \
     docker-php-ext-configure intl ; \
     docker-php-ext-install intl; \
     apt-get purge -y --auto-remove libicu-dev; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libicu76 ;\
     php -m | grep intl;
 
@@ -125,7 +125,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     if [ ! -f /usr/local/etc/php-fpm.d/www.conf ]; then \
         apt-get update; \
-        DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+        DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             cron \
             sudo \
         ; \
@@ -136,7 +136,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 #     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
 #     apt-get update; \
-#     DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+#     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 #         curl \
 #         procps \
 #         vim \
