@@ -2,112 +2,15 @@
 FROM php:8.4-cli
 
 # Install the PHP zip extention
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
-    set -eux; \
-    apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libzip-dev zip unzip ; \
-    docker-php-ext-install zip; \
-    apt-get purge -y --auto-remove libzip-dev; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libzip5 ; \
-    php -m | grep zip;
+RUN  --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
+    install-php-extensions zip pdo_pgsql gd bz2 bcmath intl redis xdebug msgpack apcu
 
-# Install the PHP pdo_pgsql extention
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
-    set -eux; \
-    apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libpq-dev \
-    ; \
-    # Install the PHP pdo_mysql extention
-    # docker-php-ext-install pdo_mysql; \
-    # Install the PHP pdo_pgsql extention
-    docker-php-ext-install pdo_pgsql; \
-    apt-get purge -y --auto-remove libpq-dev; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libpq5 ; \
-    php -m | grep pdo_pgsql;
-
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
-    set -eux; \
-    apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libjpeg-dev libpng-dev libwebp-dev libxpm-dev libfreetype-dev ; \
-    docker-php-ext-configure gd --prefix=/usr --with-jpeg --with-webp --with-xpm --with-freetype; \
-    docker-php-ext-install gd; \
-    apt-get purge -y --auto-remove libjpeg-dev libpng-dev libwebp-dev libxpm-dev libfreetype-dev; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libpng16-16 libfreetype6 ; \
-    php -m | grep gd;
-
-
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
-    set -eux; \
-    apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libbz2-dev ; \
-    docker-php-ext-install bz2; \
-    apt-get purge -y --auto-remove libbz2-dev ; \
-    php -m | grep bz2;
-
-RUN docker-php-ext-install bcmath; \
-    php -m | grep bcmath;
 
 # RUN docker-php-ext-install mysqli;
 
 # RUN docker-php-ext-install exif; \
 
 # RUN docker-php-ext-install sockets; \
-
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
-    set -eux; \
-    apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libicu-dev ; \
-    docker-php-ext-configure intl ; \
-    docker-php-ext-install intl; \
-    apt-get purge -y --auto-remove libicu-dev; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libicu76 ;\
-    php -m | grep intl;
-
-RUN --mount=type=cache,target=/tmp/pear,sharing=locked,id=pear-tmp \
-    set -eux; \
-    pecl install -o -f redis; \
-    docker-php-ext-enable redis;\
-    php -m | grep redis;
-
-# Install the xdebug extension
-# https://xdebug.org/docs/compat
-# https://pecl.php.net/package/xdebug
-RUN --mount=type=cache,target=/tmp/pear,sharing=locked,id=pear-tmp \
-    set -eux; \
-    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-        # pecl install xdebug-3.4.6; \
-        pecl install xdebug; \
-    elif [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
-        pecl install xdebug-3.1.6; \
-    fi; \
-    docker-php-ext-enable xdebug; \
-    php -m | grep xdebug;
-
-RUN --mount=type=cache,target=/tmp/pear,sharing=locked,id=pear-tmp \
-    set -eux; \
-    pecl install -o -f msgpack; \
-    docker-php-ext-enable msgpack; \
-    php -m | grep msgpack;
-
-RUN --mount=type=cache,target=/tmp/pear,sharing=locked,id=pear-tmp \
-    set -eux; \
-    pecl install apcu; \
-    docker-php-ext-enable apcu; \
-    php -m | grep apcu;
 
 # Install Composer
 # RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
