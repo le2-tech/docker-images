@@ -38,3 +38,11 @@ RUN set -eux; \
     install -m 755 "/tmp/ossutil-${OSSUTIL_VERSION}-${osspkg}/ossutil" /usr/local/bin/ossutil; \
     rm -fr /tmp/ossutil*; \
     ossutil --help >/dev/null
+
+RUN set -eux; \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip; \
+    unzip -q /tmp/awscliv2.zip -d /tmp; \
+    /tmp/aws/install --update; \
+    rm -rf /tmp/awscliv2.zip /tmp/aws; \
+    aws --version; \
+    echo "complete -C '/usr/local/bin/aws_completer' aws" >> /etc/bash.bashrc
