@@ -40,7 +40,7 @@ RUN set -eux; \
     ossutil --help >/dev/null
 
 RUN set -eux; \
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip; \
+    curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip; \
     unzip -q /tmp/awscliv2.zip -d /tmp; \
     /tmp/aws/install --update; \
     rm -rf /tmp/awscliv2.zip /tmp/aws; \
