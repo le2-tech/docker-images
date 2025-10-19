@@ -3,6 +3,7 @@ FROM php:8.4-fpm-alpine
 
 # Install PHP extensions via mlocati installer (works on Alpine)
 RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
+    # sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories; \
     install-php-extensions zip pdo_pgsql gd bz2 bcmath intl redis xdebug msgpack apcu
 
 # 可按需启用内置扩展（Alpine 同样适用）
