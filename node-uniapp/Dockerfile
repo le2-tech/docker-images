@@ -1,4 +1,4 @@
-FROM node:latest AS builder
+FROM node:latest
 
 RUN npm install -g @vue/cli --loglevel verbose
 
@@ -9,7 +9,7 @@ WORKDIR /app
 
 RUN set -eux; \
     npm update --loglevel verbose; \
-    npm i vue@latest pinia@latest decimal.js@latest; \
+    npm i vue@latest vue-router@latest pinia@latest decimal.js@latest; \
     npm i -D sass@latest;
 
 # RUN set -eux; \

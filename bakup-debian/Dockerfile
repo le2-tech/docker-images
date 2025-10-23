@@ -24,6 +24,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
     apt-get install -y --no-install-recommends minio-client; \
     ln -sf /usr/bin/minio-client /usr/local/bin/mc;
 
+# 安装ossutil
+# https://help.aliyun.com/zh/oss/developer-reference/install-ossutil2
 RUN set -eux; \
     OSSUTIL_VERSION=2.1.2; \
     arch="$(dpkg --print-architecture)"; \
