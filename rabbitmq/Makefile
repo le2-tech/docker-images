@@ -2,6 +2,6 @@
 .PHONY: 
 .DEFAULT_GOAL := build
 
-tag := rabbitmq:3-management
+tag := rabbitmq:4-management
 
 include ../_env/Makefile
