@@ -35,11 +35,6 @@ jobs:
         with:
           install: true
 
-      - name: Install make (if needed)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y make
-
       - name: make .env file
         run: echo "BASIC_ENV=pro" > .env
 

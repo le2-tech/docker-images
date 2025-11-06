@@ -35,10 +35,6 @@ fi
 echo "正在登录 Aliyun cr ..."
 docker login -u "$MIGRATE_USERNAME" -p "$MIGRATE_PASSWORD" "${MIGRATE_HOST:-}"
 
-echo "正在登录 Docker Hub ..."
-docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "${REGISTRY_HOST:-}"
-
-
 # 定义迁移任务（只写源镜像，格式例如： "axllent/mailpit:latest"）
 MIGRATIONS=(
   "alpine:latest"

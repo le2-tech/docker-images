@@ -27,11 +27,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Install make (if needed)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y make
-
       - name: make .env file
         run: echo "BASIC_ENV=pro" > .env
 
