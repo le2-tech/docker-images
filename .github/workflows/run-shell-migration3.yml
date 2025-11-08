@@ -17,9 +17,9 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@main
 
-      - uses: docker/login-action@v3
+      - uses: docker/login-action@master
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
