@@ -1,4 +1,8 @@
-FROM node:latest
+# FROM node:latest
+# FROM node:trixie-slim
+FROM node:alpine
+
+RUN apk add --no-cache git ca-certificates;
 
 RUN npm install -g @vue/cli --loglevel verbose
 
