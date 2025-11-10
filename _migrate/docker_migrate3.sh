@@ -8,20 +8,19 @@ GHCR_NS="ghcr.io/${GHCR_OWNER}"
 
 # 迁移的镜像数组（可扩展）
 IMAGES=(
-  # "alpine:latest"
-  # "debian:latest"
-  # "ubuntu:latest"
-  # "neilpang/acme.sh:latest"
-  # "nginx:latest"
-  "node:alpine"
-  # "redis:latest"
-  # "fluent/fluent-bit:latest"
-  # "golang:latest"
-  # "timescale/timescaledb:latest-pg18"
-  # "emqx/emqx:5.8.8"
-  # "emqx/mqttx-web:latest"
-  # "emqx/mqttx-cli:latest"
-  # "emqx/emqtt-bench:latest"
+  "alpine:latest"
+  "debian:latest"
+  "ubuntu:latest"
+  "neilpang/acme.sh:latest"
+  "nginx:latest"
+  "redis:latest"
+  "fluent/fluent-bit:latest"
+  "golang:latest"
+  "timescale/timescaledb:latest-pg18"
+  "emqx/emqx:5.8.8"
+  "emqx/mqttx-web:latest"
+  "emqx/mqttx-cli:latest"
+  "emqx/emqtt-bench:latest"
 )
 
 # 需要合并的架构
