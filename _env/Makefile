@@ -5,6 +5,8 @@ BASE_DIR := $(abspath $(CURRENT_MAKEFILE_DIR)/../)
 include ${BASE_DIR}/.env
 include ${BASE_DIR}/_env/${BASIC_ENV}.env
 
+buildx_suffix :=" --pull --platform linux/amd64,linux/arm64 --push"
+
 build_proxy_clean := $(subst ",,$(build_proxy))
 host_proxy_clean := $(subst ",,$(host_proxy))
 buildx_suffix_clean := $(subst ",,$(buildx_suffix))
