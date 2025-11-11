@@ -1,7 +1,8 @@
 name: Run Shell Script migration3
 
-# 手动触发
 on:
+  schedule:
+    - cron: "0 0 * * 2,5"
   workflow_dispatch:
 
 permissions:

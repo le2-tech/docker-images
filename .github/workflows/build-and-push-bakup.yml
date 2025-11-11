@@ -1,6 +1,8 @@
 name: Build and Push Docker - bakup-debian
 
 on:
+  schedule:
+    - cron: "0 0 * * 2,5"
   workflow_dispatch:
 
 permissions:
@@ -12,8 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 180
     env:
-      DOCKER_DRIVER: overlay2
-      DOCKER_BUILDKIT: 1
+      # DOCKER_DRIVER: overlay2
+      # DOCKER_BUILDKIT: 1
+      BASIC_ENV: pro
     steps:
       - uses: actions/checkout@main
 
@@ -35,8 +38,8 @@ jobs:
         with:
           install: true
 
-      - name: make .env file
-        run: echo "BASIC_ENV=pro" > .env
+      # - name: make .env file
+      #   run: echo "BASIC_ENV=pro" > .env
 
       - name: Build and Push Service
         run: make -C ./bakup-debian buildx

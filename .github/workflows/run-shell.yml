@@ -1,7 +1,6 @@
 # 文件路径：.github/workflows/run-shell.yml
 name: Run Shell Script
 
-# 手动触发
 on:
   workflow_dispatch:
 

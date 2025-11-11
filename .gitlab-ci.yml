@@ -38,4 +38,4 @@ build-and-push:
     - make -C ./${SERVICE_NAME} ${CMD_BUILDX}
 
   rules:
-    - when: manual # 手动触发流水线
+    - when: manual

@@ -2,7 +2,7 @@ CURRENT_MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 BASE_DIR := $(abspath $(CURRENT_MAKEFILE_DIR)/../)
 
-include ${BASE_DIR}/.env
+# include ${BASE_DIR}/.env
 include ${BASE_DIR}/_env/${BASIC_ENV}.env
 
 buildx_suffix :=" --pull --platform linux/amd64,linux/arm64 --push"
