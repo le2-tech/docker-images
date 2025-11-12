@@ -1,4 +1,4 @@
-name: Build & Push Docker image (ssh-debian)
+name: Build & Push Docker image (backup-debian)
 
 on:
   schedule:
@@ -19,7 +19,7 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: le2-tech/ssh-debian
+  IMAGE_NAME: le2-tech/backup-debian
 
 jobs:
   meta:
@@ -69,7 +69,7 @@ jobs:
       - name: Build & push (native ${{ matrix.platform }})
         uses: docker/build-push-action@master
         with:
-          context: ./ssh-debian
+          context: ./backup-debian
           platforms: ${{ matrix.platform }} # 原生构建，无 QEMU
           push: ${{ github.event_name != 'pull_request' }}
           # 临时标签，用于后续合成 manifest
