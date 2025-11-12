@@ -14,8 +14,8 @@ permissions:
   packages: write
 
 concurrency:
-  group: docker-${{ github.ref }}
-  cancel-in-progress: false
+  group: docker-${{ github.ref }}-postgres
+  cancel-in-progress: true
 
 env:
   REGISTRY: ghcr.io
