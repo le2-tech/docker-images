@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: "0 0 * * 2,5"
   push:
+    paths:
+      - "awscli/**"
     branches: ["main"]
     tags: ["v*"]
   pull_request:
