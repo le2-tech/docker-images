@@ -16,12 +16,12 @@ permissions:
   packages: write
 
 concurrency:
-  group: docker-${{ github.ref }}-php-cli-alpine
+  group: docker-${{ github.ref }}-php-fpm-alpine
   cancel-in-progress: true
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: le2-tech/php
+  IMAGE_NAME: le2-tech/php-fpm-alpine
 
 jobs:
   meta:
@@ -36,7 +36,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=84-fpm-alpine
+            type=raw,value=latest
 
   build:
     needs: meta

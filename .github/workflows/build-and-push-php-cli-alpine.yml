@@ -21,7 +21,7 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: le2-tech/php
+  IMAGE_NAME: le2-tech/php-cli-alpine
 
 jobs:
   meta:
@@ -36,7 +36,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=84-cli-alpine
+            type=raw,value=latest
 
   build:
     needs: meta
