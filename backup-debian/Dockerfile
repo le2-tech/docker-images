@@ -3,6 +3,13 @@ FROM debian:sid-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+ARG APP_ENV=prod
+
+RUN set -eux; \
+    if [ "${APP_ENV:-}" = "dev" ]; then \
+    sed -i "s|http://deb.debian.org|http://mirrors.aliyun.com|g" /etc/apt/sources.list.d/debian.sources; \
+    fi
+
 # 安装必须依赖
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
@@ -30,12 +37,12 @@ RUN set -eux; \
     OSSUTIL_VERSION=2.1.2; \
     arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
-      amd64) osspkg="linux-amd64";; \
-      arm64) osspkg="linux-arm64";; \
-      *) echo "unsupported architecture: $arch"; exit 1;; \
+    amd64) osspkg="linux-amd64";; \
+    arm64) osspkg="linux-arm64";; \
+    *) echo "unsupported architecture: $arch"; exit 1;; \
     esac; \
     curl -fsSL -o /tmp/ossutil.zip \
-      "https://gosspublic.alicdn.com/ossutil/v2/${OSSUTIL_VERSION}/ossutil-${OSSUTIL_VERSION}-${osspkg}.zip"; \
+    "https://gosspublic.alicdn.com/ossutil/v2/${OSSUTIL_VERSION}/ossutil-${OSSUTIL_VERSION}-${osspkg}.zip"; \
     unzip -q /tmp/ossutil.zip -d /tmp/; \
     install -m 755 "/tmp/ossutil-${OSSUTIL_VERSION}-${osspkg}/ossutil" /usr/local/bin/ossutil; \
     rm -fr /tmp/ossutil*; \

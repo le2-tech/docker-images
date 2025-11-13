@@ -21,7 +21,7 @@ buildx:
 
 # --no-cache --progress=plain
 build:
-	${host_proxy_clean} docker        build . -t ${tag_full}                         ${build_proxy_clean} --pull --progress=plain
+	${host_proxy_clean} docker        build . -t ${tag_full}                         ${build_proxy_clean} --pull --progress=plain --build-arg APP_ENV=dev
 
 check:
 	${host_proxy_clean} docker run -it --rm ${tag_full} sh -c "$(CHECK_CMD)"
