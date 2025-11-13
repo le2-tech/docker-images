@@ -8,7 +8,6 @@ GHCR_NS="ghcr.io/${GHCR_OWNER}"
 
 # 迁移的镜像数组（可扩展）
 IMAGES=(
-  "alpine:latest"
   "debian:latest"
   "neilpang/acme.sh:latest"
   "nginx:latest"
