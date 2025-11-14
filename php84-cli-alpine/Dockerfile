@@ -33,5 +33,7 @@ RUN set -eux; \
 #     git \
 #     gnupg
 
+RUN apk add --no-cache git
+
 # 工作目录
 WORKDIR /www
