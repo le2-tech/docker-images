@@ -5,7 +5,9 @@ FROM php:8.4-cli-alpine
 RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
     # sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories; \
     install-php-extensions zip pdo_pgsql gd bz2 bcmath intl redis xdebug msgpack apcu \
-    pcntl
+    pcntl \
+    # Reverb事件循环使用
+    uv
 
 # 可选扩展（与原文件一致，按需开启）
 # RUN docker-php-ext-install mysqli
