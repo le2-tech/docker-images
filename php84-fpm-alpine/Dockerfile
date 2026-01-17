@@ -35,7 +35,7 @@ RUN sed -i -e "s|^listen *=.*|listen = 9000|g" /usr/local/etc/php-fpm.d/www.conf
 #         tzdata \
 #         bash
 
-RUN apk add --no-cache git
+RUN apk add --no-cache git tzdata
 
 # Set working directory
 WORKDIR /www

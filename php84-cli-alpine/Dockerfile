@@ -36,7 +36,9 @@ RUN set -eux; \
 #     git \
 #     gnupg
 
-RUN apk add --no-cache git
+RUN apk add --no-cache \
+    git \
+    tzdata
 
 # 工作目录
 WORKDIR /www
