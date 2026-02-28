@@ -8,6 +8,7 @@ GHCR_NS="ghcr.io/${GHCR_OWNER}"
 
 # 迁移的镜像数组（可扩展）
 IMAGES=(
+  "mediagis/nominatim:5.2"
   "debian:latest"
   "neilpang/acme.sh:latest"
   "nginx:latest"
@@ -15,10 +16,10 @@ IMAGES=(
   "fluent/fluent-bit:latest"
   "golang:latest"
   "timescale/timescaledb:latest-pg18"
-  "emqx/emqx:5.8.8"
-  "emqx/mqttx-web:latest"
-  "emqx/mqttx-cli:latest"
-  "emqx/emqtt-bench:latest"
+  # "emqx/emqx:5.8.8"
+  # "emqx/mqttx-web:latest"
+  # "emqx/mqttx-cli:latest"
+  # "emqx/emqtt-bench:latest"
 )
 
 # 需要合并的架构
