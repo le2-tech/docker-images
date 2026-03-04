@@ -13,7 +13,7 @@ WORKDIR /app
 
 RUN set -eux; \
     npm update --loglevel verbose; \
-    npm i vue@latest vue-router@latest pinia@latest decimal.js@latest; \
+    npm i vue@latest vue-router@latest pinia@latest decimal.js@latest @noble/ciphers@latest; \
     npm i -D sass@latest;
 
 # RUN set -eux; \
