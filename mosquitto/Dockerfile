@@ -1,4 +1,5 @@
-FROM debian:latest AS build
+# syntax=docker/dockerfile:1
+FROM debian:trixie AS build
 
 ENV MOSQUITTO_VERSION=2.1.2
 ENV MOSQUITTO_DOWNLOAD_SHA256=fd905380691ac65ea5a93779e8214941829e3d6e038d5edff9eac5fd74cbed02
@@ -15,7 +16,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	set -eux; \
 	rm -f /etc/apt/apt.conf.d/docker-clean; \
 	apt-get update; \
-	apt-get install -y --no-install-recommends \
+	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 		build-essential \
 		ca-certificates \
 		libargon2-dev \
@@ -36,23 +37,21 @@ RUN set -eux; \
 	rm /tmp/mosq.tar.gz
 
 RUN set -eux; \
-	mkdir -p /out; \
-	make -C /build/mosq \
+	mkdir -p /opt/mosquitto/share/mosquitto; \
+	make -C /build/mosq -j"$(nproc)" \
 		WITH_ADNS=no \
 		WITH_DOCS=no \
 		WITH_SHARED_LIBRARIES=yes \
 		WITH_SRV=no \
 		WITH_STRIP=yes \
 		WITH_WEBSOCKETS=yes \
-		CFLAGS="-Wall -O2 -I/build -DHTTP_API_DIR=\\\"/opt/usr/share/mosquitto/dashboard\\\"" \
-		prefix=/usr \
-		DESTDIR=/out \
+		CFLAGS="-Wall -O2 -I/build -DHTTP_API_DIR=\\\"/opt/mosquitto/share/mosquitto/dashboard\\\"" \
+		prefix=/opt/mosquitto \
 		install \
 	; \
-	install -d /out/usr/share/mosquitto; \
-	cp -r /build/mosq/dashboard/src /out/usr/share/mosquitto/dashboard
+	cp -r /build/mosq/dashboard/src /opt/mosquitto/share/mosquitto/dashboard
 
-FROM debian:latest AS runtime
+FROM debian:trixie AS runtime
 
 ARG APP_ENV=prod
 
@@ -66,7 +65,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	set -eux; \
 	rm -f /etc/apt/apt.conf.d/docker-clean; \
 	apt-get update; \
-	apt-get install -y --no-install-recommends \
+	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 		ca-certificates \
 		tzdata \
 		libargon2-1 \
@@ -83,16 +82,13 @@ RUN set -eux; \
 	mkdir -p /app/data /mosquitto/data /mosquitto/log /mosquitto/plugins; \
 	chown -R mosquitto:mosquitto /app /mosquitto
 
-ENV PATH=/opt/usr/bin:/opt/usr/sbin:${PATH}
-ENV LD_LIBRARY_PATH=/opt/usr/lib
+ENV PATH=/opt/mosquitto/bin:/opt/mosquitto/sbin:${PATH}
+ENV LD_LIBRARY_PATH=/opt/mosquitto/lib
 
 WORKDIR /mosquitto
 
-COPY --from=build /out/ /opt/
-COPY entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN set -eux; \
-	chmod +x /usr/local/bin/docker-entrypoint.sh; \
-	sed -i 's#^prefix=.*#prefix=/opt/usr#' /opt/usr/lib/pkgconfig/libmosquitto.pc
+COPY --from=build /opt/mosquitto/ /opt/mosquitto/
+COPY --chmod=755 entrypoint.sh /docker-entrypoint.sh
 
 USER 1883:1883
 
@@ -100,6 +96,6 @@ VOLUME ["/mosquitto/data", "/mosquitto/log"]
 
 EXPOSE 1883
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["mosquitto", "-c", "/mosquitto/config/mosquitto.conf"]
