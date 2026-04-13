@@ -6,14 +6,12 @@ ENV MOSQUITTO_DOWNLOAD_SHA256=fd905380691ac65ea5a93779e8214941829e3d6e038d5edff9
 
 ARG APP_ENV=prod
 
-RUN set -eux; \
-	if [ "${APP_ENV:-}" = "dev" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
-		sed -i "s|http://deb.debian.org|http://mirrors.aliyun.com|g" /etc/apt/sources.list.d/debian.sources; \
-	fi
-
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	--mount=type=cache,target=/var/lib/apt,sharing=locked \
 	set -eux; \
+	if [ "${APP_ENV:-}" = "dev" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+		sed -i "s|http://deb.debian.org|http://mirrors.aliyun.com|g" /etc/apt/sources.list.d/debian.sources; \
+	fi; \
 	rm -f /etc/apt/apt.conf.d/docker-clean; \
 	apt-get update; \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -55,14 +53,12 @@ FROM debian:trixie AS runtime
 
 ARG APP_ENV=prod
 
-RUN set -eux; \
-	if [ "${APP_ENV:-}" = "dev" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
-		sed -i "s|http://deb.debian.org|http://mirrors.aliyun.com|g" /etc/apt/sources.list.d/debian.sources; \
-	fi
-
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	--mount=type=cache,target=/var/lib/apt,sharing=locked \
 	set -eux; \
+	if [ "${APP_ENV:-}" = "dev" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+		sed -i "s|http://deb.debian.org|http://mirrors.aliyun.com|g" /etc/apt/sources.list.d/debian.sources; \
+	fi; \
 	rm -f /etc/apt/apt.conf.d/docker-clean; \
 	apt-get update; \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
