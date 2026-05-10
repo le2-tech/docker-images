@@ -29,7 +29,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  REGISTRY: ${{ inputs.registry }}
+  REGISTRY: ${{ inputs.registry || 'registry.cn-chengdu.aliyuncs.com' }}
   IMAGE_NAME: le2-tech/libreoffice
 
 jobs:
