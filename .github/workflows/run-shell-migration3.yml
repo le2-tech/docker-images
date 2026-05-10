@@ -4,13 +4,23 @@ on:
   schedule:
     - cron: "0 0 * * 2,5"
   workflow_dispatch:
+    inputs:
+      registry:
+        description: "Container registry to push"
+        required: true
+        default: registry.cn-chengdu.aliyuncs.com
+        type: choice
+        options:
+          - ghcr.io
+          - registry.cn-chengdu.aliyuncs.com
 
 permissions:
   contents: read
   packages: write
 
 env:
-  GHCR_OWNER: ${{ github.repository_owner }}
+  REGISTRY: ${{ inputs.registry || 'ghcr.io' }}
+  TARGET_NS: ${{ (inputs.registry || 'ghcr.io') == 'registry.cn-chengdu.aliyuncs.com' && 'registry.cn-chengdu.aliyuncs.com/le2-tech' || format('ghcr.io/{0}', github.repository_owner) }}
 
 jobs:
   execute-shell:
@@ -20,11 +30,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@main
 
-      - uses: docker/login-action@master
+      - name: Login to GHCR
+        if: env.REGISTRY == 'ghcr.io'
+        uses: docker/login-action@master
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to Aliyun CR
+        if: env.REGISTRY == 'registry.cn-chengdu.aliyuncs.com'
+        uses: docker/login-action@master
+        with:
+          registry: registry.cn-chengdu.aliyuncs.com
+          username: ${{ secrets.ALIYUN_ACR_USERNAME }}
+          password: ${{ secrets.ALIYUN_ACR_PASSWORD }}
 
       - name: Make script executable
         run: chmod +x ./_migrate/docker_migrate3.sh

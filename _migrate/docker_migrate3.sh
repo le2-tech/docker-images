@@ -2,21 +2,22 @@
 set -euo pipefail
 
 # ========= 配置 =========
-# GitHub 命名空间（用户名或组织名），用于 ghcr.io/<owner>/*
-: "${GHCR_OWNER:?请先 export GHCR_OWNER=你的GitHub用户名或组织名}"
-GHCR_NS="ghcr.io/${GHCR_OWNER}"
+# 目标命名空间由调用方传入。
+# 示例：TARGET_NS=registry.cn-chengdu.aliyuncs.com/le2-tech ./_migrate/docker_migrate3.sh
+: "${TARGET_NS:?请先 export TARGET_NS=目标仓库命名空间，例如 registry.cn-chengdu.aliyuncs.com/le2-tech}"
 
 # 迁移的镜像数组（可扩展）
 IMAGES=(
+  "node:alpine"
   "rabbitmq:management"
-  # "mediagis/nominatim:5.2"
-  # "debian:latest"
+  "mediagis/nominatim:5.3"
+  "debian:latest"
   # "neilpang/acme.sh:latest"
-  # "nginx:latest"
-  # "redis:latest"
-  # "fluent/fluent-bit:latest"
-  # "golang:latest"
-  # "timescale/timescaledb:latest-pg18"
+  "nginx:latest"
+  "redis:latest"
+  "fluent/fluent-bit:latest"
+  "golang:latest"
+  "timescale/timescaledb:latest-pg18"
   # "emqx/emqx:5.8.8"
   # "emqx/mqttx-web:latest"
   # "emqx/mqttx-cli:latest"
@@ -45,7 +46,7 @@ for image in "${IMAGES[@]}"; do
 
   # 目标仓库名沿用源名最后一段
   repo_base="${name_part##*/}"
-  dest_repo="${GHCR_NS}/${repo_base}"
+  dest_repo="${TARGET_NS}/${repo_base}"
   dest_final="${dest_repo}:${tag_part}"
 
   echo
