@@ -24,12 +24,17 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
     apt-get update; \
     apt-get install -y --no-install-recommends postgresql-client;
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
-    set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends minio-client; \
-    ln -sf /usr/bin/minio-client /usr/local/bin/mc;
+# https://github.com/minio/mc#binary-download
+RUN set -eux; \
+    arch="$(dpkg --print-architecture)"; \
+    case "$arch" in \
+    amd64) mc_arch="linux-amd64";; \
+    arm64) mc_arch="linux-arm64";; \
+    *) echo "unsupported architecture: $arch"; exit 1;; \
+    esac; \
+    curl -fsSL -o /usr/local/bin/mc "https://dl.min.io/client/mc/release/${mc_arch}/mc"; \
+    chmod 755 /usr/local/bin/mc; \
+    mc --version
 
 # 安装ossutil
 # https://help.aliyun.com/zh/oss/developer-reference/install-ossutil2
