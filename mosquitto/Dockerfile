@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM debian:trixie AS build
+FROM debian:latest AS build
 
 ENV MOSQUITTO_VERSION=2.1.2
 ENV MOSQUITTO_DOWNLOAD_SHA256=fd905380691ac65ea5a93779e8214941829e3d6e038d5edff9eac5fd74cbed02
@@ -49,7 +49,7 @@ RUN set -eux; \
 	; \
 	cp -r /build/mosq/dashboard/src /opt/mosquitto/share/mosquitto/dashboard
 
-FROM debian:trixie AS runtime
+FROM debian:latest AS runtime
 
 ARG APP_ENV=prod
 
