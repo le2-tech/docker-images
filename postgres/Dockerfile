@@ -3,7 +3,15 @@
 # postgresql-17-postgis-3 在 trixie 源里有。 https://packages.debian.org/sid/postgresql-17-postgis-3
 # FROM postgres:17-trixie
 # https://wiki.postgresql.org/wiki/Apt 有办法安装最新的postgresql版本
-FROM postgres:18-trixie
+ARG IMAGE_MIRROR
+FROM ${IMAGE_MIRROR}postgres:18-trixie
+
+ARG APT_REPOSITORY
+
+RUN set -eux; \
+    if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+      sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
+    fi;
 
 RUN set -eux; \
     apt-get update; \
