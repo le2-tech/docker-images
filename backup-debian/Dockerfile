@@ -53,10 +53,10 @@ RUN set -eux; \
     rm -fr /tmp/ossutil*; \
     ossutil --help >/dev/null
 
-RUN set -eux; \
-    curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip; \
-    unzip -q /tmp/awscliv2.zip -d /tmp; \
-    /tmp/aws/install --update; \
-    rm -rf /tmp/awscliv2.zip /tmp/aws; \
-    aws --version; \
-    echo "complete -C '/usr/local/bin/aws_completer' aws" >> /etc/bash.bashrc
+# RUN set -eux; \
+#     curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip; \
+#     unzip -q /tmp/awscliv2.zip -d /tmp; \
+#     /tmp/aws/install --update; \
+#     rm -rf /tmp/awscliv2.zip /tmp/aws; \
+#     aws --version; \
+#     echo "complete -C '/usr/local/bin/aws_completer' aws" >> /etc/bash.bashrc
