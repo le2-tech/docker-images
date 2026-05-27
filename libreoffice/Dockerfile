@@ -18,8 +18,8 @@ RUN set -eux; \
 RUN set -eux; \
   apt-get update; \
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-  libreoffice-core \
-  libreoffice-writer \
+  libreoffice-core-nogui \
+  libreoffice-writer-nogui \
   ; \
   apt-get clean; \
   rm -rf /var/lib/apt/lists/*
