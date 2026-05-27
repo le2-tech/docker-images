@@ -5,7 +5,7 @@
 tag := awscli2
 CHECK_CMD := aws --version ; session-manager-plugin ; mysql --version ;
 
-include ../_env/Makefile
+include ../Makefile
 
 will:
 	${host_proxy_clean} curl -s https://api.github.com/repos/aws/aws-cli/tags | jq -r '.[].name' | sort -V | tail -n1

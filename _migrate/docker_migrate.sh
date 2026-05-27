@@ -12,7 +12,7 @@ else
 fi
 
 # 
-env_file=./_env/${BASIC_ENV}.env
+env_file=./${BASIC_ENV}.env
 if [ -f $env_file ]; then
   echo "加载 $env_file 文件中的环境变量..."
   source $env_file

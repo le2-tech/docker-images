@@ -4,7 +4,7 @@
 tag := ssh-debian:latest
 CHECK_CMD := ssh -V ;
 
-include ../_env/Makefile
+include ../Makefile
 
 will:
 	${host_proxy_clean} curl -s 'https://registry.hub.docker.com/v2/repositories/library/debian/tags/?page_size=100&name=bookworm&ordering=last_updated' \

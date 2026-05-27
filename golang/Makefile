@@ -4,7 +4,7 @@
 
 tag := golang
 
-include ../_env/Makefile
+include ../Makefile
 
 build:
 	docker build . -t ${tag}

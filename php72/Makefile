@@ -3,7 +3,7 @@
 
 _: clean clone git_patch_use buildx-fpm buildx-cli
 
-include ../_env/Makefile
+include ../Makefile
 
 clone:
 	${host_proxy_clean} git clone https://github.com/docker-library/php.git github \

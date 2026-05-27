@@ -4,7 +4,8 @@
 
 # https://packages.debian.org/search?suite=all&searchon=names&keywords=libreoffice-core
 # https://packages.ubuntu.com/search?suite=all&searchon=names&keywords=libreoffice-core
-FROM debian:latest
+ARG IMAGE_MIRROR
+FROM ${IMAGE_MIRROR}debian:latest
 
 ARG APP_ENV=prod
 
@@ -22,4 +23,16 @@ RUN set -eux; \
   libreoffice-writer-nogui \
   ; \
   apt-get clean; \
-  rm -rf /var/lib/apt/lists/*
+  rm -rf \
+  /var/lib/apt/lists/* \
+  /tmp/* \
+  /var/tmp/* \
+  /usr/share/doc/* \
+  /usr/share/man/* \
+  /usr/share/info/* \
+  /usr/share/lintian/* \
+  /usr/share/bug/* \
+  /usr/share/bash-completion/* \
+  /usr/share/locale/* \
+  /usr/lib/libreoffice/share/gallery \
+  /usr/lib/libreoffice/share/template

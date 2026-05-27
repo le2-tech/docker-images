@@ -4,4 +4,4 @@
 tag := postgres
 CHECK_CMD := postgres -V ;
 
-include ../_env/Makefile
+include ../Makefile

@@ -2,7 +2,7 @@
 .PHONY: 
 .DEFAULT_GOAL := build
 
-include ../_env/Makefile
+include ../Makefile
 
 tag := ${REGISTRY_HOST}${IMAGE_NS}php
 

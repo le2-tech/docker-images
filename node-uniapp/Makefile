@@ -4,5 +4,5 @@
 
 tag := node-uniapp:3
 
-include ../_env/Makefile
+include ../Makefile
 
