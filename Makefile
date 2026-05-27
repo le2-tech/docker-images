@@ -3,10 +3,10 @@ CURRENT_MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 BASE_DIR := $(abspath $(CURRENT_MAKEFILE_DIR))
 
 -include ${BASE_DIR}/.env
-include ${BASE_DIR}/${BASIC_ENV}.env
+include ${BASE_DIR}/.env.${BASIC_ENV}
 
 build_proxy_clean := $(subst ",,$(build_proxy))
-host_proxy_clean := $(subst ",,$(host_proxy))
+# host_proxy_clean := $(subst ",,$(host_proxy))
 buildx_suffix_clean := $(subst ",,$(buildx_suffix))
 check_docker_args_clean := $(subst ",,$(check_docker_args))
 
@@ -24,7 +24,8 @@ buildx:
 
 # --no-cache --progress=plain
 build:
-	docker        build . -t ${tag_full}                         ${build_proxy_clean} --pull --progress=plain --build-arg APP_ENV=dev --build-arg IMAGE_MIRROR=${IMAGE_MIRROR}
+	env
+	docker        build . -t ${tag_full}                         ${build_proxy_clean} --pull --progress=plain --build-arg APP_ENV=dev --build-arg IMAGE_MIRROR=${IMAGE_MIRROR} --build-arg APT_REPOSITORY=${APT_REPOSITORY}
 
 check:
 	docker run -it --rm ${check_docker_args_clean} ${tag_full} sh -c "$(CHECK_CMD)"
