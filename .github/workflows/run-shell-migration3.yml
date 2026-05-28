@@ -19,8 +19,8 @@ permissions:
   packages: write
 
 env:
-  REGISTRY: ${{ inputs.registry || 'ghcr.io' }}
-  TARGET_NS: ${{ (inputs.registry || 'ghcr.io') == 'registry.cn-chengdu.aliyuncs.com' && 'registry.cn-chengdu.aliyuncs.com/le2-tech' || format('ghcr.io/{0}', github.repository_owner) }}
+  REGISTRY: ${{ inputs.registry || 'registry.cn-chengdu.aliyuncs.com' }}
+  TARGET_NS: ${{ (inputs.registry || 'registry.cn-chengdu.aliyuncs.com') == 'registry.cn-chengdu.aliyuncs.com' && 'registry.cn-chengdu.aliyuncs.com/le2-tech' || format('ghcr.io/{0}', github.repository_owner) }}
 
 jobs:
   execute-shell:
