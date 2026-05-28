@@ -4,13 +4,13 @@ FROM debian:latest AS build
 ENV MOSQUITTO_VERSION=2.1.2
 ENV MOSQUITTO_DOWNLOAD_SHA256=fd905380691ac65ea5a93779e8214941829e3d6e038d5edff9eac5fd74cbed02
 
-ARG APP_ENV=prod
+ARG APT_REPOSITORY
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	--mount=type=cache,target=/var/lib/apt,sharing=locked \
 	set -eux; \
-	if [ "${APP_ENV:-}" = "dev" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
-		sed -i "s|http://deb.debian.org|http://mirrors.aliyun.com|g" /etc/apt/sources.list.d/debian.sources; \
+	if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+		sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
 	fi; \
 	rm -f /etc/apt/apt.conf.d/docker-clean; \
 	apt-get update; \
@@ -51,13 +51,13 @@ RUN set -eux; \
 
 FROM debian:latest AS runtime
 
-ARG APP_ENV=prod
+ARG APT_REPOSITORY
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	--mount=type=cache,target=/var/lib/apt,sharing=locked \
 	set -eux; \
-	if [ "${APP_ENV:-}" = "dev" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
-		sed -i "s|http://deb.debian.org|http://mirrors.aliyun.com|g" /etc/apt/sources.list.d/debian.sources; \
+	if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+		sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
 	fi; \
 	rm -f /etc/apt/apt.conf.d/docker-clean; \
 	apt-get update; \

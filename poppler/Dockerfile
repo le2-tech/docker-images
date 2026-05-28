@@ -2,11 +2,11 @@
 
 FROM debian:latest
 
-ARG APP_ENV=prod
+ARG APT_REPOSITORY
 
 RUN set -eux; \
-  if [ "${APP_ENV:-}" = "dev" ]; then \
-  sed -i "s|http://deb.debian.org|http://mirrors.aliyun.com|g" /etc/apt/sources.list.d/debian.sources; \
+  if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+  sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
   fi
 
 # 1. 安装 poppler-utils 使用 pdftotext（Poppler 工具集）

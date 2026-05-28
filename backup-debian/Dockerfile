@@ -1,14 +1,14 @@
 # syntax=docker/dockerfile:1
-FROM debian:sid-slim
+FROM debian:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-ARG APP_ENV=prod
+ARG APT_REPOSITORY
 
 RUN set -eux; \
-    if [ "${APP_ENV:-}" = "dev" ]; then \
-    sed -i "s|http://deb.debian.org|http://mirrors.aliyun.com|g" /etc/apt/sources.list.d/debian.sources; \
-    fi
+    if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+      sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
+    fi;
 
 # 安装必须依赖
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
@@ -39,7 +39,7 @@ RUN set -eux; \
 # 安装ossutil
 # https://help.aliyun.com/zh/oss/developer-reference/install-ossutil2
 RUN set -eux; \
-    OSSUTIL_VERSION=2.1.2; \
+    OSSUTIL_VERSION=2.3.0; \
     arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
     amd64) osspkg="linux-amd64";; \
