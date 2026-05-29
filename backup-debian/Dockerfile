@@ -1,62 +1,84 @@
-# syntax=docker/dockerfile:1
-FROM debian:latest
-
-ENV DEBIAN_FRONTEND=noninteractive
+ARG IMAGE_MIRROR
+FROM ${IMAGE_MIRROR}debian:latest AS download
 
 ARG APT_REPOSITORY
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN set -eux; \
     if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
       sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
-    fi;
+    fi
 
-# 安装必须依赖
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt-cache \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked,id=backup-debian-apt-lib \
     set -eux; \
+    rm -f /etc/apt/apt.conf.d/docker-clean; \
     apt-get update; \
-    apt-get install -y --no-install-recommends ca-certificates curl unzip cron ;
-
-# postgresql-client 在sid源中只有18版本
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked,id=apt-lists \
-    set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends postgresql-client;
+    apt-get install -y --no-install-recommends \
+      ca-certificates \
+      curl \
+      unzip \
+      ;
 
 # https://github.com/minio/mc#binary-download
 RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
-    amd64) mc_arch="linux-amd64";; \
-    arm64) mc_arch="linux-arm64";; \
-    *) echo "unsupported architecture: $arch"; exit 1;; \
+      amd64) mc_arch="linux-amd64" ;; \
+      arm64) mc_arch="linux-arm64" ;; \
+      *) echo "unsupported architecture: $arch" >&2; exit 1 ;; \
     esac; \
-    curl -fsSL -o /usr/local/bin/mc "https://dl.min.io/client/mc/release/${mc_arch}/mc"; \
+    curl -fsSL --retry 5 --retry-delay 3 --retry-all-errors --connect-timeout 20 \
+      -o /usr/local/bin/mc \
+      "https://dl.min.io/client/mc/release/${mc_arch}/mc"; \
     chmod 755 /usr/local/bin/mc; \
     mc --version
 
-# 安装ossutil
 # https://help.aliyun.com/zh/oss/developer-reference/install-ossutil2
 RUN set -eux; \
     OSSUTIL_VERSION=2.3.0; \
     arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
-    amd64) osspkg="linux-amd64";; \
-    arm64) osspkg="linux-arm64";; \
-    *) echo "unsupported architecture: $arch"; exit 1;; \
+      amd64) osspkg="linux-amd64" ;; \
+      arm64) osspkg="linux-arm64" ;; \
+      *) echo "unsupported architecture: $arch" >&2; exit 1 ;; \
     esac; \
-    curl -fsSL -o /tmp/ossutil.zip \
-    "https://gosspublic.alicdn.com/ossutil/v2/${OSSUTIL_VERSION}/ossutil-${OSSUTIL_VERSION}-${osspkg}.zip"; \
+    curl -fsSL --retry 5 --retry-delay 3 --retry-all-errors --connect-timeout 20 \
+      -o /tmp/ossutil.zip \
+      "https://gosspublic.alicdn.com/ossutil/v2/${OSSUTIL_VERSION}/ossutil-${OSSUTIL_VERSION}-${osspkg}.zip"; \
     unzip -q /tmp/ossutil.zip -d /tmp/; \
     install -m 755 "/tmp/ossutil-${OSSUTIL_VERSION}-${osspkg}/ossutil" /usr/local/bin/ossutil; \
     rm -fr /tmp/ossutil*; \
-    ossutil --help >/dev/null
+    ossutil version
 
-# RUN set -eux; \
-#     curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip; \
-#     unzip -q /tmp/awscliv2.zip -d /tmp; \
-#     /tmp/aws/install --update; \
-#     rm -rf /tmp/awscliv2.zip /tmp/aws; \
-#     aws --version; \
-#     echo "complete -C '/usr/local/bin/aws_completer' aws" >> /etc/bash.bashrc
+ARG IMAGE_MIRROR
+FROM ${IMAGE_MIRROR}debian:latest
+
+ARG APT_REPOSITORY
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN set -eux; \
+    if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+      sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
+    fi
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt-cache \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked,id=backup-debian-apt-lib \
+    set -eux; \
+    rm -f /etc/apt/apt.conf.d/docker-clean; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+      ca-certificates \
+      cron \
+      postgresql-client \
+      ;
+
+COPY --from=download /usr/local/bin/mc /usr/local/bin/mc
+COPY --from=download /usr/local/bin/ossutil /usr/local/bin/ossutil
+
+RUN set -eux; \
+    ossutil version; \
+    psql -V; \
+    mc --version

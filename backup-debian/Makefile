@@ -4,9 +4,8 @@
 
 tag := backup-debian:latest
 
-CHECK_CMD := ossutil version ; ossutil --help; psql -V; mc -v;
+CHECK_CMD := ossutil version ; psql -V ; mc --version ;
 
 include ../Makefile
-
 
 
