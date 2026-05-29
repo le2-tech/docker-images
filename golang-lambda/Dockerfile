@@ -1,5 +1,5 @@
-# Use the official Golang image as the base image
-FROM golang:latest
+ARG IMAGE_MIRROR
+FROM ${IMAGE_MIRROR}golang:latest
 
 # Set environment variable for AWS Lambda Runtime Interface Emulator binary
 ENV RIE_BINARY=/aws-lambda/aws-lambda-rie

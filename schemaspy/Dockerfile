@@ -1,6 +1,5 @@
-
-# FROM openjdk:11-buster
-FROM openjdk:22-bookworm
+ARG IMAGE_MIRROR
+FROM ${IMAGE_MIRROR}openjdk:22-bookworm
 
 RUN apt update -y \
     && apt upgrade -y \

@@ -1,8 +1,16 @@
 # syntax=docker/dockerfile:1
-FROM php:8.4-fpm
+
+ARG IMAGE_MIRROR
+FROM ${IMAGE_MIRROR}composer:2 AS composer
+
+ARG IMAGE_MIRROR
+FROM ${IMAGE_MIRROR}mlocati/php-extension-installer:latest AS php-ext-installer
+
+ARG IMAGE_MIRROR
+FROM ${IMAGE_MIRROR}php:8.4-fpm
 
 # Install the PHP zip extention
-RUN  --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
+RUN  --mount=type=bind,from=php-ext-installer,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
     install-php-extensions zip pdo_pgsql gd bz2 bcmath intl redis xdebug msgpack apcu
 
 
@@ -16,7 +24,7 @@ RUN  --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/b
 # RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
 #     php composer-setup.php --install-dir=/usr/local/bin --filename=composer; \
 #     php -r "unlink('composer-setup.php');"
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Configure PHP settings
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
