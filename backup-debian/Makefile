@@ -4,8 +4,6 @@
 
 tag := backup-debian:latest
 
-CHECK_CMD := ossutil version ; psql -V ; mc --version ;
+CHECK_CMD := ossutil version ; psql -V ; mc --version ; busybox --list | grep -x crond ;
 
 include ../Makefile
-
-

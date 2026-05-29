@@ -1,11 +1,12 @@
 # syntax=docker/dockerfile:1
-FROM debian:latest AS build
+ARG IMAGE_MIRROR
+FROM ${IMAGE_MIRROR}debian:trixie-slim AS build
 
-ENV MOSQUITTO_VERSION=2.1.2
-ENV MOSQUITTO_DOWNLOAD_SHA256=fd905380691ac65ea5a93779e8214941829e3d6e038d5edff9eac5fd74cbed02
-
+ARG MOSQUITTO_VERSION=2.1.2
+ARG MOSQUITTO_DOWNLOAD_SHA256=fd905380691ac65ea5a93779e8214941829e3d6e038d5edff9eac5fd74cbed02
 ARG APT_REPOSITORY
 
+# hadolint ignore=DL3008,DL3009
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	--mount=type=cache,target=/var/lib/apt,sharing=locked \
 	set -eux; \
@@ -28,11 +29,12 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	;
 
 RUN set -eux; \
-	wget "https://mosquitto.org/files/source/mosquitto-${MOSQUITTO_VERSION}.tar.gz" -O /tmp/mosq.tar.gz; \
-	echo "${MOSQUITTO_DOWNLOAD_SHA256}  /tmp/mosq.tar.gz" | sha256sum -c -; \
+	wget --progress=dot:giga --tries=5 --waitretry=3 --timeout=20 "https://mosquitto.org/files/source/mosquitto-${MOSQUITTO_VERSION}.tar.gz" -O /tmp/mosq.tar.gz; \
+	printf '%s  %s\n' "${MOSQUITTO_DOWNLOAD_SHA256}" /tmp/mosq.tar.gz > /tmp/mosq.tar.gz.sha256; \
+	sha256sum -c /tmp/mosq.tar.gz.sha256; \
 	mkdir -p /build/mosq; \
 	tar --strip=1 -xf /tmp/mosq.tar.gz -C /build/mosq; \
-	rm /tmp/mosq.tar.gz
+	rm /tmp/mosq.tar.gz /tmp/mosq.tar.gz.sha256
 
 RUN set -eux; \
 	mkdir -p /opt/mosquitto/share/mosquitto; \
@@ -49,10 +51,11 @@ RUN set -eux; \
 	; \
 	cp -r /build/mosq/dashboard/src /opt/mosquitto/share/mosquitto/dashboard
 
-FROM debian:latest AS runtime
+FROM ${IMAGE_MIRROR}debian:trixie-slim AS runtime
 
 ARG APT_REPOSITORY
 
+# hadolint ignore=DL3008,DL3009
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	--mount=type=cache,target=/var/lib/apt,sharing=locked \
 	set -eux; \
@@ -70,13 +73,14 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 		libmicrohttpd12t64 \
 		libsqlite3-0 \
 		libssl3t64 \
-		libwebsockets19t64
+		libwebsockets19t64 \
+	;
 
 RUN set -eux; \
 	getent group mosquitto >/dev/null || groupadd -r -g 1883 mosquitto; \
 	id -u mosquitto >/dev/null 2>&1 || useradd -r -u 1883 -g mosquitto -d /var/empty -s /usr/sbin/nologin -c "mosquitto" mosquitto; \
-	mkdir -p /app/data /mosquitto/data /mosquitto/log /mosquitto/plugins; \
-	chown -R mosquitto:mosquitto /app /mosquitto
+	mkdir -p /app/data /mosquitto/config /mosquitto/data /mosquitto/log /mosquitto/plugins; \
+	chown mosquitto:mosquitto /app /app/data /mosquitto /mosquitto/config /mosquitto/data /mosquitto/log /mosquitto/plugins
 
 ENV PATH=/opt/mosquitto/bin:/opt/mosquitto/sbin:${PATH}
 ENV LD_LIBRARY_PATH=/opt/mosquitto/lib
@@ -91,6 +95,8 @@ USER 1883:1883
 VOLUME ["/mosquitto/data", "/mosquitto/log"]
 
 EXPOSE 1883
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD mosquitto --help >/dev/null || exit 1
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 

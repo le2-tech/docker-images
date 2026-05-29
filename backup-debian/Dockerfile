@@ -1,9 +1,9 @@
 ARG IMAGE_MIRROR
-FROM ${IMAGE_MIRROR}debian:latest AS download
+FROM ${IMAGE_MIRROR}debian:trixie-slim AS download
 
 ARG APT_REPOSITORY
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN set -eux; \
     if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
@@ -53,11 +53,11 @@ RUN set -eux; \
     ossutil version
 
 ARG IMAGE_MIRROR
-FROM ${IMAGE_MIRROR}debian:latest
+FROM ${IMAGE_MIRROR}debian:trixie-slim
 
 ARG APT_REPOSITORY
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN set -eux; \
     if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
@@ -70,10 +70,19 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt
     rm -f /etc/apt/apt.conf.d/docker-clean; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
+      busybox-static \
       ca-certificates \
-      cron \
       postgresql-client \
-      ;
+      ; \
+    ln -sf /bin/busybox /usr/sbin/crond; \
+    printf '%s\n' '#!/bin/sh' 'exec /usr/sbin/crond "$@"' > /usr/sbin/cron; \
+    chmod 755 /usr/sbin/cron; \
+    rm -rf \
+      /usr/share/doc/* \
+      /usr/share/man/* \
+      /usr/share/info/* \
+      /usr/share/lintian/* \
+      /usr/share/bug/*
 
 COPY --from=download /usr/local/bin/mc /usr/local/bin/mc
 COPY --from=download /usr/local/bin/ossutil /usr/local/bin/ossutil
@@ -81,4 +90,5 @@ COPY --from=download /usr/local/bin/ossutil /usr/local/bin/ossutil
 RUN set -eux; \
     ossutil version; \
     psql -V; \
-    mc --version
+    mc --version; \
+    busybox --list | grep -x crond
