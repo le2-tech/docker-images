@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 ARG IMAGE_MIRROR
-FROM ${IMAGE_MIRROR}debian:trixie-slim AS build
+FROM ${IMAGE_MIRROR}debian:latest AS build
 
 ARG MOSQUITTO_VERSION=2.1.2
 ARG MOSQUITTO_DOWNLOAD_SHA256=fd905380691ac65ea5a93779e8214941829e3d6e038d5edff9eac5fd74cbed02
@@ -51,7 +51,7 @@ RUN set -eux; \
 	; \
 	cp -r /build/mosq/dashboard/src /opt/mosquitto/share/mosquitto/dashboard
 
-FROM ${IMAGE_MIRROR}debian:trixie-slim AS runtime
+FROM ${IMAGE_MIRROR}debian:latest AS runtime
 
 ARG APT_REPOSITORY
 
@@ -62,7 +62,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
 		sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
 	fi; \
-	rm -f /etc/apt/apt.conf.d/docker-clean; \
 	apt-get update; \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 		ca-certificates \

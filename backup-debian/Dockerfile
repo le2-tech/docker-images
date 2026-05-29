@@ -1,5 +1,5 @@
 ARG IMAGE_MIRROR
-FROM ${IMAGE_MIRROR}debian:trixie-slim AS download
+FROM ${IMAGE_MIRROR}debian:latest AS download
 
 ARG APT_REPOSITORY
 
@@ -53,7 +53,7 @@ RUN set -eux; \
     ossutil version
 
 ARG IMAGE_MIRROR
-FROM ${IMAGE_MIRROR}debian:trixie-slim
+FROM ${IMAGE_MIRROR}debian:latest
 
 ARG APT_REPOSITORY
 
@@ -67,7 +67,6 @@ RUN set -eux; \
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt-cache \
     --mount=type=cache,target=/var/lib/apt,sharing=locked,id=backup-debian-apt-lib \
     set -eux; \
-    rm -f /etc/apt/apt.conf.d/docker-clean; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
       busybox-static \
