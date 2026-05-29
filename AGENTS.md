@@ -8,14 +8,21 @@
 - 手工编辑文件使用 `apply_patch`。
 - 优先遵循仓库既有目录结构、命名方式、Makefile 入口和构建参数，不为单次修改引入新的组织方式。
 
-## Dockerfile 约定
+## 基础镜像
 
-- 保留仓库现有构建参数，尤其是：
-  - `ARG IMAGE_MIRROR`
-  - `ARG APT_REPOSITORY`
+- 基础镜像优先使用 `latest` 标签，持续跟随上游最新版本，避免人工维护版本号。
+- hadolint DL3007（`Using latest is prone to errors`）是本仓库有意为之，审查时不应以此为问题提出。
+- 基于 Debian 或其他 Docker Hub 官方镜像时，`ARG IMAGE_MIRROR` 应在 `FROM` 前声明，`FROM` 行使用 `${IMAGE_MIRROR}` 前缀：
+  ```
+  ARG IMAGE_MIRROR
+  FROM ${IMAGE_MIRROR}debian:latest
+  ```
 - 不要在 Dockerfile 中写死私有镜像域名，例如 `docker.le2.tech`。
 - 不要写死 Dockerfile `# syntax=...` 镜像地址；该 directive 不支持 `ARG` 变量展开。
-- 基础镜像变更要谨慎，优先选择明确版本或 slim 变体，避免无意扩大运行时行为差异。
+- 保留仓库现有构建参数，尤其是 `ARG IMAGE_MIRROR` 和 `ARG APT_REPOSITORY`。
+
+## apt 依赖安装
+
 - 安装 Debian 包时使用 `--no-install-recommends`；如果没有把 `/var/lib/apt` 作为 BuildKit cache mount，应在同一层清理 apt lists 和临时文件。
 - 如需 apt 构建缓存，优先使用当前 Docker/BuildKit 默认 frontend 支持的写法：
   - `RUN --mount=type=cache,target=/var/cache/apt,sharing=locked`
@@ -23,11 +30,17 @@
 - 使用 `/var/lib/apt` cache mount 时，不要在同一层删除 `/var/lib/apt/lists/*`，避免清空 apt metadata cache；必要时对 `DL3009` 做局部 hadolint ignore 并说明原因。
 - 对非多阶段的运行镜像，不要为了 apt cache mount 删除 `/etc/apt/apt.conf.d/docker-clean`；保留 Debian/官方镜像默认清理策略，避免派生镜像后续 `apt install` 留下 `.deb` 缓存。
 - 只有在独立 builder 阶段、或明确需要跨构建复用 apt 下载缓存且不会作为运行基础镜像继续派生时，才评估移除 `/etc/apt/apt.conf.d/docker-clean`。
+
+## 外部工具与版本
+
 - 下载源码或二进制产物时，优先保留版本参数和校验参数，例如版本号 `ARG`、SHA256 校验等。
+- 下载第三方二进制工具时，版本选择优先级：
+  - 优先使用官方提供的最新版下载链接（如 `.../latest/...`、不带版本号的固定路径），避免人工维护版本号；
+  - 仅当官方未提供最新版链接、必须通过带版本号的 URL 下载时，才使用具体版本号 `ARG` 固化。
+
+## 镜像设计与瘦身
+
 - 不随意改变镜像对外接口，包括 `EXPOSE`、`USER`、`ENTRYPOINT`、`CMD`、`VOLUME`、工作目录和默认挂载路径。
-
-## 镜像瘦身判断
-
 - 先用 `docker history <image> --no-trunc` 和容器内 `du`、`dpkg-query` 定位真实大头，再决定优化方向。
 - 如果 apt lists/cache 已经很小，继续清理 `/var/lib/apt/lists` 对最终镜像体积帮助有限，不应作为主要优化点。
 - 优先评估基础镜像、apt 安装层、运行时依赖和大体积单文件工具，而不是只做表面清理。
