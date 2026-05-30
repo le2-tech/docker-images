@@ -3,7 +3,7 @@ CURRENT_MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 BASE_DIR := $(abspath $(CURRENT_MAKEFILE_DIR))
 
 -include ${BASE_DIR}/.env
-include ${BASE_DIR}/.env.${BASIC_ENV}
+-include ${BASE_DIR}/.env.${BASIC_ENV}
 
 build_proxy_clean := $(subst ",,$(build_proxy))
 # host_proxy_clean := $(subst ",,$(host_proxy))

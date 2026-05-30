@@ -101,9 +101,8 @@ jobs:
 
       - name: Verify & summarize
         if: success()
-        env:
-          IMAGE_REF: ${ env.REGISTRY }/${ env.IMAGE_NAME }:${ github.sha }-${ matrix.short }
         run: |
+          IMAGE_REF="$REGISTRY/$IMAGE_NAME:$GITHUB_SHA-${ matrix.short }"
           echo "## $IMAGE_REF" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           cd ./backup-debian && tag_full="$IMAGE_REF" make -s check 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
