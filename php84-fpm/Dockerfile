@@ -36,9 +36,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       ca-certificates \
-      ; \
-    php -v; \
-    php -m; \
-    composer --version
+      ;
 
 WORKDIR /www

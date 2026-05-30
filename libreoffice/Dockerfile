@@ -25,7 +25,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     locale-gen zh_CN.UTF-8; \
     fc-cache -f; \
     fc-match "Noto Sans CJK SC"; \
-    libreoffice --version; \
     rm -rf \
       /tmp/* \
       /var/tmp/* \

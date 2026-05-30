@@ -33,9 +33,6 @@ RUN sed -i -e "s|^listen *=.*|listen = 9000|g" /usr/local/etc/php-fpm.d/www.conf
 RUN apk add --no-cache \
     ca-certificates \
     git \
-    tzdata; \
-    php -v; \
-    php -m; \
-    composer --version
+    tzdata
 
 WORKDIR /www

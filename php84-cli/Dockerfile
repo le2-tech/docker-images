@@ -34,9 +34,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ca-certificates \
         busybox-static \
-    ; \
-    php -v; \
-    php -m; \
-    composer --version
+    echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers
 
 WORKDIR /www

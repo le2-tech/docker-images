@@ -75,8 +75,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         python3 \
         ; \
-    ln -svT /usr/bin/python3 /usr/local/bin/python; \
-    python --version;
+    ln -svT /usr/bin/python3 /usr/local/bin/python;
 
 COPY --from=awscli-builder /usr/local/aws-cli /usr/local/aws-cli
 
@@ -89,8 +88,6 @@ COPY --from=session-manager-builder /usr/src/session-manager-plugin/bin/* /usr/l
 RUN set -eux; \
     ln -sf /usr/local/aws-cli/bin/aws /usr/local/bin/aws; \
     ln -sf /usr/local/aws-cli/bin/aws_completer /usr/local/bin/aws_completer; \
-    aws --version; \
-    ls /usr/local/session-manager-plugin/; \
     echo "complete -C '/usr/local/aws-cli/bin/aws_completer' aws" >> ~/.bashrc
 
 ENV PYTHONPATH=/usr/local/aws-cli

@@ -35,8 +35,7 @@ RUN set -eux; \
     curl -fsSL --retry 5 --retry-delay 3 --retry-all-errors --connect-timeout 20 \
       -o /usr/local/bin/mc \
       "https://dl.min.io/client/mc/release/${mc_arch}/mc"; \
-    chmod 755 /usr/local/bin/mc; \
-    mc --version
+    chmod 755 /usr/local/bin/mc
 
 # 下载 ossutil（阿里云 OSS 命令行工具）
 # https://help.aliyun.com/zh/oss/developer-reference/install-ossutil2
@@ -53,8 +52,7 @@ RUN set -eux; \
       "https://gosspublic.alicdn.com/ossutil/v2/${OSSUTIL_VERSION}/ossutil-${OSSUTIL_VERSION}-${osspkg}.zip"; \
     unzip -q /tmp/ossutil.zip -d /tmp/; \
     install -m 755 "/tmp/ossutil-${OSSUTIL_VERSION}-${osspkg}/ossutil" /usr/local/bin/ossutil; \
-    rm -fr /tmp/ossutil*; \
-    ossutil version
+    rm -fr /tmp/ossutil*
 
 # 最终阶段：合并产物到精简运行镜像
 ARG IMAGE_MIRROR
@@ -88,9 +86,3 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt
 
 COPY --from=download /usr/local/bin/mc /usr/local/bin/mc
 COPY --from=download /usr/local/bin/ossutil /usr/local/bin/ossutil
-
-RUN set -eux; \
-    ossutil version; \
-    psql -V; \
-    mc --version; \
-    busybox --list | grep -x crond

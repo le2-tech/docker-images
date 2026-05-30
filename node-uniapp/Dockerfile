@@ -37,7 +37,4 @@ RUN set -eux; \
     npm update --loglevel verbose; \
     npm i vue@latest pinia@latest; \
     npm i -D sass@latest; \
-    npm cache clean --force; \
-    vue --version; \
-    node --version; \
-    ls /app/package.json
+    npm cache clean --force

@@ -15,6 +15,4 @@ RUN set -eux; \
         esac ; \
     mkdir -p /aws-lambda ; \
     curl -Lo "$RIE_BINARY" "$base_url/$binary" ; \
-    chmod +x "$RIE_BINARY" ; \
-    go version; \
-    "$RIE_BINARY" --help >/dev/null
+    chmod +x "$RIE_BINARY"

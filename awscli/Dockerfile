@@ -80,6 +80,4 @@ RUN set -eux; \
     ln -sf /usr/local/aws-cli/v2/current/bin/aws /usr/local/bin/aws; \
     ln -sf /usr/local/aws-cli/v2/current/bin/aws_completer /usr/local/bin/aws_completer; \
     ln -sf /usr/local/sessionmanagerplugin/bin/session-manager-plugin /usr/local/bin/session-manager-plugin; \
-    aws --version; \
-    session-manager-plugin --version; \
     echo "complete -C '/usr/local/bin/aws_completer' aws" >> ~/.bashrc

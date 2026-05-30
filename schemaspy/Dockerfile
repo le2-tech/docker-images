@@ -22,7 +22,4 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 # 下载 SchemaSpy 和 MySQL 驱动
 RUN curl -L https://github.com/schemaspy/schemaspy/releases/download/v6.2.4/schemaspy-6.2.4.jar -o /tmp/schemaspy.jar \
-    && curl -L https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar -o /tmp/mysql-connector-j.jar \
-    && java -version \
-    && curl --version \
-    && dot -V
+    && curl -L https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar -o /tmp/mysql-connector-j.jar

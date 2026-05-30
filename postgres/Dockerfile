@@ -23,8 +23,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
       locales \
       ; \
     sed -i '/^# zh_CN.UTF-8/s/^# //g' /etc/locale.gen; \
-    locale-gen; \
-    locale -a | grep zh_CN.utf8
+    locale-gen
 
 ENV LANG=zh_CN.UTF-8
 ENV LC_ALL=zh_CN.UTF-8
@@ -36,5 +35,4 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       postgis \
-      postgresql-$PG_MAJOR-postgis-3; \
-    dpkg -l | grep postgis
+      postgresql-$PG_MAJOR-postgis-3

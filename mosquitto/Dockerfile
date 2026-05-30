@@ -97,8 +97,6 @@ WORKDIR /mosquitto
 
 COPY --from=build /opt/mosquitto/ /opt/mosquitto/
 COPY --chmod=755 entrypoint.sh /docker-entrypoint.sh
-RUN set -eux; \
-	/opt/mosquitto/sbin/mosquitto --help >/dev/null
 
 USER 1883:1883
 

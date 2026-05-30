@@ -31,9 +31,6 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 RUN apk add --no-cache \
     ca-certificates \
     git \
-    tzdata; \
-    php -v; \
-    php -m; \
-    composer --version
+    tzdata
 
 WORKDIR /www

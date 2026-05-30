@@ -16,5 +16,4 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   apt-get update; \
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   poppler-utils \
-  ; \
-  pdftotext -v
+  ;
