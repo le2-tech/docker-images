@@ -3,7 +3,7 @@
 .DEFAULT_GOAL := build
 
 tag := awscli
-CHECK_CMD := aws --version ; session-manager-plugin ;
+CHECK_CMD := aws --version ; session-manager-plugin --version ;
 
 include ../Makefile
 

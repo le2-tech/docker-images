@@ -2,7 +2,7 @@
 .PHONY: 
 .DEFAULT_GOAL := build
 
-tag := poppler-full
+tag := poppler
 CHECK_CMD := pdftotext -v ;
 
 include ../Makefile

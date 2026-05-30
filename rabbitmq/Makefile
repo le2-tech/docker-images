@@ -2,6 +2,7 @@
 .PHONY: 
 .DEFAULT_GOAL := build
 
-tag := rabbitmq:4-management
+tag := rabbitmq
+CHECK_CMD := rabbitmqctl version ;
 
 include ../Makefile

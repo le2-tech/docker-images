@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 设置变量
-ACCESS_TOKEN="glpat-Y-b4FSsqxsdze-xD5Ljy"  # 替换为您的个人访问令牌
+ACCESS_TOKEN="${GITLAB_ACCESS_TOKEN:-}"  # 通过环境变量传入
 GITLAB_API="https://gitlab.com/api/v4"    # 根据需要修改为自托管 GitLab 的 API URL
 BACKUP_DIR="$HOME/gitlab_backup"          # 备份的目标目录
 

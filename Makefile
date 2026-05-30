@@ -24,7 +24,6 @@ buildx:
 
 # --no-cache --progress=plain
 build:
-	env
 	docker        build . -t ${tag_full}                         ${build_proxy_clean} --pull --progress=plain --build-arg IMAGE_MIRROR=${IMAGE_MIRROR} --build-arg APT_REPOSITORY=${APT_REPOSITORY} --build-arg ALPINE_MIRROR=${ALPINE_MIRROR} --build-arg NPM_MIRROR=${NPM_MIRROR}
 
 check:

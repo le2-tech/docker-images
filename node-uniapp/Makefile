@@ -2,7 +2,7 @@
 .PHONY: 
 .DEFAULT_GOAL := build
 
-tag := node-uniapp:3
+tag := node-uniapp
+CHECK_CMD := vue --version ; node --version ;
 
 include ../Makefile
-
