@@ -1,11 +1,11 @@
-name: Build & Push Docker image (php84-fpm-alpine)
+name: Build & Push Docker image (php-fpm-alpine)
 
 on:
   schedule:
     - cron: "0 0 * * 2,5"
   push:
     paths:
-      - "php84-fpm-alpine/**"
+      - "php-fpm-alpine/**"
     branches: ["main"]
     tags: ["v*"]
   pull_request:
@@ -25,12 +25,12 @@ permissions:
   packages: write
 
 concurrency:
-  group: docker-${{ github.ref }}-php84-fpm-alpine
+  group: docker-${{ github.ref }}-php-fpm-alpine
   cancel-in-progress: true
 
 env:
   REGISTRY: ${{ inputs.registry || 'registry.cn-chengdu.aliyuncs.com' }}
-  IMAGE_NAME: le2-tech/php84-fpm-alpine
+  IMAGE_NAME: le2-tech/php-fpm-alpine
 
 jobs:
   meta:
@@ -87,7 +87,7 @@ jobs:
       - name: Build & push (native ${{ matrix.platform }})
         uses: docker/build-push-action@master
         with:
-          context: ./php84-fpm-alpine
+          context: ./php-fpm-alpine
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}
@@ -99,13 +99,10 @@ jobs:
 
       - name: Verify & summarize
         if: success()
-        env:
-          IMAGE_REF: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}
         run: |
-          echo "## $IMAGE_REF" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          cd ./php84-fpm-alpine && tag_full="$IMAGE_REF" DOCKER_RUN_FLAGS="" make -s check 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          IMAGE_REF="${REGISTRY}/${IMAGE_NAME}:${GITHUB_SHA}-${{ matrix.short }}"
+          echo "## ${IMAGE_REF}" >> "${GITHUB_STEP_SUMMARY}"
+          cd ./php-fpm-alpine && tag_full="${IMAGE_REF}" DOCKER_RUN_FLAGS="" make -s check 2>&1 | tee -a "${GITHUB_STEP_SUMMARY}"
 
   manifest:
     needs: [meta, build]
@@ -142,10 +139,7 @@ jobs:
             TAG_ARGS="$TAG_ARGS --tag $tag"
           done <<< "$TAGS"
 
-          docker buildx imagetools create \
-            $TAG_ARGS \
-            "$IMAGE:${GITHUB_SHA}-amd64" \
-            "$IMAGE:${GITHUB_SHA}-arm64"
+          docker buildx imagetools create             $TAG_ARGS             "$IMAGE:${GITHUB_SHA}-amd64"             "$IMAGE:${GITHUB_SHA}-arm64"
 
       - name: Inspect (debug)
         run: |
