@@ -100,9 +100,11 @@ jobs:
       - name: Verify & summarize
         if: success()
         run: |
-          IMAGE_REF="${REGISTRY}/${IMAGE_NAME}:${GITHUB_SHA}-${{ matrix.short }}"
-          echo "## ${IMAGE_REF}" >> "${GITHUB_STEP_SUMMARY}"
-          cd ./backup-debian && tag_full="${IMAGE_REF}" DOCKER_RUN_FLAGS="" make -s check 2>&1 | tee -a "${GITHUB_STEP_SUMMARY}"
+          IMAGE_REF="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}"
+          echo "## $IMAGE_REF" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          docker run --rm "$IMAGE_REF" sh -c "ossutil version ; psql -V ; mc --version ; busybox --list | grep -x crond ;" 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
 
   manifest:
     needs: [meta, build]
