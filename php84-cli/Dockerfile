@@ -15,7 +15,7 @@ ARG APT_REPOSITORY
 
 # 安装 PHP 扩展
 RUN  --mount=type=bind,from=php-ext-installer,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
-    install-php-extensions zip pdo_pgsql gd bz2 bcmath intl redis xdebug msgpack apcu
+    install-php-extensions zip pdo_pgsql gd bcmath intl redis xdebug
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -33,10 +33,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ca-certificates \
-        cron \
-        sudo \
+        busybox-static \
     ; \
-    echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/cron" >> /etc/sudoers; \
     php -v; \
     php -m; \
     composer --version
