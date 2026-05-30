@@ -79,9 +79,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt
       ca-certificates \
       postgresql-client \
       ; \
-    ln -sf /bin/busybox /usr/sbin/crond; \
-    printf '%s\n' '#!/bin/sh' 'exec /usr/sbin/crond "$@"' > /usr/sbin/cron; \
-    chmod 755 /usr/sbin/cron; \
     rm -rf \
       /usr/share/doc/* \
       /usr/share/man/* \
