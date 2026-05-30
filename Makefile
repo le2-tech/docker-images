@@ -26,5 +26,7 @@ buildx:
 build:
 	docker        build . -t ${tag_full}                         ${build_proxy_clean} --pull --progress=plain --build-arg IMAGE_MIRROR=${IMAGE_MIRROR} --build-arg APT_REPOSITORY=${APT_REPOSITORY} --build-arg ALPINE_MIRROR=${ALPINE_MIRROR} --build-arg NPM_MIRROR=${NPM_MIRROR}
 
+DOCKER_RUN_FLAGS ?= -it
+
 check:
-	docker run -it --rm ${check_docker_args_clean} ${tag_full} sh -c "$(CHECK_CMD)"
+	docker run ${DOCKER_RUN_FLAGS} --rm ${check_docker_args_clean} ${tag_full} sh -c "$(CHECK_CMD)"

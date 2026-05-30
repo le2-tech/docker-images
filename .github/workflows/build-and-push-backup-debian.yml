@@ -88,12 +88,10 @@ jobs:
         uses: docker/build-push-action@master
         with:
           context: ./backup-debian
-          platforms: ${{ matrix.platform }} # 原生构建，无 QEMU
+          platforms: ${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
-          # 临时标签，用于后续合成 manifest
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}
           labels: ${{ needs.meta.outputs.labels }}
-          # 官方 runner 用 gha 缓存即可
           cache-from: type=gha,version=2
           cache-to: type=gha,version=2,mode=min
           sbom: true
@@ -102,12 +100,11 @@ jobs:
       - name: Verify & summarize
         if: success()
         env:
-          ARCH: ${ matrix.short }
+          IMAGE_REF: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}
         run: |
-          IMAGE_REF="$REGISTRY/$IMAGE_NAME:$GITHUB_SHA-$ARCH"
           echo "## $IMAGE_REF" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          cd ./backup-debian && tag_full="$IMAGE_REF" make -s check 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          cd ./backup-debian && tag_full="$IMAGE_REF" DOCKER_RUN_FLAGS="" make -s check 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
   manifest:
@@ -138,15 +135,13 @@ jobs:
         run: |
           set -Eeuxo pipefail
 
-          # 直接把 metadata 的“完整引用”作为 --tag 传入；去掉空行与首尾空白
           TAG_ARGS=""
           while IFS= read -r tag; do
-            tag="$(echo "$tag" | xargs)"    # trim
+            tag="$(echo "$tag" | xargs)"
             [ -z "$tag" ] && continue
             TAG_ARGS="$TAG_ARGS --tag $tag"
           done <<< "$TAGS"
 
-          # 合成多架构 manifest（使用两个临时标签作为来源）
           docker buildx imagetools create \
             $TAG_ARGS \
             "$IMAGE:${GITHUB_SHA}-amd64" \
