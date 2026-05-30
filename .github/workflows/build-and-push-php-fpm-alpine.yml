@@ -101,8 +101,10 @@ jobs:
 
       - name: Verify & summarize
         if: success()
+        env:
+          ARCH: ${ matrix.short }
         run: |
-          IMAGE_REF="$REGISTRY/$IMAGE_NAME:$GITHUB_SHA-${ matrix.short }"
+          IMAGE_REF="$REGISTRY/$IMAGE_NAME:$GITHUB_SHA-$ARCH"
           echo "## $IMAGE_REF" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           cd ./php84-fpm-alpine && tag_full="$IMAGE_REF" make -s check 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
