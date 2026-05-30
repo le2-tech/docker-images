@@ -1,15 +1,17 @@
+# 第一阶段：下载 mc（MinIO Client）和 ossutil（阿里云 OSS）
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}debian:latest AS download
 
 ARG APT_REPOSITORY
-
 ARG DEBIAN_FRONTEND=noninteractive
 
+# 替换为国内镜像源加速下载
 RUN set -eux; \
     if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
       sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
     fi
 
+# 安装下载工具依赖
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt-cache \
     --mount=type=cache,target=/var/lib/apt,sharing=locked,id=backup-debian-apt-lib \
     set -eux; \
@@ -21,6 +23,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt
       unzip \
       ;
 
+# 下载 mc（MinIO Client）
 # https://github.com/minio/mc#binary-download
 RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
@@ -35,6 +38,7 @@ RUN set -eux; \
     chmod 755 /usr/local/bin/mc; \
     mc --version
 
+# 下载 ossutil（阿里云 OSS 命令行工具）
 # https://help.aliyun.com/zh/oss/developer-reference/install-ossutil2
 RUN set -eux; \
     OSSUTIL_VERSION=2.3.0; \
@@ -52,18 +56,20 @@ RUN set -eux; \
     rm -fr /tmp/ossutil*; \
     ossutil version
 
+# 最终阶段：合并产物到精简运行镜像
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}debian:latest
 
 ARG APT_REPOSITORY
-
 ARG DEBIAN_FRONTEND=noninteractive
 
+# 替换为国内镜像源加速下载
 RUN set -eux; \
     if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
       sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
     fi
 
+# 安装运行依赖
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt-cache \
     --mount=type=cache,target=/var/lib/apt,sharing=locked,id=backup-debian-apt-lib \
     set -eux; \

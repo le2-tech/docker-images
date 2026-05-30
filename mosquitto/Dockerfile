@@ -1,4 +1,6 @@
 # syntax=docker/dockerfile:1
+
+# 第一阶段：编译 mosquitto（SHA256 校验 + 从源码编译）
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}debian:latest AS build
 
@@ -6,6 +8,7 @@ ARG MOSQUITTO_VERSION=2.1.2
 ARG MOSQUITTO_DOWNLOAD_SHA256=fd905380691ac65ea5a93779e8214941829e3d6e038d5edff9eac5fd74cbed02
 ARG APT_REPOSITORY
 
+# 安装编译依赖
 # hadolint ignore=DL3008,DL3009
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	--mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -28,6 +31,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 		wget \
 	;
 
+# 下载并校验 mosquitto 源码
 RUN set -eux; \
 	wget --progress=dot:giga --tries=5 --waitretry=3 --timeout=20 "https://mosquitto.org/files/source/mosquitto-${MOSQUITTO_VERSION}.tar.gz" -O /tmp/mosq.tar.gz; \
 	printf '%s  %s\n' "${MOSQUITTO_DOWNLOAD_SHA256}" /tmp/mosq.tar.gz > /tmp/mosq.tar.gz.sha256; \
@@ -36,6 +40,7 @@ RUN set -eux; \
 	tar --strip=1 -xf /tmp/mosq.tar.gz -C /build/mosq; \
 	rm /tmp/mosq.tar.gz /tmp/mosq.tar.gz.sha256
 
+# 编译 mosquitto
 RUN set -eux; \
 	mkdir -p /opt/mosquitto/share/mosquitto; \
 	make -C /build/mosq -j"$(nproc)" \
@@ -51,10 +56,13 @@ RUN set -eux; \
 	; \
 	cp -r /build/mosq/dashboard/src /opt/mosquitto/share/mosquitto/dashboard
 
+# 最终阶段：运行时镜像
+ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}debian:latest AS runtime
 
 ARG APT_REPOSITORY
 
+# 安装运行时动态库
 # hadolint ignore=DL3008,DL3009
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	--mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -75,6 +83,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 		libwebsockets19t64 \
 	;
 
+# 创建 mosquitto 用户和目录
 RUN set -eux; \
 	getent group mosquitto >/dev/null || groupadd -r -g 1883 mosquitto; \
 	id -u mosquitto >/dev/null 2>&1 || useradd -r -u 1883 -g mosquitto -d /var/empty -s /usr/sbin/nologin -c "mosquitto" mosquitto; \
@@ -88,15 +97,14 @@ WORKDIR /mosquitto
 
 COPY --from=build /opt/mosquitto/ /opt/mosquitto/
 COPY --chmod=755 entrypoint.sh /docker-entrypoint.sh
+RUN set -eux; \
+	/opt/mosquitto/sbin/mosquitto --help >/dev/null
 
 USER 1883:1883
 
 VOLUME ["/mosquitto/data", "/mosquitto/log"]
-
 EXPOSE 1883
-
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD mosquitto --help >/dev/null || exit 1
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-
 CMD ["mosquitto", "-c", "/mosquitto/config/mosquitto.conf"]

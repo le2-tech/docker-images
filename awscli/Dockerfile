@@ -1,13 +1,16 @@
+# 第一阶段：下载 AWS CLI 和 session-manager-plugin 二进制
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}debian:latest AS download
 
 ARG APT_REPOSITORY
 
+# 替换为国内镜像源加速下载
 RUN set -eux; \
     if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
       sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
     fi
 
+# 安装下载工具依赖
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     set -eux; \
@@ -19,6 +22,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
       unzip \
       ;
 
+# 下载并安装 AWS CLI v2
 RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
     case "${arch}" in \
@@ -33,6 +37,7 @@ RUN set -eux; \
     /tmp/aws/install --install-dir /usr/local/aws-cli --bin-dir /usr/local/bin; \
     rm -rf /tmp/aws /tmp/awscliv2.zip
 
+# 下载 session-manager-plugin（根据架构选择对应 deb 包）
 RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
     case "${arch}" in \
@@ -47,16 +52,19 @@ RUN set -eux; \
     dpkg-deb -x /tmp/session-manager-plugin.deb /tmp/session-manager-plugin-root; \
     rm -f /tmp/session-manager-plugin.deb
 
+# 最终阶段：合并产物到精简运行镜像
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}debian:latest
 
 ARG APT_REPOSITORY
 
+# 替换为国内镜像源加速下载
 RUN set -eux; \
     if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
       sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
     fi
 
+# 安装运行依赖
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     set -eux; \
@@ -73,5 +81,5 @@ RUN set -eux; \
     ln -sf /usr/local/aws-cli/v2/current/bin/aws_completer /usr/local/bin/aws_completer; \
     ln -sf /usr/local/sessionmanagerplugin/bin/session-manager-plugin /usr/local/bin/session-manager-plugin; \
     aws --version; \
-    session-manager-plugin; \
+    session-manager-plugin --version; \
     echo "complete -C '/usr/local/bin/aws_completer' aws" >> ~/.bashrc

@@ -1,13 +1,11 @@
-# FROM ubuntu:latest
-# FROM ubuntu:rolling
-
+# 选择说明：ubuntu:rolling 也可用，此处统一使用 Debian
 # https://packages.debian.org/search?suite=all&searchon=names&keywords=libreoffice-core
-# https://packages.ubuntu.com/search?suite=all&searchon=names&keywords=libreoffice-core
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}debian:latest
 
 ARG APT_REPOSITORY
 
+# 安装 LibreOffice 无头模式、中文字体和 locale
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     set -eux; \

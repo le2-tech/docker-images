@@ -1,10 +1,10 @@
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}golang:latest
 
-# Set environment variable for AWS Lambda Runtime Interface Emulator binary
-ENV RIE_BINARY=/aws-lambda/aws-lambda-rie
+# AWS Lambda Runtime Interface Emulator 二进制路径
+ARG RIE_BINARY=/aws-lambda/aws-lambda-rie
 
-# Detect the architecture and set the appropriate binary URL
+# 下载 Lambda Runtime Interface Emulator（根据架构选择对应二进制）
 RUN set -eux; \
     arch=$(uname -m) ; \
     base_url="https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download" ;\
@@ -15,4 +15,6 @@ RUN set -eux; \
         esac ; \
     mkdir -p /aws-lambda ; \
     curl -Lo "$RIE_BINARY" "$base_url/$binary" ; \
-    chmod +x "$RIE_BINARY" ;
+    chmod +x "$RIE_BINARY" ; \
+    go version; \
+    "$RIE_BINARY" --help >/dev/null
