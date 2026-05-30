@@ -102,10 +102,10 @@ jobs:
       - name: Verify & summarize
         if: success()
         run: |
-          echo "## ${{ env.IMAGE_NAME }} (${{ matrix.short }})" >> "${{ GITHUB_STEP_SUMMARY }}"
-          echo '```' >> "${{ GITHUB_STEP_SUMMARY }}"
-          cd ./awscli && tag_full="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}" make -s check 2>&1 | tee -a "${{ GITHUB_STEP_SUMMARY }}"
-          echo '```' >> "${{ GITHUB_STEP_SUMMARY }}"
+          echo "## ${{ env.IMAGE_NAME }} (${{ matrix.short }})" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cd ./awscli && tag_full="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}" make -s check 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
 
   manifest:
     needs: [meta, build]
