@@ -34,7 +34,7 @@ RUN set -eux; \
     if [ -n "${NPM_MIRROR:-}" ]; then \
       npm config set registry "${NPM_MIRROR}"; \
     fi; \
-    npm update --loglevel verbose; \
+    npm install --loglevel verbose; \
     npm i vue@latest pinia@latest; \
     npm i -D sass@latest; \
     npm cache clean --force
