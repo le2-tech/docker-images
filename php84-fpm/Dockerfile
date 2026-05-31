@@ -18,7 +18,4 @@ RUN  --mount=type=bind,from=php-ext-installer,source=/usr/bin/install-php-extens
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-# 配置 PHP-FPM 监听端口
-RUN sed -i "s|^listen *=.*|listen = 9000|g" /usr/local/etc/php-fpm.d/www.conf
-
 WORKDIR /www
