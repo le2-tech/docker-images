@@ -22,7 +22,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt
       busybox-static \
       postgresql-common \
     ; \
-    /bin/busybox --install -s /usr/local/bin; \
     /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
