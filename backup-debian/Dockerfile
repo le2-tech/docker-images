@@ -1,6 +1,5 @@
-# 第一阶段：下载 mc（MinIO Client）和 ossutil（阿里云 OSS）
 ARG IMAGE_MIRROR
-FROM ${IMAGE_MIRROR}debian:latest AS download
+FROM ${IMAGE_MIRROR}debian:latest
 
 ARG APT_REPOSITORY
 ARG DEBIAN_FRONTEND=noninteractive
@@ -11,17 +10,28 @@ RUN set -eux; \
       sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
     fi
 
-# 安装下载工具依赖
+# 安装运行依赖
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt-cache \
     --mount=type=cache,target=/var/lib/apt,sharing=locked,id=backup-debian-apt-lib \
     set -eux; \
-    rm -f /etc/apt/apt.conf.d/docker-clean; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
       ca-certificates \
       curl \
       unzip \
-      ;
+      busybox-static \
+      postgresql-common \
+    ; \
+    /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        postgresql-client-18; \
+    rm -rf \
+      /usr/share/doc/* \
+      /usr/share/man/* \
+      /usr/share/info/* \
+      /usr/share/lintian/* \
+      /usr/share/bug/*
 
 # 下载 mc（MinIO Client）
 # https://github.com/minio/mc#binary-download
@@ -53,36 +63,3 @@ RUN set -eux; \
     unzip -q /tmp/ossutil.zip -d /tmp/; \
     install -m 755 "/tmp/ossutil-${OSSUTIL_VERSION}-${osspkg}/ossutil" /usr/local/bin/ossutil; \
     rm -fr /tmp/ossutil*
-
-# 最终阶段：合并产物到精简运行镜像
-ARG IMAGE_MIRROR
-FROM ${IMAGE_MIRROR}debian:latest
-
-ARG APT_REPOSITORY
-ARG DEBIAN_FRONTEND=noninteractive
-
-# 替换为国内镜像源加速下载
-RUN set -eux; \
-    if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
-      sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
-    fi
-
-# 安装运行依赖
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt-cache \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked,id=backup-debian-apt-lib \
-    set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends \
-      busybox-static \
-      ca-certificates \
-      postgresql-client \
-      ; \
-    rm -rf \
-      /usr/share/doc/* \
-      /usr/share/man/* \
-      /usr/share/info/* \
-      /usr/share/lintian/* \
-      /usr/share/bug/*
-
-COPY --from=download /usr/local/bin/mc /usr/local/bin/mc
-COPY --from=download /usr/local/bin/ossutil /usr/local/bin/ossutil
