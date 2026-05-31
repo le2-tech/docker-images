@@ -44,7 +44,6 @@ ARG SSM_PLUGIN_VERSION=mainline
 RUN set -eux; \
     git clone --branch "${SSM_PLUGIN_VERSION}" --depth 1 https://github.com/aws/session-manager-plugin.git . ; \
     sed -i 's/go build -i/go build/' makefile; \
-    gofmt -w . ;\
     ARCH=$(uname -m) ; \
     if [ "$ARCH" = "x86_64" ]; then \
         make build-linux-amd64 ; \

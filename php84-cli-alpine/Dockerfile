@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 
 # 预下载 composer 二进制（通过镜像源加速）
 ARG IMAGE_MIRROR
@@ -21,8 +20,7 @@ RUN set -eux; \
 
 # 安装 PHP 扩展（兼容 Alpine 的 mlocati 安装器）
 RUN --mount=type=bind,from=php-ext-installer,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
-    install-php-extensions zip pdo_pgsql gd bcmath intl redis xdebug \
-    pcntl
+    install-php-extensions zip pdo_pgsql gd bcmath intl redis xdebug pcntl
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"

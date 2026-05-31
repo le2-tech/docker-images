@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 
 # 预下载 composer 二进制（通过镜像源加速）
 ARG IMAGE_MIRROR

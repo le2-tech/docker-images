@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-
 # 第一阶段：编译 mosquitto（SHA256 校验 + 从源码编译）
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}debian:latest AS build

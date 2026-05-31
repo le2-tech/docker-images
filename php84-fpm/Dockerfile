@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 
 # 预下载 composer 二进制（通过镜像源加速）
 ARG IMAGE_MIRROR
@@ -22,20 +21,5 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 # 配置 PHP-FPM 监听端口
 RUN sed -i -e "s/^listen *=.*/listen = 9000/g" /usr/local/etc/php-fpm.d/www.conf;
-
-# 替换为国内镜像源加速下载
-RUN set -eux; \
-    if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
-      sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
-    fi
-
-# 安装运行依赖
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    set -eux; \
-    apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      ca-certificates \
-      ;
 
 WORKDIR /www

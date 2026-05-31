@@ -2,7 +2,6 @@ ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}debian:latest
 
 ARG APT_REPOSITORY
-ARG DEBIAN_FRONTEND=noninteractive
 
 # 替换为国内镜像源加速下载
 RUN set -eux; \
@@ -15,7 +14,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt
     --mount=type=cache,target=/var/lib/apt,sharing=locked,id=backup-debian-apt-lib \
     set -eux; \
     apt-get update; \
-    apt-get install -y --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       ca-certificates \
       curl \
       unzip \
@@ -24,7 +23,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt
     ; \
     /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y; \
     apt-get update; \
-    apt-get install -y --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         postgresql-client-18; \
     rm -rf \
       /usr/share/doc/* \
