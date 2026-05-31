@@ -5,7 +5,7 @@ on:
     - cron: "0 0 * * 2,5"
   push:
     paths:
-      - "php-cli-alpine/**"
+      - "php84-cli-alpine/**"
     branches: ["main"]
     tags: ["v*"]
   pull_request:

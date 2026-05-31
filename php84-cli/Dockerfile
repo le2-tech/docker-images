@@ -1,4 +1,3 @@
-
 # 预下载 composer 二进制（通过镜像源加速）
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}composer:2 AS composer
