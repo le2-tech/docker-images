@@ -87,7 +87,7 @@ jobs:
       - name: Build & push (native ${{ matrix.platform }})
         uses: docker/build-push-action@master
         with:
-          context: ./php-cli-alpine
+          context: ./php84-cli-alpine
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}
