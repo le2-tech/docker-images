@@ -1,11 +1,11 @@
-name: Build & Push Docker image (awscli)
+name: Build & Push Docker image (awscli-alpine)
 
 on:
   schedule:
     - cron: "0 0 * * 2,5"
   push:
     paths:
-      - "awscli/**"
+      - "awscli-alpine/**"
     branches: ["main"]
     tags: ["v*"]
   pull_request:
@@ -25,12 +25,12 @@ permissions:
   packages: write
 
 concurrency:
-  group: docker-${{ github.ref }}-awscli
+  group: docker-${{ github.ref }}-awscli-alpine
   cancel-in-progress: true
 
 env:
   REGISTRY: ${{ inputs.registry || 'registry.cn-chengdu.aliyuncs.com' }}
-  IMAGE_NAME: le2-tech/awscli
+  IMAGE_NAME: le2-tech/awscli-alpine
 
 jobs:
   meta:
@@ -87,7 +87,7 @@ jobs:
       - name: Build & push (native ${{ matrix.platform }})
         uses: docker/build-push-action@master
         with:
-          context: ./awscli
+          context: ./awscli-alpine
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}
