@@ -26,8 +26,8 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 # 安装运行依赖
 RUN apk add --no-cache \
-    ca-certificates \
-    git \
-    tzdata
+        ca-certificates \
+        git \
+        tzdata
 
 WORKDIR /www
