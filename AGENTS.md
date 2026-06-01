@@ -11,25 +11,20 @@
 ## 基础镜像
 
 - 基础镜像优先使用 `latest` 标签，持续跟随上游最新版本，避免人工维护版本号。
-- hadolint DL3007（`Using latest is prone to errors`）是本仓库有意为之，审查时不应以此为问题提出。
-- 基于 Debian 或其他 Docker Hub 官方镜像时，`ARG IMAGE_MIRROR` 应在 `FROM` 前声明，`FROM` 行使用 `${IMAGE_MIRROR}` 前缀：
-  ```
-  ARG IMAGE_MIRROR
-  FROM ${IMAGE_MIRROR}debian:latest
-  ```
 - 不要在 Dockerfile 中写死私有镜像域名，例如 `docker.le2.tech`。
 - 不要写死 Dockerfile `# syntax=...` 镜像地址；该 directive 不支持 `ARG` 变量展开。
 - 保留仓库现有构建参数，尤其是 `ARG IMAGE_MIRROR` 和 `ARG APT_REPOSITORY`。
 
+> 指令格式、缩进、ARG 声明顺序等详见 `DOCKERFILE_STYLE.md`。
+
 ## apt 依赖安装
 
-- 安装 Debian 包时使用 `--no-install-recommends`；如果没有把 `/var/lib/apt` 作为 BuildKit cache mount，应在同一层清理 apt lists 和临时文件。
-- 如需 apt 构建缓存，优先使用当前 Docker/BuildKit 默认 frontend 支持的写法：
-  - `RUN --mount=type=cache,target=/var/cache/apt,sharing=locked`
-  - `RUN --mount=type=cache,target=/var/lib/apt,sharing=locked`
-- 使用 `/var/lib/apt` cache mount 时，不要在同一层删除 `/var/lib/apt/lists/*`，避免清空 apt metadata cache；必要时对 `DL3009` 做局部 hadolint ignore 并说明原因。
+- 安装 Debian 包时使用 `--no-install-recommends`。
+- 使用 `/var/lib/apt` cache mount 时，不要在同一层删除 `/var/lib/apt/lists/*`，避免清空 apt metadata cache。
 - 对非多阶段的运行镜像，不要为了 apt cache mount 删除 `/etc/apt/apt.conf.d/docker-clean`；保留 Debian/官方镜像默认清理策略，避免派生镜像后续 `apt install` 留下 `.deb` 缓存。
 - 只有在独立 builder 阶段、或明确需要跨构建复用 apt 下载缓存且不会作为运行基础镜像继续派生时，才评估移除 `/etc/apt/apt.conf.d/docker-clean`。
+
+> apt cache mount 写法和示例见 `DOCKERFILE_STYLE.md`。
 
 ## 外部工具与版本
 
@@ -51,7 +46,6 @@
 ## 构建与验证
 
 - 优先使用对应目录已有的 `make build`、`make check`、`make test` 等入口验证，不绕开仓库既有流程。
-- 修改 Dockerfile 后，如本地可用 `hadolint`，优先运行 `hadolint <Dockerfile>` 做静态检查；确需忽略的规则应局部说明原因。
 - Docker 构建失败时先区分失败阶段：解析 frontend、拉取基础镜像、安装依赖、编译、运行时验证等。
 - 涉及字体、locale、命令行工具或服务二进制的镜像，应在构建期或运行后增加针对性验证命令。
 - 如果验证命令会改写仓库样例或产物，优先复制到临时目录再挂载验证。
