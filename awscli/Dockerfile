@@ -20,7 +20,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
       ca-certificates \
       curl \
       unzip \
-      ;
+    ;
 
 # 下载并安装 AWS CLI v2
 RUN set -eux; \
@@ -71,7 +71,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       ca-certificates \
-      ;
+    ;
 
 COPY --from=download /usr/local/aws-cli /usr/local/aws-cli
 COPY --from=download /tmp/session-manager-plugin-root/usr/local/sessionmanagerplugin /usr/local/sessionmanagerplugin

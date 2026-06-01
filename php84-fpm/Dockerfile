@@ -12,7 +12,7 @@ FROM ${IMAGE_MIRROR}php:8.4-fpm
 ARG APT_REPOSITORY
 
 # 安装 PHP 扩展
-RUN  --mount=type=bind,from=php-ext-installer,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
+RUN --mount=type=bind,from=php-ext-installer,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
     install-php-extensions zip pdo_pgsql gd bcmath intl redis xdebug
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer

@@ -61,7 +61,6 @@ FROM ${IMAGE_MIRROR}debian:latest AS runtime
 ARG APT_REPOSITORY
 
 # 安装运行时动态库
-# hadolint ignore=DL3008,DL3009
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	--mount=type=cache,target=/var/lib/apt,sharing=locked \
 	set -eux; \

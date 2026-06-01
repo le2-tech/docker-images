@@ -23,7 +23,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libc-dev \
         libffi-dev \
         libssl-dev \
-        ;
+    ;
 
 # 克隆并安装 AWS CLI v2
 # https://github.com/aws/aws-cli/
@@ -51,7 +51,7 @@ RUN set -eux; \
         make build-arm64 ; \
     else \
         echo "Unsupported architecture: $ARCH" ; exit 1 ; \
-    fi ;
+    fi
 
 # 最终阶段：合并产物到精简运行镜像
 ARG IMAGE_MIRROR
@@ -73,7 +73,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         python3 \
-        ; \
+    ; \
     ln -svT /usr/bin/python3 /usr/local/bin/python;
 
 COPY --from=awscli-builder /usr/local/aws-cli /usr/local/aws-cli

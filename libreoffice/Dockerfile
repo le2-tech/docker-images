@@ -20,7 +20,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
       libreoffice-core-nogui \
       libreoffice-writer-nogui \
       locales \
-      ; \
+    ; \
     sed -i '/^# *zh_CN.UTF-8 UTF-8/s/^# *//g' /etc/locale.gen; \
     locale-gen zh_CN.UTF-8; \
     fc-cache -f; \

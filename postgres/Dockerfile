@@ -21,7 +21,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       ca-certificates \
       locales \
-      ; \
+    ; \
     sed -i '/^# zh_CN.UTF-8/s/^# //g' /etc/locale.gen; \
     locale-gen
 
