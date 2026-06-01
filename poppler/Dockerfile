@@ -11,8 +11,8 @@ RUN set -eux; \
 
 # 安装 poppler-utils（提供 pdftotext）
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    set -eux; \
+	--mount=type=cache,target=/var/lib/apt,sharing=locked \
+	set -eux; \
 	apt-get update; \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 		poppler-utils \
