@@ -9,7 +9,21 @@ FROM ${IMAGE_MIRROR}mlocati/php-extension-installer:latest AS php-ext-installer
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}php:8.4-fpm
 
+# 替换为国内镜像源加速下载
 ARG APT_REPOSITORY
+RUN set -eux; \
+    if [ -n "${APT_REPOSITORY:-}" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+      sed -i "s|http://deb.debian.org|${APT_REPOSITORY}|g" /etc/apt/sources.list.d/debian.sources; \
+    fi
+
+RUN set -eux; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        ca-certificates \
+        git \
+        tzdata \
+    ; \
+    rm -rf /var/lib/apt/lists/*
 
 # 安装 PHP 扩展
 RUN --mount=type=bind,from=php-ext-installer,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
