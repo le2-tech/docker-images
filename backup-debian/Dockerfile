@@ -18,7 +18,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt
       ca-certificates \
       curl \
       unzip \
-      busybox-static \
       postgresql-common \
     ; \
     /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y; \
@@ -31,6 +30,20 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=backup-debian-apt
       /usr/share/info/* \
       /usr/share/lintian/* \
       /usr/share/bug/*
+
+# 下载 Supercronic
+# https://github.com/aptible/supercronic
+RUN set -eux; \
+    arch="$(dpkg --print-architecture)"; \
+    case "$arch" in \
+      amd64) supercronic_arch="linux-amd64" ;; \
+      arm64) supercronic_arch="linux-arm64" ;; \
+      *) echo "unsupported architecture: $arch" >&2; exit 1 ;; \
+    esac; \
+    curl -fsSL --retry 5 --retry-delay 3 --retry-all-errors --connect-timeout 20 \
+      -o /usr/local/bin/supercronic \
+      "https://github.com/aptible/supercronic/releases/latest/download/supercronic-${supercronic_arch}"; \
+    chmod 755 /usr/local/bin/supercronic
 
 # 下载 mc（MinIO Client）
 # https://github.com/minio/mc#binary-download
