@@ -103,7 +103,7 @@ jobs:
           IMAGE_REF="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}"
           echo "## $IMAGE_REF" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          docker run --rm "$IMAGE_REF" sh -c "ossutil version ; psql -V ; mc --version ; busybox --list | grep -x crond ; pg_dump --version" 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          docker run --rm "$IMAGE_REF" sh -c "ossutil version ; psql -V ; mc --version ; supercronic -version ; pg_dump --version" 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
   manifest:
