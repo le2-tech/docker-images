@@ -11,7 +11,7 @@
 ## 基础镜像
 
 - 基础镜像优先使用 `latest` 标签，持续跟随上游最新版本，避免人工维护版本号。
-- 不要在 Dockerfile 中写死私有镜像域名，例如 `docker.le2.tech`。
+- 不要在 Dockerfile 中写死私有镜像域名，例如 `docker.le2.ltd`。
 - 不要写死 Dockerfile `# syntax=...` 镜像地址；该 directive 不支持 `ARG` 变量展开。
 - 保留仓库现有构建参数，尤其是 `ARG IMAGE_MIRROR` 和 `ARG APT_REPOSITORY`。
 
