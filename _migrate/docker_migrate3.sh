@@ -12,7 +12,6 @@ IMAGES=(
   # "axllent/mailpit:latest"
   "node:alpine"
   # "rabbitmq:management"
-  "mediagis/nominatim:5.3"
   "debian:latest"
   # "neilpang/acme.sh:latest"
   "nginx:latest"
