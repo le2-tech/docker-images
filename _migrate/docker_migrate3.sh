@@ -13,7 +13,7 @@ IMAGES=(
   "node:alpine"
   # "rabbitmq:management"
   "debian:latest"
-  # "neilpang/acme.sh:latest"
+  "neilpang/acme.sh:latest"
   "nginx:latest"
   # "redis:latest"
   # "fluent/fluent-bit:latest"
