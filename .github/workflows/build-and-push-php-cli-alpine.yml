@@ -5,7 +5,7 @@ on:
     - cron: "0 0 * * 2,5"
   push:
     paths:
-      - "php84-cli-alpine/**"
+      - "php85-cli-alpine/**"
     branches: ["main"]
     tags: ["v*"]
   pull_request:
@@ -34,7 +34,7 @@ env:
 
 jobs:
   meta:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
@@ -55,10 +55,10 @@ jobs:
         include:
           - short: amd64
             platform: linux/amd64
-            runs_on: ubuntu-24.04
+            runs_on: ubuntu-26.04
           - short: arm64
             platform: linux/arm64
-            runs_on: ubuntu-24.04-arm
+            runs_on: ubuntu-26.04-arm
     runs-on: ${{ matrix.runs_on }}
     steps:
       - uses: actions/checkout@main
@@ -87,7 +87,7 @@ jobs:
       - name: Build & push (native ${{ matrix.platform }})
         uses: docker/build-push-action@master
         with:
-          context: ./php84-cli-alpine
+          context: ./php85-cli-alpine
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-${{ matrix.short }}
@@ -108,7 +108,7 @@ jobs:
 
   manifest:
     needs: [meta, build]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     if: github.event_name != 'pull_request'
     steps:
       - name: Login to GHCR
