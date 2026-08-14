@@ -94,7 +94,7 @@ jobs:
           labels: ${{ needs.meta.outputs.labels }}
           cache-from: type=gha,version=2
           cache-to: type=gha,version=2,mode=min
-          sbom: true
+          sbom: false
           provenance: false
 
       - name: Verify & summarize
