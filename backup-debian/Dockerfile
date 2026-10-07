@@ -56,7 +56,7 @@ RUN set -eux; \
     esac; \
     curl -fsSL --retry 5 --retry-delay 3 --retry-all-errors --connect-timeout 20 \
       -o /usr/local/bin/mc \
-      "https://dl.min.io/client/mc/release/${mc_arch}/mc"; \
+      "https://dl.min.io/aistor/mc/release/${mc_arch}/mc"; \
     chmod 755 /usr/local/bin/mc
 
 # 下载 ossutil（阿里云 OSS 命令行工具）
