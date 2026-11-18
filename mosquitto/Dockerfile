@@ -2,8 +2,8 @@
 ARG IMAGE_MIRROR
 FROM ${IMAGE_MIRROR}debian:latest AS build
 
-ARG MOSQUITTO_VERSION=2.1.2
-ARG MOSQUITTO_DOWNLOAD_SHA256=fd905380691ac65ea5a93779e8214941829e3d6e038d5edff9eac5fd74cbed02
+ARG MOSQUITTO_VERSION=2.1.4
+ARG MOSQUITTO_DOWNLOAD_SHA256=11de1aac1a700a85031e744ad6a93661835d8e716bc21d1e40c94eb507b670ef
 ARG APT_REPOSITORY
 
 # 安装编译依赖
@@ -30,7 +30,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 # 下载并校验 mosquitto 源码
 RUN set -eux; \
-    wget --progress=dot:giga --tries=5 --waitretry=3 --timeout=20 "https://mosquitto.org/files/source/mosquitto-${MOSQUITTO_VERSION}.tar.gz" -O /tmp/mosq.tar.gz; \
+    wget --progress=dot:giga --tries=5 --waitretry=3 --timeout=20 "https://codeload.github.com/eclipse-mosquitto/mosquitto/tar.gz/refs/tags/v${MOSQUITTO_VERSION}" -O /tmp/mosq.tar.gz; \
     printf '%s  %s\n' "${MOSQUITTO_DOWNLOAD_SHA256}" /tmp/mosq.tar.gz > /tmp/mosq.tar.gz.sha256; \
     sha256sum -c /tmp/mosq.tar.gz.sha256; \
     mkdir -p /build/mosq; \
